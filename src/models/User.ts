@@ -7,6 +7,8 @@ export interface IUserProfile {
   gender: string;
   address: string;
   photo: string;
+  emergencyContactName: string;
+  emergencyContactPhone: string;
 }
 
 export interface IUserProfessional {
@@ -14,6 +16,8 @@ export interface IUserProfessional {
   jobTitle: string;
   jobTitleOther: string;
   department: string;
+  designation: string;
+  employmentType: string;
   joiningDate: string;
   responsibilities: string;
 }
@@ -47,6 +51,8 @@ const ProfileSchema = new Schema<IUserProfile>(
     gender: { type: String, default: "" },
     address: { type: String, default: "" },
     photo: { type: String, default: "" },
+    emergencyContactName: { type: String, default: "" },
+    emergencyContactPhone: { type: String, default: "" },
   },
   { _id: false }
 );
@@ -57,6 +63,8 @@ const ProfessionalSchema = new Schema<IUserProfessional>(
     jobTitle: { type: String, default: "" },
     jobTitleOther: { type: String, default: "" },
     department: { type: String, default: "" },
+    designation: { type: String, default: "" },
+    employmentType: { type: String, default: "" },
     joiningDate: { type: String, default: "" },
     responsibilities: { type: String, default: "" },
   },
@@ -95,6 +103,7 @@ const UserSchema = new Schema<IUser>(
 
 UserSchema.index({ organizationId: 1 });
 UserSchema.index({ role: 1, organizationId: 1 });
+UserSchema.index({ organizationId: 1, "professional.employeeId": 1 }, { unique: true, sparse: true });
 
 export const User: Model<IUser> =
   mongoose.models.User ?? mongoose.model<IUser>("User", UserSchema);

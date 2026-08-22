@@ -5,7 +5,7 @@ import Link from "next/link";
 import { CheckCircle2, LogOut, Shield, User } from "lucide-react";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { formatRoleLabel } from "@/lib/auth/roles";
+import { formatRoleLabel, resolvePostLoginRedirect } from "@/lib/auth/roles";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -14,9 +14,8 @@ function AuthenticatedContent() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user?.role === "SUPER_ADMIN") {
-      router.replace("/super-admin");
-    }
+    if (!user) return;
+    router.replace(resolvePostLoginRedirect(user.role, user.mustChangePassword, null));
   }, [user, router]);
 
   if (!user) return null;

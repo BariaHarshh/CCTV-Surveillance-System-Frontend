@@ -3,7 +3,15 @@ import type { NextRequest } from "next/server";
 
 const SESSION_COOKIE = "acg_session";
 
-const protectedPaths = ["/authenticated", "/dashboard-preview", "/super-admin", "/first-login-password"];
+const protectedPaths = [
+  "/authenticated",
+  "/dashboard-preview",
+  "/super-admin",
+  "/first-login-password",
+  "/change-password",
+  "/admin",
+  "/staff",
+];
 
 function addSecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set("X-Content-Type-Options", "nosniff");

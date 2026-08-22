@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, FormEvent } from "react";
 import { Eye, EyeOff, Loader2, AlertCircle, Lock, ShieldOff } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { getDefaultRedirectForRole } from "@/lib/auth/roles";
+import { resolvePostLoginRedirect } from "@/lib/auth/roles";
 import { cn } from "@/lib/utils";
 
 type LoginState = "default" | "loading" | "error" | "locked" | "suspended";
@@ -28,10 +28,13 @@ export function LoginForm() {
 
   useEffect(() => {
     if (!authLoading && isAuthenticated && user) {
-      const redirect =
-        searchParams.get("redirect") ||
-        getDefaultRedirectForRole(user.role, user.mustChangePassword);
-      router.replace(redirect);
+      router.replace(
+        resolvePostLoginRedirect(
+          user.role,
+          user.mustChangePassword,
+          searchParams.get("redirect")
+        )
+      );
     }
   }, [authLoading, isAuthenticated, user, router, searchParams]);
 
@@ -60,13 +63,13 @@ export function LoginForm() {
     if (result.success) {
       const meRes = await fetch("/api/auth/me", { credentials: "include" });
       const meData = meRes.ok ? await meRes.json() : null;
-      const redirect =
-        searchParams.get("redirect") ||
-        getDefaultRedirectForRole(
+      router.push(
+        resolvePostLoginRedirect(
           meData?.user?.role ?? "STAFF",
-          meData?.user?.mustChangePassword ?? false
-        );
-      router.push(redirect);
+          meData?.user?.mustChangePassword ?? false,
+          searchParams.get("redirect")
+        )
+      );
       router.refresh();
       return;
     }

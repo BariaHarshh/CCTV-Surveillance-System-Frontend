@@ -34,8 +34,8 @@ export function ProtectedRoute({
       router.replace(getDefaultRedirectForRole(user.role, false));
       return;
     }
-    if (!requirePasswordChange && user?.mustChangePassword && user.role === "ADMIN") {
-      router.replace("/first-login-password");
+    if (!requirePasswordChange && user?.mustChangePassword && (user.role === "ADMIN" || user.role === "STAFF")) {
+      router.replace("/change-password");
     }
   }, [isAuthenticated, isLoading, user, router, allowedRoles, requirePasswordChange]);
 
@@ -53,7 +53,7 @@ export function ProtectedRoute({
   if (!isAuthenticated) return null;
   if (allowedRoles && user && !allowedRoles.includes(user.role)) return null;
   if (requirePasswordChange && user && !user.mustChangePassword) return null;
-  if (!requirePasswordChange && user?.mustChangePassword && user.role === "ADMIN") return null;
+  if (!requirePasswordChange && user?.mustChangePassword && (user.role === "ADMIN" || user.role === "STAFF")) return null;
 
   return <>{children}</>;
 }

@@ -12,19 +12,38 @@ export function formatRoleLabel(role: string): string {
 }
 
 export function getDefaultRedirectForRole(role: string, mustChangePassword = false): string {
-  if (mustChangePassword && role === "ADMIN") {
-    return "/first-login-password";
+  if (mustChangePassword && (role === "ADMIN" || role === "STAFF")) {
+    return "/change-password";
   }
   switch (role) {
     case "SUPER_ADMIN":
       return "/super-admin";
     case "ADMIN":
-      return "/authenticated";
+      return "/admin/dashboard";
     case "STAFF":
-      return "/authenticated";
+      return "/staff/dashboard";
     default:
-      return "/authenticated";
+      return "/login";
   }
+}
+
+export function getPasswordChangePath(): string {
+  return "/change-password";
+}
+
+/** Post-login destination: password change always wins over ?redirect= */
+export function resolvePostLoginRedirect(
+  role: string,
+  mustChangePassword: boolean,
+  redirectParam?: string | null
+): string {
+  if (mustChangePassword && (role === "ADMIN" || role === "STAFF")) {
+    return getPasswordChangePath();
+  }
+  if (redirectParam && redirectParam.startsWith("/") && !redirectParam.startsWith("//")) {
+    return redirectParam;
+  }
+  return getDefaultRedirectForRole(role, false);
 }
 
 export function canAccessSuperAdmin(role: string): boolean {

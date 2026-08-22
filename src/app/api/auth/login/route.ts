@@ -220,6 +220,34 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    if (user.role === "ADMIN") {
+      const { logAuditEvent } = await import("@/lib/audit/log");
+      await logAuditEvent({
+        actor: user,
+        action: "ADMIN_LOGIN",
+        description: `${user.name} logged in to admin portal`,
+        ipAddress: ip,
+        userAgent,
+        metadata: {
+          organizationId: user.organizationId?.toString() ?? null,
+        },
+      });
+    }
+
+    if (user.role === "STAFF") {
+      const { logAuditEvent } = await import("@/lib/audit/log");
+      await logAuditEvent({
+        actor: user,
+        action: "STAFF_LOGIN",
+        description: `${user.name} logged in to staff portal`,
+        ipAddress: ip,
+        userAgent,
+        metadata: {
+          organizationId: user.organizationId?.toString() ?? null,
+        },
+      });
+    }
+
     return apiSuccess({
       authenticated: true,
       user: toSafeUserMinimal(user),

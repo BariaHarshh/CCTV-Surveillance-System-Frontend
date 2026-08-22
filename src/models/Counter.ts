@@ -29,3 +29,7 @@ export async function formatOrgId(seq: number): Promise<string> {
 export async function formatAdminId(seq: number): Promise<string> {
   return `ADM-${String(seq).padStart(6, "0")}`;
 }
+
+export async function formatStaffId(seq: number): Promise<string> {
+  return `STF-${String(seq).padStart(6, "0")}`;
+}

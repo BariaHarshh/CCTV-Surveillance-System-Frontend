@@ -9,6 +9,7 @@ export interface SafeUser {
   organizationId: string | null;
   status: string;
   mustChangePassword: boolean;
+  permissions?: string[];
 }
 
 export function toSafeUser(user: IUser): SafeUser {
@@ -21,6 +22,7 @@ export function toSafeUser(user: IUser): SafeUser {
     organizationId: user.organizationId?.toString() ?? null,
     status: user.status,
     mustChangePassword: user.mustChangePassword ?? false,
+    permissions: user.permissions ?? [],
   };
 }
 
