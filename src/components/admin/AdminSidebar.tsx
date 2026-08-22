@@ -7,14 +7,18 @@ import {
   AlertTriangle,
   BarChart3,
   Building2,
+  Camera,
   ChevronLeft,
+  DoorOpen,
   LayoutDashboard,
+  Monitor,
   ScrollText,
   Settings,
   Shield,
   UserCircle,
   Users,
   X,
+  Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +31,15 @@ const navSections = [
     title: "Organization",
     items: [
       { href: "/admin/organization", label: "Organization Profile", icon: Building2 },
-      { href: "/admin/campus", label: "Campus", icon: Building2 },
+      { href: "/admin/campus", label: "Campus Overview", icon: Building2 },
+    ],
+  },
+  {
+    title: "Campus",
+    items: [
+      { href: "/admin/campus/buildings", label: "Buildings", icon: Building2 },
+      { href: "/admin/campus/rooms", label: "Rooms", icon: DoorOpen },
+      { href: "/admin/cameras", label: "Cameras", icon: Camera },
     ],
   },
   {
@@ -38,9 +50,17 @@ const navSections = [
     ],
   },
   {
+    title: "Monitoring",
+    items: [
+      { href: "/admin/monitoring", label: "Live Monitoring", icon: Monitor },
+      { href: "/admin/events", label: "Events", icon: ScrollText },
+      { href: "/admin/alerts", label: "Alert Center", icon: AlertTriangle },
+      { href: "/admin/notifications", label: "Notifications", icon: Bell },
+    ],
+  },
+  {
     title: "Security",
     items: [
-      { href: "/admin/alerts", label: "Alerts", icon: AlertTriangle },
       { href: "/admin/security", label: "Security Activity", icon: Shield },
       { href: "/admin/sessions", label: "Sessions", icon: ScrollText },
     ],

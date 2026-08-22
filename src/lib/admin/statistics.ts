@@ -4,6 +4,10 @@ import { User } from "@/models/User";
 import { Organization } from "@/models/Organization";
 import { AuditLog } from "@/models/AuditLog";
 import { getStaffStatistics } from "@/lib/staff/service";
+import { getCampusStatistics } from "@/lib/campus/service";
+import { getCameraStatistics } from "@/lib/campus/camera-service";
+import { getOrCreateCampus } from "@/lib/campus/service";
+import { getMonitoringOverview } from "@/lib/monitoring/monitoring-stats";
 import mongoose from "mongoose";
 
 const ORG_STAFF_ACTIONS = [
@@ -20,6 +24,11 @@ const ORG_STAFF_ACTIONS = [
   "PROFILE_UPDATED",
   "ORGANIZATION_VIEWED",
   "ORGANIZATION_UPDATED",
+  "CAMPUS_UPDATED",
+  "BUILDING_CREATED",
+  "BUILDING_UPDATED",
+  "CAMERA_CREATED",
+  "CAMERA_TESTED",
 ] as const;
 
 function onlineThresholdDate(): Date {
@@ -30,7 +39,7 @@ export async function getAdminDashboardData(organizationId: string) {
   await connectDB();
   const orgObjectId = new mongoose.Types.ObjectId(organizationId);
 
-  const [organization, staffStats, campusUsers, recentActivity] = await Promise.all([
+  const [organization, staffStats, campusUsers, recentActivity, campusDoc, cameraStats, monitoringOverview] = await Promise.all([
     Organization.findOne({ _id: orgObjectId, deletedAt: null }),
     getStaffStatistics(organizationId),
     User.countDocuments({
@@ -38,7 +47,15 @@ export async function getAdminDashboardData(organizationId: string) {
       role: { $in: ["ADMIN", "STAFF"] },
     }),
     getOrganizationActivity(organizationId, 15),
+    getOrCreateCampus(organizationId).catch(() => null),
+    getCameraStatistics(organizationId).catch(() => null),
+    getMonitoringOverview(organizationId).catch(() => null),
   ]);
+
+  let campusStats = null;
+  if (campusDoc) {
+    campusStats = await getCampusStatistics(organizationId, campusDoc._id.toString());
+  }
 
   if (!organization) {
     throw new Error("Organization not found.");
@@ -54,8 +71,31 @@ export async function getAdminDashboardData(organizationId: string) {
     statistics: {
       staff: staffStats,
       campusUsers,
-      activeAlerts: 0,
+      activeAlerts: monitoringOverview?.alerts.unresolved ?? 0,
+      criticalAlerts: monitoringOverview?.alerts.critical ?? 0,
+      eventsToday: monitoringOverview?.events.today ?? 0,
+      activeEvents: monitoringOverview?.events.active ?? 0,
+      currentRisk: monitoringOverview?.currentRisk ?? { score: 0, level: "LOW", label: "No active risk" },
       organizationStatus: organization.status,
+      campus: campusStats
+        ? {
+            buildings: campusStats.buildings,
+            rooms: campusStats.rooms,
+            cameras: campusStats.cameras,
+            totalCapacity: campusStats.totalCapacity,
+            occupancy: null,
+            occupancyLabel: "AI Occupancy — Coming Soon",
+          }
+        : null,
+      cameras: cameraStats ?? {
+        total: 0,
+        online: 0,
+        offline: 0,
+        maintenance: 0,
+        error: 0,
+        connecting: 0,
+        disabled: 0,
+      },
     },
     staffOverview: [
       { name: "Active", value: staffStats.active, color: "#34d399" },

@@ -97,19 +97,28 @@ export function StaffWizard({ user }: { user: SafeUser }) {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Failed to create staff");
 
+      const payload = {
+        name: json.staff.name,
+        userId: json.staff.userId,
+        password: json.temporaryPassword,
+        staffId: json.staff.id,
+        orgName: json.organizationName,
+        orgId: json.organizationPublicId,
+      };
+
       const key = `acg_staff_success_${Date.now()}`;
-      sessionStorage.setItem(
+      sessionStorage.setItem(key, JSON.stringify(payload));
+      sessionStorage.setItem("acg_staff_success_latest", JSON.stringify(payload));
+
+      const qs = new URLSearchParams({
         key,
-        JSON.stringify({
-          name: json.staff.name,
-          userId: json.staff.userId,
-          password: json.temporaryPassword,
-          staffId: json.staff.id,
-          orgName: json.organizationName,
-          orgId: json.organizationPublicId,
-        })
-      );
-      router.push(`/admin/staff/success?key=${key}`);
+        staffId: json.staff.id,
+        name: json.staff.name,
+        userId: json.staff.userId,
+        orgName: json.organizationName ?? "",
+        orgId: json.organizationPublicId ?? "",
+      });
+      router.push(`/admin/staff/success?${qs.toString()}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Creation failed");
     } finally {

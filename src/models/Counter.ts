@@ -33,3 +33,31 @@ export async function formatAdminId(seq: number): Promise<string> {
 export async function formatStaffId(seq: number): Promise<string> {
   return `STF-${String(seq).padStart(6, "0")}`;
 }
+
+export async function formatBuildingId(seq: number): Promise<string> {
+  return `BLD-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatRoomId(seq: number): Promise<string> {
+  return `ROOM-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatCameraId(seq: number): Promise<string> {
+  return `CAM-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatCampusId(seq: number): Promise<string> {
+  return `CMP-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatEventId(seq: number): Promise<string> {
+  return `EVT-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatAlertId(seq: number): Promise<string> {
+  return `ALT-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatNotificationId(seq: number): Promise<string> {
+  return `NTF-${String(seq).padStart(6, "0")}`;
+}

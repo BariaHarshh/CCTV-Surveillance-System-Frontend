@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { RefreshCw, Shield, UserCheck, Users, UserX, Wifi, AlertTriangle, Building2 } from "lucide-react";
+import { RefreshCw, Shield, UserCheck, Users, UserX, Wifi, AlertTriangle, Building2, Camera, DoorOpen, Activity } from "lucide-react";
 import { AdminShell } from "./AdminShell";
 import { StatCard, StatCardSkeleton } from "@/components/super-admin/StatCard";
 import { DonutChart } from "@/components/super-admin/DonutChart";
@@ -10,9 +10,10 @@ import { EmptyState } from "@/components/super-admin/EmptyState";
 import { useAdminDashboardData } from "./useAdminDashboardData";
 import { formatRelativeTime } from "@/lib/utils/time";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
+import { RealtimeIndicator } from "@/components/monitoring/shared";
 
 export function AdminDashboard({ user }: { user: SafeUser }) {
-  const { data, loading, error, refetch, notifications } = useAdminDashboardData();
+  const { data, loading, error, refetch, notifications, realtimeStatus } = useAdminDashboardData();
   const stats = data?.statistics;
 
   if (error && !data) {
@@ -37,15 +38,33 @@ export function AdminDashboard({ user }: { user: SafeUser }) {
       notifications={notifications}
     >
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Welcome back, {user.name}</h1>
-          <p className="mt-1 text-muted">Here&apos;s what&apos;s happening across your organization.</p>
-          {data?.organization.name && (
-            <p className="mt-3 flex items-center gap-2 text-lg font-semibold text-accent">
-              <Building2 className="h-5 w-5" /> {data.organization.name}
-            </p>
-          )}
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Welcome back, {user.name}</h1>
+            <p className="mt-1 text-muted">Here&apos;s what&apos;s happening across your organization.</p>
+            {data?.organization.name && (
+              <p className="mt-3 flex items-center gap-2 text-lg font-semibold text-accent">
+                <Building2 className="h-5 w-5" /> {data.organization.name}
+              </p>
+            )}
+          </div>
+          <RealtimeIndicator status={realtimeStatus} />
         </div>
+
+        {stats && (
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold">Live Security Overview</h2>
+            <p className="mt-1 text-sm text-muted">Real-time monitoring metrics — updates via WebSocket</p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
+              <StatCard label="Cameras Online" value={stats.cameras?.online ?? 0} icon={Camera} delay={0} />
+              <StatCard label="Active Alerts" value={stats.activeAlerts} icon={AlertTriangle} delay={0.05} />
+              <StatCard label="Critical Alerts" value={stats.criticalAlerts ?? 0} icon={AlertTriangle} delay={0.1} />
+              <StatCard label="Events Today" value={stats.eventsToday ?? 0} icon={Activity} delay={0.15} />
+              <StatCard label="Current Risk" value={stats.currentRisk?.label ?? "—"} icon={Shield} delay={0.2} />
+              <StatCard label="Unresolved Events" value={stats.activeEvents ?? 0} icon={Activity} delay={0.25} />
+            </div>
+          </div>
+        )}
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {loading ? (
@@ -63,6 +82,33 @@ export function AdminDashboard({ user }: { user: SafeUser }) {
             </>
           ) : null}
         </div>
+
+        {stats?.cameras && (
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold">Camera Statistics</h2>
+            <p className="mt-1 text-sm text-muted">Real counts from your organization&apos;s camera network</p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+              <StatCard label="Total Cameras" value={stats.cameras.total} icon={Camera} delay={0} />
+              <StatCard label="Online" value={stats.cameras.online} icon={Camera} delay={0.05} />
+              <StatCard label="Offline" value={stats.cameras.offline} icon={Camera} delay={0.1} />
+              <StatCard label="Maintenance" value={stats.cameras.maintenance} icon={Camera} delay={0.15} />
+              <StatCard label="Connection Errors" value={stats.cameras.error} icon={AlertTriangle} delay={0.2} />
+            </div>
+          </div>
+        )}
+
+        {stats?.campus && (
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold">Campus Statistics</h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+              <StatCard label="Buildings" value={stats.campus.buildings} icon={Building2} delay={0} />
+              <StatCard label="Rooms" value={stats.campus.rooms} icon={DoorOpen} delay={0.05} />
+              <StatCard label="Cameras" value={stats.campus.cameras} icon={Camera} delay={0.1} />
+              <StatCard label="Campus Capacity" value={stats.campus.totalCapacity} icon={Users} delay={0.15} />
+              <StatCard label="Occupancy" value={stats.campus.occupancyLabel} icon={Users} delay={0.2} />
+            </div>
+          </div>
+        )}
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">

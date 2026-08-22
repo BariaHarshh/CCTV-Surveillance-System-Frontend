@@ -3,9 +3,7 @@ import { toSafeUser } from "@/lib/auth/sanitize-user";
 import { AdminPlaceholderPage } from "@/components/admin/AdminPlaceholderPage";
 
 const pages = {
-  campus: { title: "Campus", description: "Campus management and monitoring foundation will be available in Step 6." },
   users: { title: "Users", description: "Campus user management will be expanded in a future release." },
-  alerts: { title: "Alerts", description: "AI-powered alert monitoring will be available in a later development stage." },
   security: { title: "Security Activity", description: "Organization security activity feed will be expanded in Step 6." },
   sessions: { title: "Sessions", description: "Session management for your organization will be available soon." },
   reports: { title: "Reports", description: "Advanced reporting will be available in a future release." },

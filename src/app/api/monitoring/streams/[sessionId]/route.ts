@@ -1,0 +1,34 @@
+import { NextRequest } from "next/server";
+import { ensureDbReady } from "@/lib/auth/init-super-admin";
+import { requireOrgMember } from "@/lib/auth/require-org-member";
+import { canViewMonitoring } from "@/lib/monitoring/permissions";
+import { getStreamSessionProxy } from "@/lib/monitoring/stream-service";
+
+type RouteParams = { params: Promise<{ sessionId: string }> };
+
+export async function GET(_request: NextRequest, { params }: RouteParams) {
+  try {
+    await ensureDbReady();
+    const { user } = await requireOrgMember();
+    if (!canViewMonitoring(user)) {
+      return new Response("Forbidden", { status: 403 });
+    }
+
+    const { sessionId } = await params;
+    const proxy = await getStreamSessionProxy(sessionId);
+    if (!proxy) return new Response("Stream unavailable", { status: 404 });
+
+    const upstream = await fetch(proxy.fetchUrl, { signal: AbortSignal.timeout(10000) });
+    if (!upstream.ok) return new Response("Stream connection failed", { status: 502 });
+
+    const contentType = upstream.headers.get("content-type") ?? proxy.contentType;
+    return new Response(upstream.body, {
+      headers: {
+        "Content-Type": contentType,
+        "Cache-Control": "no-store",
+      },
+    });
+  } catch {
+    return new Response("Stream error", { status: 500 });
+  }
+}

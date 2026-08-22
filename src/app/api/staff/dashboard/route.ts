@@ -17,7 +17,9 @@ export async function GET() {
         role: user.role,
         status: user.status,
         permissions: user.permissions,
+        professional: user.professional,
         lastLogin: user.lastLogin?.toISOString() ?? null,
+        lastActive: user.lastActive?.toISOString() ?? null,
       },
       organization: org
         ? { name: org.name, organizationId: org.organizationId, status: org.status }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useMonitoringSocket } from "@/hooks/useMonitoringSocket";
 
 interface DashboardData {
   organization: { name: string; status: string };
@@ -8,7 +9,28 @@ interface DashboardData {
     staff: { total: number; active: number; inactive: number; suspended: number; pending: number; online: number; offline: number };
     campusUsers: number;
     activeAlerts: number;
+    criticalAlerts: number;
+    eventsToday: number;
+    activeEvents: number;
+    currentRisk: { score: number; level: string; label: string };
     organizationStatus: string;
+    campus: {
+      buildings: number;
+      rooms: number;
+      cameras: number;
+      totalCapacity: number;
+      occupancy: null;
+      occupancyLabel: string;
+    } | null;
+    cameras: {
+      total: number;
+      online: number;
+      offline: number;
+      maintenance: number;
+      error: number;
+      connecting: number;
+      disabled: number;
+    };
   };
   staffOverview: { name: string; value: number; color: string }[];
   activity: { id: string; description: string; createdAt: string; action: string }[];
@@ -38,6 +60,13 @@ export function useAdminDashboardData() {
     fetchData();
   }, [fetchData]);
 
+  const { status: realtimeStatus } = useMonitoringSocket({
+    onAlertCreated: () => fetchData(),
+    onAlertUpdated: () => fetchData(),
+    onEventCreated: () => fetchData(),
+    onCameraStatus: () => fetchData(),
+  });
+
   const notifications =
     data?.activity.slice(0, 5).map((a) => ({
       id: a.id,
@@ -45,5 +74,5 @@ export function useAdminDashboardData() {
       time: a.createdAt,
     })) ?? [];
 
-  return { data, loading, error, refetch: fetchData, notifications };
+  return { data, loading, error, refetch: fetchData, notifications, realtimeStatus };
 }
