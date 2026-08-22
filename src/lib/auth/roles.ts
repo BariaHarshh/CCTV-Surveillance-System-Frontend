@@ -11,7 +11,10 @@ export function formatRoleLabel(role: string): string {
   }
 }
 
-export function getDefaultRedirectForRole(role: string): string {
+export function getDefaultRedirectForRole(role: string, mustChangePassword = false): string {
+  if (mustChangePassword && role === "ADMIN") {
+    return "/first-login-password";
+  }
   switch (role) {
     case "SUPER_ADMIN":
       return "/super-admin";

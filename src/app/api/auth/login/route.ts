@@ -9,6 +9,7 @@ import { createSession, setSessionCookie } from "@/lib/auth/session";
 import { toSafeUserMinimal } from "@/lib/auth/sanitize-user";
 import { apiError, apiSuccess, handleApiError } from "@/lib/api/response";
 import { User } from "@/models/User";
+import { Organization } from "@/models/Organization";
 
 const loginSchema = z.object({
   userIdOrEmail: z.string().min(1, "Please enter your User ID or email."),
@@ -112,6 +113,37 @@ export async function POST(request: NextRequest) {
       return apiError("Account access denied.", 403, "ACCOUNT_DENIED");
     }
 
+    if (user.organizationId && user.role !== "SUPER_ADMIN") {
+      const org = await Organization.findById(user.organizationId);
+      if (!org || org.deletedAt) {
+        return apiError(
+          "Organization Unavailable",
+          403,
+          "ORGANIZATION_UNAVAILABLE",
+          { message: "Your organization is no longer available. Contact platform support." }
+        );
+      }
+      if (org.status === "SUSPENDED") {
+        return apiError(
+          "Organization Suspended",
+          403,
+          "ORGANIZATION_SUSPENDED",
+          {
+            message:
+              "Your organization has been suspended. Contact your platform administrator.",
+          }
+        );
+      }
+      if (org.status === "INACTIVE" || org.status === "ARCHIVED") {
+        return apiError(
+          "Organization Inactive",
+          403,
+          "ORGANIZATION_INACTIVE",
+          { message: "Your organization is inactive. Contact platform support." }
+        );
+      }
+    }
+
     const passwordValid = await verifyPassword(password, user.passwordHash);
 
     if (!passwordValid) {
@@ -191,6 +223,7 @@ export async function POST(request: NextRequest) {
     return apiSuccess({
       authenticated: true,
       user: toSafeUserMinimal(user),
+      mustChangePassword: user.mustChangePassword ?? false,
     });
   } catch (error) {
     return handleApiError(error);

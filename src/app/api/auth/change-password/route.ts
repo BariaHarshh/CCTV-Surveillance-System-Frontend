@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
 
     userWithPassword.passwordHash = await hashPassword(newPassword);
     userWithPassword.passwordChangedAt = new Date();
+    userWithPassword.mustChangePassword = false;
     await userWithPassword.save();
 
     const currentToken = await getSessionTokenFromCookie();

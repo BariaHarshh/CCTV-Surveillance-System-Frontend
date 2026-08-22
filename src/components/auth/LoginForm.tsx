@@ -29,7 +29,8 @@ export function LoginForm() {
   useEffect(() => {
     if (!authLoading && isAuthenticated && user) {
       const redirect =
-        searchParams.get("redirect") || getDefaultRedirectForRole(user.role);
+        searchParams.get("redirect") ||
+        getDefaultRedirectForRole(user.role, user.mustChangePassword);
       router.replace(redirect);
     }
   }, [authLoading, isAuthenticated, user, router, searchParams]);
@@ -61,7 +62,10 @@ export function LoginForm() {
       const meData = meRes.ok ? await meRes.json() : null;
       const redirect =
         searchParams.get("redirect") ||
-        getDefaultRedirectForRole(meData?.user?.role ?? "STAFF");
+        getDefaultRedirectForRole(
+          meData?.user?.role ?? "STAFF",
+          meData?.user?.mustChangePassword ?? false
+        );
       router.push(redirect);
       router.refresh();
       return;

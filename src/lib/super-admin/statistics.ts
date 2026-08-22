@@ -39,6 +39,7 @@ export async function getPlatformStatistics() {
       { $group: { _id: "$role", count: { $sum: 1 } } },
     ]),
     Organization.aggregate([
+      { $match: { deletedAt: null } },
       { $group: { _id: "$status", count: { $sum: 1 } } },
     ]),
     User.countDocuments({ lastActive: { $gte: threshold }, status: "ACTIVE" }),
@@ -63,11 +64,12 @@ export async function getPlatformStatistics() {
     orgStatusCounts.map((o: { _id: string; count: number }) => [o._id, o.count])
   );
 
+  const totalOrganizations = await Organization.countDocuments({ deletedAt: null });
+
   const totalUsers = Object.values(statusMap).reduce((a, b) => a + b, 0);
   const totalAdmins = roleMap.ADMIN ?? 0;
   const totalStaff = roleMap.STAFF ?? 0;
   const totalSuperAdmins = roleMap.SUPER_ADMIN ?? 0;
-  const totalOrganizations = Object.values(orgMap).reduce((a, b) => a + b, 0);
 
   const activeUsers = statusMap.ACTIVE ?? 0;
   const inactiveUsers = statusMap.INACTIVE ?? 0;
@@ -182,27 +184,9 @@ function formatAuthActivityDescription(type: string): string {
 
 export async function getOrganizationsList() {
   await connectDB();
-
-  const orgs = await Organization.find().sort({ createdAt: -1 }).lean();
-
-  const results = await Promise.all(
-    orgs.map(async (org) => {
-      const [adminCount, staffCount] = await Promise.all([
-        User.countDocuments({ organizationId: org._id, role: "ADMIN" }),
-        User.countDocuments({ organizationId: org._id, role: "STAFF" }),
-      ]);
-      return {
-        id: org._id.toString(),
-        name: org.name,
-        status: org.status,
-        admins: adminCount,
-        staff: staffCount,
-        createdAt: org.createdAt.toISOString(),
-      };
-    })
-  );
-
-  return results;
+  const { listOrganizations } = await import("@/lib/organizations/service");
+  const { organizations } = await listOrganizations({ limit: 100 });
+  return organizations;
 }
 
 export async function getAdminsList() {
@@ -210,18 +194,21 @@ export async function getAdminsList() {
 
   const admins = await User.find({ role: "ADMIN" })
     .sort({ lastLogin: -1 })
-    .populate("organizationId", "name")
+    .populate("organizationId", "basicInformation.name organizationId")
     .lean();
 
   return admins.map((admin) => {
-    const org = admin.organizationId as { name?: string } | null;
+    const org = admin.organizationId as { basicInformation?: { name?: string } } | null;
     return {
       id: admin._id.toString(),
       name: admin.name,
       userId: admin.userId,
       email: admin.email,
       status: admin.status,
-      organization: org && typeof org === "object" && "name" in org ? org.name ?? "Unassigned" : "Unassigned",
+      organization:
+        org && typeof org === "object" && org.basicInformation?.name
+          ? org.basicInformation.name
+          : "Unassigned",
       lastLogin: admin.lastLogin?.toISOString() ?? null,
     };
   });

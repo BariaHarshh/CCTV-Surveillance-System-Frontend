@@ -8,6 +8,7 @@ export interface SafeUser {
   role: string;
   organizationId: string | null;
   status: string;
+  mustChangePassword: boolean;
 }
 
 export function toSafeUser(user: IUser): SafeUser {
@@ -19,6 +20,7 @@ export function toSafeUser(user: IUser): SafeUser {
     role: user.role,
     organizationId: user.organizationId?.toString() ?? null,
     status: user.status,
+    mustChangePassword: user.mustChangePassword ?? false,
   };
 }
 
@@ -29,5 +31,6 @@ export function toSafeUserMinimal(user: IUser) {
     userId: user.userId,
     role: user.role,
     organizationId: user.organizationId?.toString() ?? null,
+    mustChangePassword: user.mustChangePassword ?? false,
   };
 }

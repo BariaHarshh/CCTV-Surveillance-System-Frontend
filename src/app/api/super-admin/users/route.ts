@@ -74,7 +74,9 @@ export async function GET(request: NextRequest) {
       .map((u) => u.organizationId)
       .filter(Boolean) as mongoose.Types.ObjectId[];
     const orgs = await Organization.find({ _id: { $in: orgIds } }).lean();
-    const orgMap = Object.fromEntries(orgs.map((o) => [o._id.toString(), o.name]));
+    const orgMap = Object.fromEntries(
+      orgs.map((o) => [o._id.toString(), o.basicInformation?.name ?? "Unknown"])
+    );
 
     const threshold = new Date(Date.now() - platformConfig.onlineThresholdSeconds * 1000);
 

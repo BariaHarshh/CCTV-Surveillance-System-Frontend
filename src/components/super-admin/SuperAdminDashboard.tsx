@@ -157,7 +157,7 @@ export function SuperAdminDashboard({ user }: { user: SafeUser }) {
                       <td className="px-4 py-3"><StatusBadge status={org.status} /></td>
                       <td className="px-4 py-3 text-muted">{new Date(org.createdAt).toLocaleDateString()}</td>
                       <td className="px-4 py-3">
-                        <Link href="/super-admin/organizations" className="text-accent hover:underline">View</Link>
+                        <Link href={`/super-admin/organizations/${org.id}`} className="text-accent hover:underline">View</Link>
                       </td>
                     </tr>
                   ))}

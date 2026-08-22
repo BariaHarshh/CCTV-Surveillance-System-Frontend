@@ -25,7 +25,7 @@ export async function GET(
     let organizationName = "Platform";
     if (user.organizationId) {
       const org = await Organization.findById(user.organizationId).lean();
-      organizationName = org?.name ?? "Unknown";
+      organizationName = org?.basicInformation?.name ?? "Unknown";
     }
 
     const sessions = await Session.find({
