@@ -7,6 +7,7 @@ import { RiskEngine } from "@/components/landing/RiskEngine";
 import { DashboardPreview } from "@/components/landing/DashboardPreview";
 import { SecuritySection } from "@/components/landing/SecuritySection";
 import { FutureIntelligence } from "@/components/landing/FutureIntelligence";
+import { InterestForm } from "@/components/landing/InterestForm";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
 
@@ -23,6 +24,7 @@ export default function HomePage() {
         <DashboardPreview />
         <SecuritySection />
         <FutureIntelligence />
+        <InterestForm />
         <FinalCTA />
       </main>
       <Footer />

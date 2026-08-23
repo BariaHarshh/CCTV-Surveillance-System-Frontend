@@ -26,14 +26,20 @@ export function FinalCTA() {
           <motion.div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-10 inline-block"
+            className="mt-10 inline-flex flex-wrap items-center justify-center gap-4"
           >
-            <Link
-              href="/login"
+            <a
+              href="#interest"
               className="group inline-flex items-center gap-3 rounded-full bg-accent px-10 py-4 text-base font-semibold text-background transition-all hover:bg-accent-dim hover:shadow-[0_0_50px_rgba(56,189,248,0.4)]"
             >
-              Enter AI Campus Guardian
+              Share your requirements
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </a>
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-8 py-4 text-base font-medium text-white transition hover:bg-white/[0.04]"
+            >
+              Enter platform
             </Link>
           </motion.div>
         </motion.div>

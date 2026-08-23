@@ -146,7 +146,7 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
           </button>
           {testMode && (
             <div className="mt-3 flex flex-wrap gap-2">
-              {["test_event", "test_critical_alert", "camera_online", "camera_offline"].map((a) => (
+              {["test_event", "test_critical_alert", "camera_online", "camera_offline", "test_person", "test_occupancy", "test_restricted_entry", "test_after_hours", "test_abandoned_object", "test_fire", "test_smoke", "test_ppe", "test_tamper", "test_full_chain"].map((a) => (
                 <button key={a} type="button" onClick={() => runTest(a)} className="rounded-lg bg-amber-500/10 px-3 py-1.5 text-[11px] text-amber-300 hover:bg-amber-500/20">
                   {a.replace(/_/g, " ")}
                 </button>

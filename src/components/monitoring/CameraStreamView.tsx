@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Maximize2, VideoOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DetectionOverlay } from "./DetectionOverlay";
 
 interface StreamInfo {
   available: boolean;
@@ -11,16 +12,31 @@ interface StreamInfo {
   message?: string;
 }
 
+interface OverlayDetection {
+  label: string;
+  confidence?: number | null;
+  boundingBox?: { x: number; y: number; w: number; h: number };
+}
+
+interface OverlayZone {
+  name: string;
+  polygon: { x: number; y: number }[];
+}
+
 export function CameraStreamView({
   cameraDbId,
   status,
   className,
   showFullscreen = true,
+  detections = [],
+  zones = [],
 }: {
   cameraDbId: string;
   status: string;
   className?: string;
   showFullscreen?: boolean;
+  detections?: OverlayDetection[];
+  zones?: OverlayZone[];
 }) {
   const [stream, setStream] = useState<StreamInfo | null>(null);
   const [loading, setLoading] = useState(false);
@@ -73,6 +89,7 @@ export function CameraStreamView({
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={stream.url} alt="Live camera feed" className="aspect-video w-full object-cover" />
+          <DetectionOverlay detections={detections} zones={zones} />
           {showFullscreen && (
             <button
               type="button"

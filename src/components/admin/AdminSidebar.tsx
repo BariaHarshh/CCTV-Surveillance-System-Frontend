@@ -8,6 +8,7 @@ import {
   BarChart3,
   Building2,
   Camera,
+  Brain,
   ChevronLeft,
   DoorOpen,
   LayoutDashboard,
@@ -47,6 +48,13 @@ const navSections = [
     items: [
       { href: "/admin/staff", label: "Staff", icon: Users },
       { href: "/admin/users", label: "Users", icon: UserCircle },
+    ],
+  },
+  {
+    title: "AI Intelligence",
+    items: [
+      { href: "/admin/ai", label: "AI Intelligence", icon: Brain },
+      { href: "/admin/incidents", label: "Incidents", icon: Shield },
     ],
   },
   {

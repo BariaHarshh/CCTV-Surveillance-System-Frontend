@@ -7,6 +7,7 @@ import {
   Activity,
   Building2,
   ChevronLeft,
+  Inbox,
   LayoutDashboard,
   ScrollText,
   Server,
@@ -29,6 +30,7 @@ const navSections = [
       { href: "/super-admin/organizations", label: "Organizations", icon: Building2 },
       { href: "/super-admin/administrators", label: "Administrators", icon: UserCog },
       { href: "/super-admin/users", label: "Users", icon: Users },
+      { href: "/super-admin/inquiries", label: "Purchase Inquiries", icon: Inbox },
     ],
   },
   {

@@ -46,3 +46,7 @@ export function broadcastAlertUpdated(organizationId: string, payload: Record<st
 export function broadcastNotificationCreated(organizationId: string, payload: Record<string, unknown>): void {
   emitToOrganization(organizationId, SOCKET_EVENTS.NOTIFICATION_CREATED, payload);
 }
+
+export function broadcastIncidentUpdated(organizationId: string, payload: Record<string, unknown>): void {
+  emitToOrganization(organizationId, SOCKET_EVENTS.INCIDENT_UPDATED, payload);
+}

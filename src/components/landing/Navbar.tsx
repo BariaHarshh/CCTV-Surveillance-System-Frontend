@@ -9,6 +9,7 @@ const navLinks = [
   { href: "#platform", label: "Platform" },
   { href: "#intelligence", label: "Intelligence" },
   { href: "#security", label: "Security" },
+  { href: "#interest", label: "Get a Quote" },
   { href: "#about", label: "About" },
 ];
 

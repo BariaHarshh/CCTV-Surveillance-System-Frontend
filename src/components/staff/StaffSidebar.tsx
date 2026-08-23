@@ -39,6 +39,7 @@ const ALL_NAV = [
       { href: "/staff/monitoring", label: "Live Monitoring", icon: Monitor, perm: "monitoring.view" },
       { href: "/staff/events", label: "Events", icon: ScrollText, perm: "event.view" },
       { href: "/staff/alerts", label: "Alerts", icon: AlertTriangle, perm: "alert.view" },
+      { href: "/staff/incidents", label: "Incidents", icon: Shield, perm: "incident.view" },
     ],
   },
   { section: "Reports", items: [{ href: "/staff/reports", label: "Reports", icon: BarChart3, perm: "report.view" }] },

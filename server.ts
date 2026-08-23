@@ -1,4 +1,5 @@
-import { createServer, type IncomingMessage, type ServerResponse } from "http";
+import { createServer } from "http";
+import { parse } from "url";
 import next from "next";
 import { Server as SocketIOServer } from "socket.io";
 import { authenticateSocketSession } from "./src/lib/monitoring/socket-auth";
@@ -13,15 +14,9 @@ const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
-  const httpServer = createServer((req: IncomingMessage, res: ServerResponse) => {
-    const url = new URL(req.url ?? "/", `http://${req.headers.host ?? hostname}`);
-    handle(req, res, {
-      pathname: url.pathname,
-      query: Object.fromEntries(url.searchParams),
-      href: url.href,
-      path: url.pathname + url.search,
-      search: url.search,
-    });
+  const httpServer = createServer((req, res) => {
+    const parsedUrl = parse(req.url ?? "", true);
+    handle(req, res, parsedUrl);
   });
 
   const io = new SocketIOServer(httpServer, {

@@ -13,6 +13,7 @@ export function useMonitoringSocket(handlers?: {
   onAlertCreated?: (payload: Record<string, unknown>) => void;
   onAlertUpdated?: (payload: Record<string, unknown>) => void;
   onNotification?: (payload: Record<string, unknown>) => void;
+  onIncidentUpdated?: (payload: Record<string, unknown>) => void;
 }) {
   const [status, setStatus] = useState<RealtimeStatus>("disconnected");
   const socketRef = useRef<Socket | null>(null);
@@ -39,6 +40,7 @@ export function useMonitoringSocket(handlers?: {
     socket.on(SOCKET_EVENTS.ALERT_CREATED, (p) => handlersRef.current?.onAlertCreated?.(p));
     socket.on(SOCKET_EVENTS.ALERT_UPDATED, (p) => handlersRef.current?.onAlertUpdated?.(p));
     socket.on(SOCKET_EVENTS.NOTIFICATION_CREATED, (p) => handlersRef.current?.onNotification?.(p));
+    socket.on(SOCKET_EVENTS.INCIDENT_UPDATED, (p) => handlersRef.current?.onIncidentUpdated?.(p));
 
     socketRef.current = socket;
   }, []);

@@ -22,6 +22,15 @@ const PERMISSION_ALIASES: Record<string, string> = {
   "alert.investigate": "alert:investigate",
   "alert.resolve": "alert:resolve",
   "alert.dismiss": "alert:dismiss",
+  "ai.view": "ai:view",
+  "ai.configure": "ai:configure",
+  "detection.view": "detection:view",
+  "detection.configure": "detection:configure",
+  "incident.view": "incident:view",
+  "incident.manage": "incident:manage",
+  "risk.view": "risk:view",
+  "event.feedback": "event:feedback",
+  "camera.ai.configure": "camera:ai:configure",
   "report.view": "reports:view",
   "dashboard.view": "dashboard:view",
 };
@@ -75,6 +84,15 @@ export function can(user: Pick<IUser, "role" | "permissions"> | null | undefined
       "alert:investigate": ["org:edit"],
       "alert:resolve": ["org:edit"],
       "alert:dismiss": ["org:edit"],
+      "ai:view": ["org:view", "monitoring:view"],
+      "ai:configure": ["org:edit"],
+      "detection:view": ["monitoring:events", "monitoring:view"],
+      "detection:configure": ["org:edit"],
+      "incident:view": ["monitoring:events", "monitoring:alerts"],
+      "incident:manage": ["org:edit"],
+      "risk:view": ["monitoring:view"],
+      "event:feedback": ["monitoring:events"],
+      "camera:ai:configure": ["org:edit", "camera:edit"],
     };
     const grants = adminLegacy[normalized];
     if (grants?.some((p) => perms.includes(p))) return true;

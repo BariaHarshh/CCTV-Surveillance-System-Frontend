@@ -28,6 +28,7 @@ interface EventRow {
   detectedAt: string;
   status: string;
   source: string;
+  metadata?: Record<string, unknown>;
 }
 
 export function MonitoringCameraDetailClient({
@@ -56,6 +57,21 @@ export function MonitoringCameraDetailClient({
 
   const activeEvents = events.filter((e) => e.status === "OPEN");
 
+  const overlayEvent = events.find((e) => {
+    const meta = (e as EventRow & { metadata?: Record<string, unknown> }).metadata;
+    return meta && typeof meta === "object" && "boundingBox" in meta;
+  });
+  const overlayMeta = (overlayEvent as (EventRow & { metadata?: Record<string, unknown> }) | undefined)?.metadata;
+  const boundingBox = overlayMeta?.boundingBox as { x: number; y: number; w: number; h: number } | undefined;
+  const overlayDetections = boundingBox
+    ? [{ label: formatEventType(overlayEvent!.eventType), confidence: overlayEvent!.confidence, boundingBox }]
+    : [];
+  const zonePolygon = overlayMeta?.zonePolygon as { x: number; y: number }[] | undefined;
+  const overlayZones =
+    zonePolygon && overlayMeta?.zoneName
+      ? [{ name: String(overlayMeta.zoneName), polygon: zonePolygon }]
+      : [];
+
   return (
     <MonitoringPortal portal={portal} user={user}>
       <Link href={`${base}/monitoring`} className="inline-flex items-center gap-2 text-sm text-muted hover:text-accent">
@@ -73,8 +89,20 @@ export function MonitoringCameraDetailClient({
             <p className="font-mono text-sm text-muted">{camera.cameraId}</p>
             <div className="mt-6">
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">Live View</h2>
-              <CameraStreamView cameraDbId={camera.id} status={camera.status} className="w-full" />
+              <CameraStreamView
+                cameraDbId={camera.id}
+                status={camera.status}
+                className="w-full"
+                detections={overlayDetections}
+                zones={overlayZones}
+              />
             </div>
+
+            {portal === "admin" && (
+              <Link href={`/admin/cameras/${camera.id}/ai`} className="mt-3 inline-block text-xs text-accent hover:underline">
+                Configure AI detection for this camera
+              </Link>
+            )}
 
             <div className="mt-8">
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">Current Events</h2>

@@ -61,3 +61,19 @@ export async function formatAlertId(seq: number): Promise<string> {
 export async function formatNotificationId(seq: number): Promise<string> {
   return `NTF-${String(seq).padStart(6, "0")}`;
 }
+
+export async function formatInquiryId(seq: number): Promise<string> {
+  return `INQ-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatIncidentId(seq: number): Promise<string> {
+  return `INC-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatZoneId(seq: number): Promise<string> {
+  return `ZON-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatScheduleId(seq: number): Promise<string> {
+  return `SCH-${String(seq).padStart(6, "0")}`;
+}

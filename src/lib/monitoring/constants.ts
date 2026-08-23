@@ -18,7 +18,7 @@ export type EventType = (typeof EVENT_TYPES)[number];
 export const SEVERITY_LEVELS = ["LOW", "MEDIUM", "HIGH", "CRITICAL"] as const;
 export type SeverityLevel = (typeof SEVERITY_LEVELS)[number];
 
-export const EVENT_STATUSES = ["OPEN", "ACKNOWLEDGED", "RESOLVED", "DISMISSED"] as const;
+export const EVENT_STATUSES = ["OPEN", "ACKNOWLEDGED", "RESOLVED", "DISMISSED", "FALSE_POSITIVE"] as const;
 export type EventStatus = (typeof EVENT_STATUSES)[number];
 
 export const ALERT_STATUSES = ["NEW", "ACKNOWLEDGED", "INVESTIGATING", "RESOLVED", "DISMISSED"] as const;
@@ -48,6 +48,8 @@ export const SOCKET_EVENTS = {
   ALERT_CREATED: "alert:created",
   ALERT_UPDATED: "alert:updated",
   NOTIFICATION_CREATED: "notification:created",
+  INCIDENT_UPDATED: "incident:updated",
+  DETECTION_CREATED: "detection:created",
 } as const;
 
 export function orgChannel(organizationId: string): string {

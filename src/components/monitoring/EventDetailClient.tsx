@@ -26,10 +26,22 @@ interface EventDetail {
   cameraName?: string;
 }
 
+const FEEDBACK_OPTIONS = [
+  { value: "CORRECT", label: "Correct" },
+  { value: "FALSE_POSITIVE", label: "False Positive" },
+  { value: "INCORRECT_EVENT_TYPE", label: "Incorrect Event Type" },
+  { value: "INCORRECT_SEVERITY", label: "Incorrect Severity" },
+] as const;
+
 export function EventDetailClient({ user, portal, eventId }: { user: SafeUser; portal: "admin" | "staff"; eventId: string }) {
   const base = portal === "admin" ? "/admin" : "/staff";
   const [event, setEvent] = useState<EventDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [feedbackType, setFeedbackType] = useState("");
+  const [reason, setReason] = useState("");
+  const [useful, setUseful] = useState<boolean | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [feedbackMsg, setFeedbackMsg] = useState("");
 
   useEffect(() => {
     fetch(`/api/events/${eventId}`, { credentials: "include" })
@@ -44,6 +56,30 @@ export function EventDetailClient({ user, portal, eventId }: { user: SafeUser; p
       })
       .finally(() => setLoading(false));
   }, [eventId]);
+
+  async function submitFeedback() {
+    if (!feedbackType) return;
+    setSubmitting(true);
+    setFeedbackMsg("");
+    try {
+      const res = await fetch(`/api/events/${eventId}/feedback`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ feedbackType, reason: reason || undefined, useful }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to submit feedback");
+      setFeedbackMsg("Feedback recorded. Thank you.");
+      setReason("");
+      setFeedbackType("");
+      setUseful(null);
+    } catch (e) {
+      setFeedbackMsg(e instanceof Error ? e.message : "Failed to submit feedback");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <MonitoringPortal portal={portal} user={user}>
@@ -101,6 +137,26 @@ export function EventDetailClient({ user, portal, eventId }: { user: SafeUser; p
                 <ul className="mt-1 list-inside list-disc text-xs">{event.riskFactors.map((f) => <li key={f}>{f}</li>)}</ul>
               </div>
             )}
+
+            <div className="mt-6 border-t border-white/[0.06] pt-4">
+              <h3 className="text-sm font-semibold">Detection Feedback</h3>
+              <p className="mt-1 text-xs text-muted">Was this detection useful?</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button type="button" onClick={() => setUseful(true)} className={`rounded-lg border px-3 py-1.5 text-xs ${useful === true ? "border-emerald-400/40 text-emerald-400" : "border-white/10 text-muted"}`}>Yes</button>
+                <button type="button" onClick={() => setUseful(false)} className={`rounded-lg border px-3 py-1.5 text-xs ${useful === false ? "border-red-400/40 text-red-400" : "border-white/10 text-muted"}`}>No</button>
+              </div>
+              <select value={feedbackType} onChange={(e) => setFeedbackType(e.target.value)} className="mt-3 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs">
+                <option value="">Select feedback type…</option>
+                {FEEDBACK_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+              <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Optional reason…" rows={2} className="mt-2 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs" />
+              <button type="button" onClick={submitFeedback} disabled={!feedbackType || submitting} className="mt-3 w-full rounded-lg bg-accent/20 py-2 text-xs font-semibold text-accent disabled:opacity-40">
+                {submitting ? "Submitting…" : "Submit Feedback"}
+              </button>
+              {feedbackMsg && <p className="mt-2 text-xs text-muted">{feedbackMsg}</p>}
+            </div>
           </div>
         </div>
       )}
