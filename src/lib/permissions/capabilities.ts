@@ -46,6 +46,14 @@ const PERMISSION_ALIASES: Record<string, string> = {
   "emergency_contact.view": "emergency_contact:view",
   "emergency_contact.manage": "emergency_contact:manage",
   "command_center.view": "command_center:view",
+  "analytics.view": "analytics:view",
+  "analytics.export": "analytics:export",
+  "reports.view": "reports:view",
+  "reports.generate": "reports:generate",
+  "executive.view": "executive:view",
+  "actions.view": "actions:view",
+  "actions.manage": "actions:manage",
+  "insights.view": "insights:view",
   "report.view": "reports:view",
   "dashboard.view": "dashboard:view",
 };
@@ -123,6 +131,14 @@ export function can(user: Pick<IUser, "role" | "permissions"> | null | undefined
       "emergency_contact:view": ["org:view", "monitoring:alerts"],
       "emergency_contact:manage": ["org:edit"],
       "command_center:view": ["org:view", "monitoring:view", "monitoring:dashboard"],
+      "analytics:view": ["org:view", "monitoring:view", "reports:view"],
+      "analytics:export": ["org:edit", "reports:view"],
+      "reports:view": ["org:view", "monitoring:view"],
+      "reports:generate": ["org:edit", "reports:view"],
+      "executive:view": ["org:view"],
+      "actions:view": ["org:view", "monitoring:alerts"],
+      "actions:manage": ["org:edit"],
+      "insights:view": ["org:view", "monitoring:view"],
     };
     const grants = adminLegacy[normalized];
     if (grants?.some((p) => perms.includes(p))) return true;

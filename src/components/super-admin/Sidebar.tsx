@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Activity,
   AlertTriangle,
+  BarChart3,
   Building2,
   ChevronLeft,
   Inbox,
@@ -46,6 +47,7 @@ const navSections = [
     title: "Platform",
     items: [
       { href: "/super-admin/system-health", label: "System Health", icon: Server },
+      { href: "/super-admin/analytics", label: "Platform Analytics", icon: BarChart3 },
       { href: "/super-admin/emergency-overview", label: "Emergency Overview", icon: AlertTriangle },
       { href: "/super-admin/settings", label: "Platform Settings", icon: Settings },
     ],

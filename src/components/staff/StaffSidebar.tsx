@@ -42,7 +42,13 @@ const ALL_NAV = [
       { href: "/staff/incidents", label: "Incidents", icon: Shield, perm: "incident.view" },
     ],
   },
-  { section: "Reports", items: [{ href: "/staff/reports", label: "Reports", icon: BarChart3, perm: "report.view" }] },
+  {
+    section: "Reports",
+    items: [
+      { href: "/staff/analytics", label: "Analytics", icon: BarChart3, perm: "report.view" },
+      { href: "/staff/reports", label: "Reports", icon: BarChart3, perm: "report.view" },
+    ],
+  },
   {
     section: "Account",
     items: [

@@ -48,5 +48,18 @@ app.prepare().then(() => {
 
   httpServer.listen(port, () => {
     console.log(`> Ready on http://${hostname}:${port} (Socket.IO enabled)`);
+
+    // Idempotent daily analytics aggregation (Step 10)
+    const runAnalyticsJob = async () => {
+      try {
+        const { analyticsAggregationWorker } = await import("./src/lib/analytics/aggregation-worker");
+        await analyticsAggregationWorker.run();
+      } catch (err) {
+        console.error("[AnalyticsAggregationWorker]", err instanceof Error ? err.message : err);
+      }
+    };
+    // Initial run shortly after boot, then every 6 hours
+    setTimeout(runAnalyticsJob, 60_000);
+    setInterval(runAnalyticsJob, 6 * 60 * 60 * 1000);
   });
 });

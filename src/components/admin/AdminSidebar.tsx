@@ -12,6 +12,8 @@ import {
   ChevronLeft,
   DoorOpen,
   LayoutDashboard,
+  Lightbulb,
+  LineChart,
   Monitor,
   ScrollText,
   Settings,
@@ -20,6 +22,7 @@ import {
   Users,
   X,
   Bell,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -85,8 +88,14 @@ const navSections = [
     ],
   },
   {
-    title: "Reports",
-    items: [{ href: "/admin/reports", label: "Reports", icon: BarChart3 }],
+    title: "Intelligence",
+    items: [
+      { href: "/admin/analytics", label: "Safety Intelligence", icon: LineChart },
+      { href: "/admin/executive", label: "Executive", icon: BarChart3 },
+      { href: "/admin/insights", label: "Insights", icon: Lightbulb },
+      { href: "/admin/actions", label: "Corrective Actions", icon: ClipboardList },
+      { href: "/admin/reports", label: "Reports", icon: BarChart3 },
+    ],
   },
   {
     title: "Account",

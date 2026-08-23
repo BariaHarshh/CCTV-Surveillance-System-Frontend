@@ -105,3 +105,23 @@ export async function formatContactId(seq: number): Promise<string> {
 export async function formatMessageId(seq: number): Promise<string> {
   return `MSG-${String(seq).padStart(6, "0")}`;
 }
+
+export async function formatPatternId(seq: number): Promise<string> {
+  return `PAT-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatActionId(seq: number): Promise<string> {
+  return `ACT-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatReportId(seq: number): Promise<string> {
+  return `RPT-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatInsightId(seq: number): Promise<string> {
+  return `INS-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatExportId(seq: number): Promise<string> {
+  return `EXP-${String(seq).padStart(6, "0")}`;
+}
