@@ -77,3 +77,31 @@ export async function formatZoneId(seq: number): Promise<string> {
 export async function formatScheduleId(seq: number): Promise<string> {
   return `SCH-${String(seq).padStart(6, "0")}`;
 }
+
+export async function formatEmergencyId(seq: number): Promise<string> {
+  return `EMG-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatTeamId(seq: number): Promise<string> {
+  return `TEM-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatTaskId(seq: number): Promise<string> {
+  return `TSK-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatPlaybookId(seq: number): Promise<string> {
+  return `PBK-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatEscalationRuleId(seq: number): Promise<string> {
+  return `ESC-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatContactId(seq: number): Promise<string> {
+  return `ECT-${String(seq).padStart(6, "0")}`;
+}
+
+export async function formatMessageId(seq: number): Promise<string> {
+  return `MSG-${String(seq).padStart(6, "0")}`;
+}

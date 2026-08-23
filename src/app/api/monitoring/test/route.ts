@@ -6,8 +6,12 @@ import { isTestModeEnabled } from "@/lib/monitoring/internal-auth";
 import { apiError, apiSuccess, handleApiError } from "@/lib/api/response";
 import { processDetection } from "@/lib/ai/detection-service";
 import { updateCameraStatus } from "@/lib/campus/camera-service";
-import { broadcastCameraStatus } from "@/lib/monitoring/socket-emitter";
-import { AI_MODULE_TYPES, MODULE_TO_EVENT } from "@/lib/ai/constants";
+import { broadcastCameraStatus, broadcastEmergencyCreated } from "@/lib/monitoring/socket-emitter";
+import { MODULE_TO_EVENT } from "@/lib/ai/constants";
+import { activateEmergency, updateEmergencyStatus } from "@/lib/emergency/emergency-service";
+import { startEscalation, acknowledgeEscalation, getActiveEscalations } from "@/lib/emergency/escalation-engine";
+import { createResponseTeam, listResponseTeams } from "@/lib/emergency/team-service";
+import { createTask } from "@/lib/emergency/task-service";
 import type { AIModuleType } from "@/lib/ai/constants";
 
 const TEST_ACTIONS = [
@@ -25,12 +29,19 @@ const TEST_ACTIONS = [
   "test_ppe",
   "test_tamper",
   "test_full_chain",
+  "test_emergency",
+  "test_escalation",
+  "test_team_assignment",
+  "test_task",
+  "test_websocket_emergency",
+  "test_emergency_resolve",
 ] as const;
 
 const schema = z.object({
   action: z.enum(TEST_ACTIONS),
   cameraId: z.string().optional(),
   zoneId: z.string().optional(),
+  emergencyId: z.string().optional(),
 });
 
 const ACTION_MODULE: Partial<Record<(typeof TEST_ACTIONS)[number], AIModuleType>> = {
@@ -54,7 +65,111 @@ export async function POST(request: NextRequest) {
     const parsed = schema.safeParse(await request.json());
     if (!parsed.success) return apiError("Invalid test action.", 400, "VALIDATION_ERROR");
 
-    const { action, cameraId, zoneId } = parsed.data;
+
+    const { action, cameraId, zoneId, emergencyId } = parsed.data;
+    const actor = { id: user._id.toString(), name: user.name };
+
+    if (action === "test_emergency") {
+      const emergency = await activateEmergency({
+        organizationId,
+        type: "SECURITY",
+        reason: "TEST: Simulated security emergency",
+        description: "Development test emergency — source TEST",
+        location: { label: "Test Building A" },
+        actor,
+        source: "TEST",
+        severity: "CRITICAL",
+        mode: "EMERGENCY",
+      });
+      await startEscalation({ organizationId, emergencyId: emergency.id, severity: "CRITICAL", source: "TEST" });
+      return apiSuccess({ emergency, source: "TEST", simulated: true }, 201);
+    }
+
+    if (action === "test_escalation") {
+      let eid = emergencyId;
+      if (!eid) {
+        const emergency = await activateEmergency({
+          organizationId,
+          type: "INTRUSION",
+          reason: "TEST: Escalation simulation",
+          actor,
+          source: "TEST",
+          severity: "HIGH",
+        });
+        eid = emergency.id;
+      }
+      const esc = await startEscalation({ organizationId, emergencyId: eid, severity: "HIGH", source: "TEST" });
+      return apiSuccess({ escalation: esc, emergencyId: eid, source: "TEST", simulated: true }, 201);
+    }
+
+    if (action === "test_team_assignment") {
+      const teams = await listResponseTeams(organizationId);
+      let team = teams[0];
+      if (!team) {
+        team = await createResponseTeam(organizationId, { name: "TEST Security Team", type: "SECURITY", source: "TEST" });
+      }
+      const emergency = await activateEmergency({
+        organizationId,
+        type: "SECURITY",
+        reason: "TEST: Team assignment",
+        actor,
+        source: "TEST",
+        teamIds: [team.id],
+      });
+      return apiSuccess({ emergency, team, source: "TEST", simulated: true }, 201);
+    }
+
+    if (action === "test_task") {
+      let eid = emergencyId;
+      if (!eid) {
+        const emergency = await activateEmergency({
+          organizationId,
+          type: "OTHER",
+          reason: "TEST: Task simulation",
+          actor,
+          source: "TEST",
+        });
+        eid = emergency.id;
+      }
+      const task = await createTask(
+        organizationId,
+        { title: "TEST: Verify location", emergencyId: eid, source: "TEST", priority: "HIGH" },
+        actor
+      );
+      return apiSuccess({ task, emergencyId: eid, source: "TEST", simulated: true }, 201);
+    }
+
+    if (action === "test_websocket_emergency") {
+      const emergency = await activateEmergency({
+        organizationId,
+        type: "CAMPUS_THREAT",
+        reason: "TEST: WebSocket broadcast",
+        actor,
+        source: "TEST",
+      });
+      broadcastEmergencyCreated(organizationId, { ...emergency, websocketTest: true });
+      return apiSuccess({ emergency, source: "TEST", simulated: true, websocket: "emitted" }, 201);
+    }
+
+    if (action === "test_emergency_resolve") {
+      let eid = emergencyId;
+      if (!eid) {
+        const emergency = await activateEmergency({
+          organizationId,
+          type: "OTHER",
+          reason: "TEST: Resolve simulation",
+          actor,
+          source: "TEST",
+        });
+        eid = emergency.id;
+        const esc = await startEscalation({ organizationId, emergencyId: eid, severity: "MEDIUM", source: "TEST" });
+        if (esc) await acknowledgeEscalation(organizationId, esc.id, actor);
+      }
+      const result = await updateEmergencyStatus(organizationId, eid, "RESOLVED", actor, "TEST resolution");
+      const remaining = await getActiveEscalations(organizationId, eid);
+      return apiSuccess({ result, escalations: remaining, source: "TEST", simulated: true });
+    }
+
     if (!cameraId && action !== "camera_online" && action !== "camera_offline") {
       return apiError("cameraId required.", 400, "VALIDATION_ERROR");
     }

@@ -23,6 +23,9 @@ function toPublic(i: IIncident) {
     status: i.status,
     assignedTo: i.assignedTo?.toString() ?? null,
     assignedToName: i.assignedToName,
+    assignedTeam: i.assignedTeam?.toString() ?? null,
+    assignedTeamName: i.assignedTeamName ?? "",
+    emergencyId: i.emergencyId?.toString() ?? null,
     title: i.title,
     startedAt: i.startedAt.toISOString(),
     resolvedAt: i.resolvedAt?.toISOString() ?? null,
@@ -167,6 +170,18 @@ export async function updateIncidentStatus(
   const incident = await Incident.findOne(orgFilter(organizationId, { _id: id }));
   if (!incident) return null;
 
+  const transitions: Record<string, string[]> = {
+    OPEN: ["INVESTIGATING", "DISMISSED", "RESOLVED", "CONTAINED"],
+    INVESTIGATING: ["CONTAINED", "RESOLVED", "DISMISSED", "OPEN"],
+    CONTAINED: ["RESOLVED", "INVESTIGATING", "DISMISSED"],
+    RESOLVED: [],
+    DISMISSED: [],
+  };
+  const allowed = transitions[incident.status] ?? [];
+  if (status !== incident.status && !allowed.includes(status)) {
+    return { error: "INVALID_TRANSITION" as const, from: incident.status, to: status };
+  }
+
   incident.status = status;
   if (status === "RESOLVED" || status === "DISMISSED") {
     incident.resolvedAt = new Date();
@@ -182,19 +197,27 @@ export async function updateIncidentStatus(
 export async function assignIncident(
   organizationId: string,
   id: string,
-  assigneeId: string,
-  assigneeName: string
+  assigneeId: string | null,
+  assigneeName: string,
+  team?: { teamId: string; teamName: string } | null
 ) {
   await connectDB();
   const incident = await Incident.findOne(orgFilter(organizationId, { _id: id }));
   if (!incident) return null;
 
-  incident.assignedTo = new mongoose.Types.ObjectId(assigneeId);
-  incident.assignedToName = assigneeName;
+  if (assigneeId) {
+    incident.assignedTo = new mongoose.Types.ObjectId(assigneeId);
+    incident.assignedToName = assigneeName;
+  }
+  if (team) {
+    incident.assignedTeam = new mongoose.Types.ObjectId(team.teamId);
+    incident.assignedTeamName = team.teamName;
+  }
   if (incident.status === "OPEN") incident.status = "INVESTIGATING";
   await incident.save();
 
   const publicIncident = toPublic(incident);
   emitToOrganization(organizationId, SOCKET_EVENTS.INCIDENT_UPDATED, publicIncident);
+  emitToOrganization(organizationId, SOCKET_EVENTS.INCIDENT_ASSIGNED, publicIncident);
   return publicIncident;
 }

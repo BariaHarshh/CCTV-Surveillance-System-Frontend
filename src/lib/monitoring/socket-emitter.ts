@@ -50,3 +50,31 @@ export function broadcastNotificationCreated(organizationId: string, payload: Re
 export function broadcastIncidentUpdated(organizationId: string, payload: Record<string, unknown>): void {
   emitToOrganization(organizationId, SOCKET_EVENTS.INCIDENT_UPDATED, payload);
 }
+
+export function broadcastEmergencyCreated(organizationId: string, payload: Record<string, unknown>): void {
+  emitToOrganization(organizationId, SOCKET_EVENTS.EMERGENCY_CREATED, payload);
+}
+
+export function broadcastEmergencyUpdated(organizationId: string, payload: Record<string, unknown>): void {
+  emitToOrganization(organizationId, SOCKET_EVENTS.EMERGENCY_UPDATED, payload);
+}
+
+export function broadcastEmergencyResolved(organizationId: string, payload: Record<string, unknown>): void {
+  emitToOrganization(organizationId, SOCKET_EVENTS.EMERGENCY_RESOLVED, payload);
+}
+
+export function broadcastIncidentAssigned(organizationId: string, payload: Record<string, unknown>): void {
+  emitToOrganization(organizationId, SOCKET_EVENTS.INCIDENT_ASSIGNED, payload);
+}
+
+export function broadcastTaskCreated(organizationId: string, payload: Record<string, unknown>): void {
+  emitToOrganization(organizationId, SOCKET_EVENTS.INCIDENT_TASK_CREATED, payload);
+}
+
+export function broadcastTaskUpdated(organizationId: string, payload: Record<string, unknown>): void {
+  emitToOrganization(organizationId, SOCKET_EVENTS.INCIDENT_TASK_UPDATED, payload);
+}
+
+export function broadcastEscalationTriggered(organizationId: string, payload: Record<string, unknown>): void {
+  emitToOrganization(organizationId, SOCKET_EVENTS.ESCALATION_TRIGGERED, payload);
+}

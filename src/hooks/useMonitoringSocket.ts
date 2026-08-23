@@ -14,6 +14,13 @@ export function useMonitoringSocket(handlers?: {
   onAlertUpdated?: (payload: Record<string, unknown>) => void;
   onNotification?: (payload: Record<string, unknown>) => void;
   onIncidentUpdated?: (payload: Record<string, unknown>) => void;
+  onEmergencyCreated?: (payload: Record<string, unknown>) => void;
+  onEmergencyUpdated?: (payload: Record<string, unknown>) => void;
+  onEmergencyResolved?: (payload: Record<string, unknown>) => void;
+  onIncidentAssigned?: (payload: Record<string, unknown>) => void;
+  onTaskCreated?: (payload: Record<string, unknown>) => void;
+  onTaskUpdated?: (payload: Record<string, unknown>) => void;
+  onEscalationTriggered?: (payload: Record<string, unknown>) => void;
 }) {
   const [status, setStatus] = useState<RealtimeStatus>("disconnected");
   const socketRef = useRef<Socket | null>(null);
@@ -41,6 +48,13 @@ export function useMonitoringSocket(handlers?: {
     socket.on(SOCKET_EVENTS.ALERT_UPDATED, (p) => handlersRef.current?.onAlertUpdated?.(p));
     socket.on(SOCKET_EVENTS.NOTIFICATION_CREATED, (p) => handlersRef.current?.onNotification?.(p));
     socket.on(SOCKET_EVENTS.INCIDENT_UPDATED, (p) => handlersRef.current?.onIncidentUpdated?.(p));
+    socket.on(SOCKET_EVENTS.EMERGENCY_CREATED, (p) => handlersRef.current?.onEmergencyCreated?.(p));
+    socket.on(SOCKET_EVENTS.EMERGENCY_UPDATED, (p) => handlersRef.current?.onEmergencyUpdated?.(p));
+    socket.on(SOCKET_EVENTS.EMERGENCY_RESOLVED, (p) => handlersRef.current?.onEmergencyResolved?.(p));
+    socket.on(SOCKET_EVENTS.INCIDENT_ASSIGNED, (p) => handlersRef.current?.onIncidentAssigned?.(p));
+    socket.on(SOCKET_EVENTS.INCIDENT_TASK_CREATED, (p) => handlersRef.current?.onTaskCreated?.(p));
+    socket.on(SOCKET_EVENTS.INCIDENT_TASK_UPDATED, (p) => handlersRef.current?.onTaskUpdated?.(p));
+    socket.on(SOCKET_EVENTS.ESCALATION_TRIGGERED, (p) => handlersRef.current?.onEscalationTriggered?.(p));
 
     socketRef.current = socket;
   }, []);

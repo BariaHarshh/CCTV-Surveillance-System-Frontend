@@ -22,6 +22,9 @@ export interface IIncident extends Document {
   status: (typeof INCIDENT_STATUSES)[number];
   assignedTo: Types.ObjectId | null;
   assignedToName: string;
+  assignedTeam: Types.ObjectId | null;
+  assignedTeamName: string;
+  emergencyId: Types.ObjectId | null;
   title: string;
   startedAt: Date;
   resolvedAt: Date | null;
@@ -48,6 +51,9 @@ const IncidentSchema = new Schema<IIncident>(
     status: { type: String, enum: INCIDENT_STATUSES, default: "OPEN", index: true },
     assignedTo: { type: Schema.Types.ObjectId, ref: "User", default: null },
     assignedToName: { type: String, default: "" },
+    assignedTeam: { type: Schema.Types.ObjectId, ref: "ResponseTeam", default: null },
+    assignedTeamName: { type: String, default: "" },
+    emergencyId: { type: Schema.Types.ObjectId, ref: "Emergency", default: null },
     title: { type: String, required: true },
     startedAt: { type: Date, default: Date.now },
     resolvedAt: { type: Date, default: null },

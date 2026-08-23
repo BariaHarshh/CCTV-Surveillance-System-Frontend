@@ -51,6 +51,16 @@ const navSections = [
     ],
   },
   {
+    title: "Command",
+    items: [
+      { href: "/admin/command-center", label: "Command Center", icon: Monitor },
+      { href: "/admin/emergency", label: "Emergency", icon: AlertTriangle },
+      { href: "/admin/response-teams", label: "Response Teams", icon: Users },
+      { href: "/admin/playbooks", label: "Playbooks", icon: ScrollText },
+      { href: "/admin/emergency-contacts", label: "Emergency Contacts", icon: Bell },
+    ],
+  },
+  {
     title: "AI Intelligence",
     items: [
       { href: "/admin/ai", label: "AI Intelligence", icon: Brain },
@@ -71,6 +81,7 @@ const navSections = [
     items: [
       { href: "/admin/security", label: "Security Activity", icon: Shield },
       { href: "/admin/sessions", label: "Sessions", icon: ScrollText },
+      { href: "/admin/settings/escalation", label: "Escalation Rules", icon: Settings },
     ],
   },
   {

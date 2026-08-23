@@ -28,7 +28,7 @@ export type AIHealthStatus = (typeof AI_HEALTH_STATUSES)[number];
 export const OCCUPANCY_LEVELS = ["NORMAL", "ELEVATED", "HIGH", "CRITICAL"] as const;
 export type OccupancyLevel = (typeof OCCUPANCY_LEVELS)[number];
 
-export const INCIDENT_STATUSES = ["OPEN", "INVESTIGATING", "RESOLVED", "DISMISSED"] as const;
+export const INCIDENT_STATUSES = ["OPEN", "INVESTIGATING", "CONTAINED", "RESOLVED", "DISMISSED"] as const;
 export type IncidentStatus = (typeof INCIDENT_STATUSES)[number];
 
 export const FEEDBACK_TYPES = [

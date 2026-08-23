@@ -50,6 +50,13 @@ export const SOCKET_EVENTS = {
   NOTIFICATION_CREATED: "notification:created",
   INCIDENT_UPDATED: "incident:updated",
   DETECTION_CREATED: "detection:created",
+  EMERGENCY_CREATED: "emergency:created",
+  EMERGENCY_UPDATED: "emergency:updated",
+  EMERGENCY_RESOLVED: "emergency:resolved",
+  INCIDENT_ASSIGNED: "incident:assigned",
+  INCIDENT_TASK_CREATED: "incident:task-created",
+  INCIDENT_TASK_UPDATED: "incident:task-updated",
+  ESCALATION_TRIGGERED: "escalation:triggered",
 } as const;
 
 export function orgChannel(organizationId: string): string {

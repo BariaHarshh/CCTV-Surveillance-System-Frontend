@@ -101,10 +101,35 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
               )}
               {!["RESOLVED", "DISMISSED"].includes(String(incident.status)) && (
                 <>
+                  <button type="button" onClick={() => updateStatus("CONTAINED")} className="rounded-lg bg-orange-500/10 px-3 py-1.5 text-xs text-orange-400">Contain</button>
                   <button type="button" onClick={() => updateStatus("RESOLVED")} className="rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs text-emerald-400">Resolve</button>
                   <button type="button" onClick={() => updateStatus("DISMISSED")} className="rounded-lg bg-white/5 px-3 py-1.5 text-xs text-muted">Dismiss</button>
                 </>
               )}
+              {!incident.emergencyId && !["RESOLVED", "DISMISSED"].includes(String(incident.status)) && (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const reason = window.prompt("Escalation reason?");
+                    if (!reason || reason.length < 3) return;
+                    await fetch(`/api/admin/incidents/${incidentId}`, {
+                      method: "PATCH",
+                      credentials: "include",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        escalate: { type: "SECURITY", reason, confirm: true },
+                      }),
+                    });
+                    load();
+                  }}
+                  className="rounded-lg bg-red-500/15 px-3 py-1.5 text-xs text-red-300"
+                >
+                  Escalate to Emergency
+                </button>
+              )}
+              <Link href={`/admin/incidents/${incidentId}/tasks`} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-muted hover:text-white">
+                Tasks
+              </Link>
             </div>
           </div>
         </div>

@@ -28,6 +28,16 @@ const patchSchema = z.object({
   status: z.enum(INCIDENT_STATUSES).optional(),
   assigneeId: z.string().optional(),
   assigneeName: z.string().optional(),
+  teamId: z.string().optional(),
+  teamName: z.string().optional(),
+  escalate: z
+    .object({
+      type: z.enum(["FIRE", "MEDICAL", "SECURITY", "INTRUSION", "VIOLENCE", "NATURAL_DISASTER", "HAZARDOUS_MATERIAL", "MISSING_PERSON", "CAMPUS_THREAT", "OTHER"]),
+      reason: z.string().min(3),
+      description: z.string().optional(),
+      confirm: z.literal(true),
+    })
+    .optional(),
 });
 
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
@@ -39,12 +49,38 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const parsed = patchSchema.safeParse(await request.json());
     if (!parsed.success) return apiError("Invalid update.", 400, "VALIDATION_ERROR");
 
+    if (parsed.data.escalate) {
+      const { escalateIncidentToEmergency } = await import("@/lib/emergency/emergency-service");
+      const { canEscalateIncident } = await import("@/lib/emergency/permissions");
+      if (!canEscalateIncident(user)) return apiError("Permission denied.", 403, "FORBIDDEN");
+      const result = await escalateIncidentToEmergency(organizationId, id, {
+        type: parsed.data.escalate.type,
+        reason: parsed.data.escalate.reason,
+        description: parsed.data.escalate.description,
+        actor: { id: user._id.toString(), name: user.name },
+      });
+      if ("error" in result) return apiError("Incident not found.", 404, "NOT_FOUND");
+      await logAuditEvent({
+        actor: user,
+        action: "INCIDENT_ESCALATED",
+        description: `${user.name} escalated incident ${id} to emergency`,
+        request,
+        targetType: "Incident",
+        targetId: id,
+        severity: "critical",
+      });
+      return apiSuccess(result, 201);
+    }
+
     if (parsed.data.status) {
       const incident = await updateIncidentStatus(organizationId, id, parsed.data.status, {
         id: user._id.toString(),
         name: user.name,
       });
       if (!incident) return apiError("Incident not found.", 404, "NOT_FOUND");
+      if ("error" in incident) {
+        return apiError(`Invalid transition from ${incident.from} to ${incident.to}.`, 400, "INVALID_TRANSITION");
+      }
       const action =
         parsed.data.status === "RESOLVED" ? "INCIDENT_RESOLVED" :
         parsed.data.status === "DISMISSED" ? "INCIDENT_DISMISSED" : "INCIDENT_CREATED";
@@ -60,8 +96,16 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return apiSuccess({ incident });
     }
 
-    if (parsed.data.assigneeId && parsed.data.assigneeName) {
-      const incident = await assignIncident(organizationId, id, parsed.data.assigneeId, parsed.data.assigneeName);
+    if (parsed.data.assigneeId || parsed.data.teamId) {
+      const incident = await assignIncident(
+        organizationId,
+        id,
+        parsed.data.assigneeId ?? null,
+        parsed.data.assigneeName ?? "",
+        parsed.data.teamId && parsed.data.teamName
+          ? { teamId: parsed.data.teamId, teamName: parsed.data.teamName }
+          : null
+      );
       if (!incident) return apiError("Incident not found.", 404, "NOT_FOUND");
       await logAuditEvent({
         actor: user,
