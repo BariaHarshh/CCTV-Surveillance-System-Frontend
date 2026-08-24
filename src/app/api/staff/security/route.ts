@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { ensureDbReady } from "@/lib/auth/init-super-admin";
-import { requireStaff } from "@/lib/auth/require-staff";
+import { requireOrgMember } from "@/lib/auth/require-org-member";
 import { getSessionTokenFromCookie, invalidateAllUserSessions } from "@/lib/auth/session";
 import { hashLookupToken } from "@/lib/auth/token-lookup";
 import { apiError, apiSuccess, handleApiError } from "@/lib/api/response";
@@ -12,7 +12,7 @@ import { logAuditEvent } from "@/lib/audit/log";
 export async function GET() {
   try {
     await ensureDbReady();
-    const { user, organizationId } = await requireStaff();
+    const { user, organizationId } = await requireOrgMember();
     const dbUser = await User.findById(user._id);
 
     const sessions = await Session.find({ userId: user._id.toString(), isValid: true, expiresAt: { $gt: new Date() } })
@@ -55,7 +55,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     await ensureDbReady();
-    const { user, organizationId } = await requireStaff();
+    const { user, organizationId } = await requireOrgMember();
     const { action } = await request.json();
 
     if (action === "logout_others") {

@@ -1,14 +1,26 @@
 import { createServer } from "http";
 import { parse } from "url";
 import next from "next";
+import { loadEnvConfig } from "@next/env";
 import { Server as SocketIOServer } from "socket.io";
 import { authenticateSocketSession } from "./src/lib/monitoring/socket-auth";
 import { orgChannel } from "./src/lib/monitoring/constants";
 import { setSocketIO } from "./src/lib/monitoring/socket-emitter";
+import { assertEnvironmentOrThrow } from "./src/lib/platform/secret-manager";
+
+// Load .env* before startup validation (custom server runs outside next CLI env bootstrap).
+loadEnvConfig(process.cwd());
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = process.env.HOSTNAME ?? "localhost";
 const port = parseInt(process.env.PORT ?? "3000", 10);
+
+try {
+  assertEnvironmentOrThrow();
+} catch (err) {
+  console.error(err instanceof Error ? err.message : err);
+  if (!dev) process.exit(1);
+}
 
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
@@ -49,7 +61,6 @@ app.prepare().then(() => {
   httpServer.listen(port, () => {
     console.log(`> Ready on http://${hostname}:${port} (Socket.IO enabled)`);
 
-    // Idempotent daily analytics aggregation (Step 10)
     const runAnalyticsJob = async () => {
       try {
         const { analyticsAggregationWorker } = await import("./src/lib/analytics/aggregation-worker");
@@ -58,8 +69,19 @@ app.prepare().then(() => {
         console.error("[AnalyticsAggregationWorker]", err instanceof Error ? err.message : err);
       }
     };
-    // Initial run shortly after boot, then every 6 hours
+
+    const runRetentionJob = async () => {
+      try {
+        const { runRetentionWorker } = await import("./src/lib/platform/retention-worker");
+        await runRetentionWorker();
+      } catch (err) {
+        console.error("[RetentionWorker]", err instanceof Error ? err.message : err);
+      }
+    };
+
     setTimeout(runAnalyticsJob, 60_000);
     setInterval(runAnalyticsJob, 6 * 60 * 60 * 1000);
+    setTimeout(runRetentionJob, 120_000);
+    setInterval(runRetentionJob, 24 * 60 * 60 * 1000);
   });
 });

@@ -11,9 +11,13 @@ const protectedPaths = [
   "/change-password",
   "/admin",
   "/staff",
+  "/settings",
+  "/notifications",
+  "/search",
 ];
 
-function addSecurityHeaders(response: NextResponse): NextResponse {
+function addSecurityHeaders(response: NextResponse, requestId: string): NextResponse {
+  response.headers.set("X-Request-Id", requestId);
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -22,15 +26,30 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
     "Permissions-Policy",
     "camera=(), microphone=(), geolocation=()"
   );
-  response.headers.set(
-    "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
-  );
+  if (process.env.NODE_ENV === "production") {
+    response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  }
+  // connect-src includes websockets for Socket.IO; avoid unsafe-eval in production CSP when possible
+  const csp = [
+    "default-src 'self'",
+    process.env.NODE_ENV === "production"
+      ? "script-src 'self' 'unsafe-inline'"
+      : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self' data:",
+    "connect-src 'self' ws: wss:",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join("; ");
+  response.headers.set("Content-Security-Policy", csp);
   return response;
 }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const requestId = request.headers.get("x-request-id") ?? crypto.randomUUID();
   const sessionCookie = request.cookies.get(SESSION_COOKIE)?.value;
   const isAuthenticated = Boolean(sessionCookie);
 
@@ -45,14 +64,11 @@ export function middleware(request: NextRequest) {
       loginUrl.searchParams.set("reason", "session_required");
     }
     const response = NextResponse.redirect(loginUrl);
-    return addSecurityHeaders(response);
+    return addSecurityHeaders(response, requestId);
   }
 
-  // Do not redirect /login → /authenticated based on cookie presence alone.
-  // Invalid/expired cookies caused redirect loops with ProtectedRoute.
-  // Client AuthProvider validates the session via GET /api/auth/me first.
-
   const response = NextResponse.next();
+  response.headers.set("x-request-id", requestId);
 
   if (isProtected) {
     response.headers.set(
@@ -62,11 +78,11 @@ export function middleware(request: NextRequest) {
     response.headers.set("Pragma", "no-cache");
   }
 
-  return addSecurityHeaders(response);
+  return addSecurityHeaders(response, requestId);
 }
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|sw.js|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

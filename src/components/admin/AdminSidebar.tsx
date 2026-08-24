@@ -22,7 +22,12 @@ import {
   Users,
   X,
   Bell,
+  CreditCard,
   ClipboardList,
+  HardDrive,
+  Plug,
+  UserPlus,
+  Rocket,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -51,6 +56,7 @@ const navSections = [
     items: [
       { href: "/admin/staff", label: "Staff", icon: Users },
       { href: "/admin/users", label: "Users", icon: UserCircle },
+      { href: "/admin/users/invitations", label: "Invitations", icon: UserPlus },
     ],
   },
   {
@@ -83,8 +89,20 @@ const navSections = [
     title: "Security",
     items: [
       { href: "/admin/security", label: "Security Activity", icon: Shield },
+      { href: "/admin/security/login-history", label: "Login History", icon: ScrollText },
       { href: "/admin/sessions", label: "Sessions", icon: ScrollText },
       { href: "/admin/settings/escalation", label: "Escalation Rules", icon: Settings },
+    ],
+  },
+  {
+    title: "Platform",
+    items: [
+      { href: "/admin/billing", label: "Billing", icon: CreditCard },
+      { href: "/admin/onboarding", label: "Onboarding", icon: Rocket },
+      { href: "/admin/integrations", label: "Integrations", icon: Plug },
+      { href: "/admin/audit", label: "Audit", icon: ScrollText },
+      { href: "/admin/departments", label: "Departments", icon: Building2 },
+      { href: "/admin/storage", label: "Storage", icon: HardDrive },
     ],
   },
   {
@@ -100,7 +118,7 @@ const navSections = [
   {
     title: "Account",
     items: [
-      { href: "/admin/profile", label: "My Profile", icon: UserCircle },
+      { href: "/settings/profile", label: "My Profile", icon: UserCircle },
       { href: "/admin/settings", label: "Settings", icon: Settings },
     ],
   },

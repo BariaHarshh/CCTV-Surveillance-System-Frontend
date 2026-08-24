@@ -18,6 +18,11 @@ import {
   UserCog,
   Users,
   X,
+  Flag,
+  Megaphone,
+  Wrench,
+  Database,
+  AlertOctagon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +54,11 @@ const navSections = [
       { href: "/super-admin/system-health", label: "System Health", icon: Server },
       { href: "/super-admin/analytics", label: "Platform Analytics", icon: BarChart3 },
       { href: "/super-admin/emergency-overview", label: "Emergency Overview", icon: AlertTriangle },
+      { href: "/super-admin/feature-flags", label: "Feature Flags", icon: Flag },
+      { href: "/super-admin/announcements", label: "Announcements", icon: Megaphone },
+      { href: "/super-admin/maintenance", label: "Maintenance", icon: Wrench },
+      { href: "/super-admin/backups", label: "Backups", icon: Database },
+      { href: "/super-admin/platform-incidents", label: "Platform Incidents", icon: AlertOctagon },
       { href: "/super-admin/settings", label: "Platform Settings", icon: Settings },
     ],
   },

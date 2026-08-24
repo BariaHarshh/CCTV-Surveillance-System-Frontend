@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { ensureDbReady } from "@/lib/auth/init-super-admin";
-import { requireStaff } from "@/lib/auth/require-staff";
+import { requireOrgMember } from "@/lib/auth/require-org-member";
 import { logAuditEvent } from "@/lib/audit/log";
 import { apiError, apiSuccess, handleApiError } from "@/lib/api/response";
 import { Session } from "@/models/Session";
@@ -10,7 +10,7 @@ type RouteParams = { params: Promise<{ id: string }> };
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     await ensureDbReady();
-    const { user, organizationId } = await requireStaff();
+    const { user, organizationId } = await requireOrgMember();
     const { id } = await params;
 
     const session = await Session.findOne({ _id: id, userId: user._id.toString() });

@@ -5,6 +5,7 @@ import { AdminSidebar } from "./AdminSidebar";
 import { AdminTopNav } from "./AdminTopNav";
 import { AdminProvider } from "./AdminProvider";
 import { EmergencyBanner } from "./EmergencyBanner";
+import { CommandPalette } from "@/components/platform/CommandPalette";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
 import { cn } from "@/lib/utils";
 
@@ -40,6 +41,7 @@ export function AdminShell({
           />
           <main className="flex-1 p-4 lg:p-6">{children}</main>
         </div>
+        <CommandPalette />
       </div>
     </AdminProvider>
   );
