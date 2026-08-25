@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { usePersistScroll } from "@/hooks/usePersistScroll";
 
 const navSections = [
   {
@@ -98,8 +99,9 @@ interface SidebarProps {
 
 export function Sidebar({ open, collapsed, onClose, onToggleCollapse }: SidebarProps) {
   const pathname = usePathname();
+  const navScrollRef = usePersistScroll<HTMLElement>("super-admin-sidebar-nav");
 
-  const content = (
+  const renderContent = (persistScroll: boolean) => (
     <div className="flex h-full flex-col">
       <div className="flex h-16 items-center justify-between border-b border-border px-4">
         {!collapsed && (
@@ -125,7 +127,10 @@ export function Sidebar({ open, collapsed, onClose, onToggleCollapse }: SidebarP
         </button>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
+      <nav
+        ref={persistScroll ? navScrollRef : undefined}
+        className="flex-1 overflow-y-auto px-3 py-4"
+      >
         {navSections.map((section) => (
           <div key={section.title} className="mb-6">
             {!collapsed && (
@@ -186,7 +191,7 @@ export function Sidebar({ open, collapsed, onClose, onToggleCollapse }: SidebarP
           collapsed ? "w-[72px]" : "w-64"
         )}
       >
-        {content}
+        {renderContent(true)}
       </aside>
 
       <AnimatePresence>
@@ -206,7 +211,7 @@ export function Sidebar({ open, collapsed, onClose, onToggleCollapse }: SidebarP
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className="fixed inset-y-0 left-0 z-50 w-64 border-r border-border bg-surface lg:hidden"
             >
-              {content}
+              {renderContent(false)}
             </motion.aside>
           </>
         )}

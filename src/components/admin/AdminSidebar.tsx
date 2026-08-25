@@ -38,6 +38,7 @@ import {
   Video,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePersistScroll } from "@/hooks/usePersistScroll";
 
 const navSections = [
   {
@@ -178,8 +179,9 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ open, collapsed, onClose, onToggleCollapse }: AdminSidebarProps) {
   const pathname = usePathname();
+  const navScrollRef = usePersistScroll<HTMLElement>("admin-sidebar-nav");
 
-  const content = (
+  const renderContent = (persistScroll: boolean) => (
     <div className="flex h-full flex-col">
       <div className="flex h-16 items-center justify-between border-b border-border px-4">
         {!collapsed && (
@@ -199,7 +201,7 @@ export function AdminSidebar({ open, collapsed, onClose, onToggleCollapse }: Adm
           <X className="h-5 w-5" />
         </button>
       </div>
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
+      <nav ref={persistScroll ? navScrollRef : undefined} className="flex-1 overflow-y-auto px-3 py-4">
         {navSections.map((section) => (
           <div key={section.title} className="mb-6">
             {!collapsed && (
@@ -237,14 +239,14 @@ export function AdminSidebar({ open, collapsed, onClose, onToggleCollapse }: Adm
   return (
     <>
       <aside className={cn("fixed inset-y-0 left-0 z-40 hidden border-r border-border bg-surface/95 backdrop-blur-xl transition-all lg:block", collapsed ? "w-[72px]" : "w-64")}>
-        {content}
+        {renderContent(true)}
       </aside>
       <AnimatePresence>
         {open && (
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={onClose} />
             <motion.aside initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }} transition={{ type: "spring", stiffness: 300, damping: 30 }} className="fixed inset-y-0 left-0 z-50 w-64 border-r border-border bg-surface lg:hidden">
-              {content}
+              {renderContent(false)}
             </motion.aside>
           </>
         )}

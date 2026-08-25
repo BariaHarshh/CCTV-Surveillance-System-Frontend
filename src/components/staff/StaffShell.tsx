@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import { StaffSidebar } from "./StaffSidebar";
 import { StaffProvider } from "./StaffProvider";
@@ -8,11 +8,25 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
 import { cn } from "@/lib/utils";
+import { ShellNestProvider, useIsInsideShell } from "@/components/shell/ShellChrome";
+import { readPersistedBool, writePersistedBool } from "@/hooks/usePersistScroll";
 
-export function StaffShell({ user, children }: { user: SafeUser; children: React.ReactNode }) {
+function StaffShellFrame({ user, children }: { user: SafeUser; children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const { logout } = useAuth();
+
+  useEffect(() => {
+    setCollapsed(readPersistedBool("staff-sidebar-collapsed", false));
+  }, []);
+
+  const toggleCollapse = () => {
+    setCollapsed((c) => {
+      const next = !c;
+      writePersistedBool("staff-sidebar-collapsed", next);
+      return next;
+    });
+  };
 
   return (
     <StaffProvider user={user}>
@@ -22,7 +36,7 @@ export function StaffShell({ user, children }: { user: SafeUser; children: React
           open={sidebarOpen}
           collapsed={collapsed}
           onClose={() => setSidebarOpen(false)}
-          onToggleCollapse={() => setCollapsed(!collapsed)}
+          onToggleCollapse={toggleCollapse}
         />
         <div
           className={cn(
@@ -57,5 +71,16 @@ export function StaffShell({ user, children }: { user: SafeUser; children: React
         </div>
       </div>
     </StaffProvider>
+  );
+}
+
+export function StaffShell({ user, children }: { user: SafeUser; children: React.ReactNode }) {
+  const nested = useIsInsideShell();
+  if (nested) return <>{children}</>;
+
+  return (
+    <ShellNestProvider>
+      <StaffShellFrame user={user}>{children}</StaffShellFrame>
+    </ShellNestProvider>
   );
 }

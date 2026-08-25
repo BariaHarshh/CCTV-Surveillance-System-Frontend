@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { getAuthSession } from "@/lib/auth/session";
 import { ensureDbReady } from "@/lib/auth/init-super-admin";
+import { toSafeUser } from "@/lib/auth/sanitize-user";
+import { SuperAdminShell } from "@/components/super-admin/SuperAdminShell";
 
 export default async function SuperAdminLayout({
   children,
@@ -18,6 +20,5 @@ export default async function SuperAdminLayout({
     redirect("/forbidden");
   }
 
-  // Pass user via context is handled in page components
-  return <>{children}</>;
+  return <SuperAdminShell user={toSafeUser(session.user)}>{children}</SuperAdminShell>;
 }
