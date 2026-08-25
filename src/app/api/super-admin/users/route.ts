@@ -13,6 +13,7 @@ const querySchema = z.object({
   role: z.enum(["SUPER_ADMIN", "ADMIN", "STAFF", "ALL"]).optional().default("ALL"),
   status: z.string().optional(),
   online: z.enum(["online", "offline", "all"]).optional().default("all"),
+  organizationId: z.string().optional(),
   page: z.coerce.number().min(1).optional().default(1),
   limit: z.coerce.number().min(1).max(50).optional().default(20),
   sort: z.enum(["name", "createdAt", "lastLogin"]).optional().default("createdAt"),
@@ -30,11 +31,14 @@ export async function GET(request: NextRequest) {
       return handleApiError(new Error(parsed.error.issues[0]?.message ?? "Invalid query"));
     }
 
-    const { q, role, status, online, page, limit, sort, order } = parsed.data;
+    const { q, role, status, online, organizationId, page, limit, sort, order } = parsed.data;
     const filter: Record<string, unknown> = {};
 
     if (role !== "ALL") filter.role = role;
     if (status && status !== "ALL") filter.status = status;
+    if (organizationId && mongoose.Types.ObjectId.isValid(organizationId)) {
+      filter.organizationId = new mongoose.Types.ObjectId(organizationId);
+    }
 
     if (online === "online") {
       filter.lastActive = {

@@ -11,6 +11,7 @@ import {
   SuperAdminChromeProvider,
   useIsInsideShell,
   useSuperAdminChrome,
+  useSuperAdminChromeSetter,
 } from "@/components/shell/ShellChrome";
 import { readPersistedBool, writePersistedBool } from "@/hooks/usePersistScroll";
 
@@ -37,15 +38,7 @@ function SuperAdminShellFrame({
     setCollapsed(readPersistedBool("super-admin-sidebar-collapsed", false));
   }, []);
 
-  useEffect(() => {
-    if (!chromeCtx) return;
-    const patch: Parameters<typeof chromeCtx.setChrome>[0] = {};
-    if (systemStatus !== undefined) patch.systemStatus = systemStatus;
-    if (notifications !== undefined) patch.notifications = notifications;
-    if (onStatusClick !== undefined) patch.onStatusClick = onStatusClick;
-    if (Object.keys(patch).length) chromeCtx.setChrome(patch);
-  }, [chromeCtx, systemStatus, notifications, onStatusClick]);
-
+  // Read overrides from nested pages; do not write chrome here (avoids update loops).
   const chrome = chromeCtx?.chrome ?? {};
   const status = chrome.systemStatus ?? systemStatus;
   const notifs = chrome.notifications ?? notifications;
@@ -93,16 +86,15 @@ function SuperAdminShellNestedForward({
   notifications,
   onStatusClick,
 }: SuperAdminShellProps) {
-  const chromeCtx = useSuperAdminChrome();
+  const setChrome = useSuperAdminChromeSetter();
 
   useEffect(() => {
-    if (!chromeCtx) return;
-    const patch: Parameters<typeof chromeCtx.setChrome>[0] = {};
+    const patch: Parameters<typeof setChrome>[0] = {};
     if (systemStatus !== undefined) patch.systemStatus = systemStatus;
     if (notifications !== undefined) patch.notifications = notifications;
     if (onStatusClick !== undefined) patch.onStatusClick = onStatusClick;
-    if (Object.keys(patch).length) chromeCtx.setChrome(patch);
-  }, [chromeCtx, systemStatus, notifications, onStatusClick]);
+    if (Object.keys(patch).length) setChrome(patch);
+  }, [setChrome, systemStatus, notifications, onStatusClick]);
 
   return <>{children}</>;
 }

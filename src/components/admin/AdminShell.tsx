@@ -12,6 +12,7 @@ import {
   AdminChromeProvider,
   ShellNestProvider,
   useAdminChrome,
+  useAdminChromeSetter,
   useIsInsideShell,
 } from "@/components/shell/ShellChrome";
 import { readPersistedBool, writePersistedBool } from "@/hooks/usePersistScroll";
@@ -38,15 +39,6 @@ function AdminShellFrame({
   useEffect(() => {
     setCollapsed(readPersistedBool("admin-sidebar-collapsed", false));
   }, []);
-
-  useEffect(() => {
-    if (!chromeCtx) return;
-    const patch: Parameters<typeof chromeCtx.setChrome>[0] = {};
-    if (organizationName !== undefined) patch.organizationName = organizationName;
-    if (organizationStatus !== undefined) patch.organizationStatus = organizationStatus;
-    if (notifications !== undefined) patch.notifications = notifications;
-    if (Object.keys(patch).length) chromeCtx.setChrome(patch);
-  }, [chromeCtx, organizationName, organizationStatus, notifications]);
 
   const chrome = chromeCtx?.chrome ?? {};
   const orgName = organizationName ?? chrome.organizationName;
@@ -94,7 +86,6 @@ function AdminShellFrame({
 export function AdminShell(props: AdminShellProps) {
   const nested = useIsInsideShell();
 
-  // Nested page wrappers only forward chrome props + children (no second sidebar).
   if (nested) {
     return <AdminShellNestedForward {...props} />;
   }
@@ -114,16 +105,15 @@ function AdminShellNestedForward({
   organizationStatus,
   notifications,
 }: AdminShellProps) {
-  const chromeCtx = useAdminChrome();
+  const setChrome = useAdminChromeSetter();
 
   useEffect(() => {
-    if (!chromeCtx) return;
-    const patch: Parameters<typeof chromeCtx.setChrome>[0] = {};
+    const patch: Parameters<typeof setChrome>[0] = {};
     if (organizationName !== undefined) patch.organizationName = organizationName;
     if (organizationStatus !== undefined) patch.organizationStatus = organizationStatus;
     if (notifications !== undefined) patch.notifications = notifications;
-    if (Object.keys(patch).length) chromeCtx.setChrome(patch);
-  }, [chromeCtx, organizationName, organizationStatus, notifications]);
+    if (Object.keys(patch).length) setChrome(patch);
+  }, [setChrome, organizationName, organizationStatus, notifications]);
 
   return <>{children}</>;
 }
