@@ -50,6 +50,8 @@ export function toolAllowed(ctx: ToolExecutionContext, tool: AIToolName): boolea
     getCameraHealth: () => userCan(ctx, "camera.view") || ctx.role === "ADMIN",
     getRecommendations: () => userCan(ctx, "analytics.view") || ctx.role === "ADMIN",
     getPredictiveRisk: () => userCan(ctx, "analytics.view") || ctx.role === "ADMIN",
+    getMapRisk: () => userCan(ctx, "campus.view") || ctx.role === "ADMIN",
+    getMapSummary: () => userCan(ctx, "campus.view") || ctx.role === "ADMIN",
   };
   return map[tool]();
 }
@@ -304,6 +306,37 @@ export async function executeTool(
     case "searchKnowledge":
       // Filled by specialized services when called from orchestrator helpers
       return { ok: true, data: { deferred: true, tool } };
+    case "getMapRisk": {
+      const { getRiskHeatmap } = await import("@/lib/map/map-service");
+      const heatmap = await getRiskHeatmap(organizationId, {
+        timeRange: String(args.timeRange || "30D"),
+      });
+      const ranked = [...heatmap.cells].sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
+      return {
+        ok: true,
+        data: {
+          explanation: heatmap.explanation,
+          highest: ranked[0] ?? null,
+          areas: ranked.slice(0, 10),
+          mapHref: "/map?mode=RISK",
+        },
+      };
+    }
+    case "getMapSummary": {
+      const { getMapBootstrap, getMapActivity } = await import("@/lib/map/map-service");
+      const bootstrap = await getMapBootstrap(organizationId, ctx.user as never);
+      const activity = await getMapActivity(organizationId, 10);
+      return {
+        ok: true,
+        data: {
+          campus: bootstrap.campus,
+          buildingCount: bootstrap.buildings.length,
+          activeEmergency: bootstrap.activeEmergency,
+          recentActivity: activity.events,
+          mapHref: "/map",
+        },
+      };
+    }
     default:
       return { ok: false, data: {}, error: "Unknown tool" };
   }
@@ -325,8 +358,11 @@ export function detectIntent(message: string): { tools: AIToolName[]; args: Reco
     tools.push("getAlerts");
     args.severity = "CRITICAL";
   }
-  if (/highest\s+risk|riskiest\s+campus|campus.*risk|which campus/.test(m)) {
-    tools.push("getCampusRisk");
+  if (/highest\s+risk|riskiest\s+campus|campus.*risk|which campus|areas?\s+.*risk|risk\s+map|higher\s+risk/.test(m)) {
+    tools.push("getCampusRisk", "getMapRisk");
+  }
+  if (/map\s+summary|campus\s+map|show\s+.*map|exits?\s+closest/.test(m)) {
+    tools.push("getMapSummary");
   }
   if (/emergency|active\s+emergency/.test(m)) tools.push("getEmergencies");
   if (/dashboard|summary|overview|briefing|what.*know/.test(m)) tools.push("getDashboardSummary");

@@ -11,6 +11,24 @@ export interface ICameraConnection {
   passwordEncrypted: string;
 }
 
+/** Optional geospatial placement — does not create a separate camera entity. */
+export interface ICameraMapLocation {
+  lat: number | null;
+  lng: number | null;
+  viewingDirectionDeg: number | null;
+  /** Estimated coverage radius in meters (configuration, not calibrated geometry). */
+  coverageRadiusM: number | null;
+  /** Estimated horizontal FOV in degrees (configuration estimate). */
+  coverageAngleDeg: number | null;
+  mapX: number | null;
+  mapY: number | null;
+  source: string;
+  accuracyM: number | null;
+  lastUpdated: Date | null;
+  /** When false/absent, UI must label coverage as estimate. */
+  calibrated: boolean;
+}
+
 export interface ICamera extends Document {
   _id: Types.ObjectId;
   cameraId: string;
@@ -30,6 +48,7 @@ export interface ICamera extends Document {
   lastSeen: Date | null;
   lastTestAt: Date | null;
   lastTestSuccess: boolean | null;
+  mapLocation: ICameraMapLocation;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,6 +60,23 @@ const ConnectionSchema = new Schema<ICameraConnection>(
     connectionType: { type: String, default: "Wired" },
     usernameEncrypted: { type: String, default: "", select: false },
     passwordEncrypted: { type: String, default: "", select: false },
+  },
+  { _id: false }
+);
+
+const CameraMapLocationSchema = new Schema<ICameraMapLocation>(
+  {
+    lat: { type: Number, default: null },
+    lng: { type: Number, default: null },
+    viewingDirectionDeg: { type: Number, default: null },
+    coverageRadiusM: { type: Number, default: null },
+    coverageAngleDeg: { type: Number, default: null },
+    mapX: { type: Number, default: null },
+    mapY: { type: Number, default: null },
+    source: { type: String, default: "ADMIN_CONFIGURATION" },
+    accuracyM: { type: Number, default: null },
+    lastUpdated: { type: Date, default: null },
+    calibrated: { type: Boolean, default: false },
   },
   { _id: false }
 );
@@ -64,11 +100,13 @@ const CameraSchema = new Schema<ICamera>(
     lastSeen: { type: Date, default: null },
     lastTestAt: { type: Date, default: null },
     lastTestSuccess: { type: Boolean, default: null },
+    mapLocation: { type: CameraMapLocationSchema, default: () => ({}) },
   },
   { timestamps: true }
 );
 
 CameraSchema.index({ organizationId: 1, status: 1 });
+CameraSchema.index({ "mapLocation.lat": 1, "mapLocation.lng": 1 });
 
 export const Camera: Model<ICamera> =
   mongoose.models.Camera ?? mongoose.model<ICamera>("Camera", CameraSchema);

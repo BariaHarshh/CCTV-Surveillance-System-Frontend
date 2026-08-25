@@ -12,6 +12,9 @@ const STATIC_COMMANDS: Result[] = [
   { type: "command", id: "ai-copilot", title: "AI Copilot", href: "/ai-copilot" },
   { type: "command", id: "automation", title: "Automation", href: "/admin/automation" },
   { type: "command", id: "emergency", title: "Emergency Center", href: "/admin/emergency" },
+  { type: "command", id: "campus-map", title: "Digital Campus Map", href: "/map" },
+  { type: "command", id: "asset-map", title: "Asset Map", href: "/assets/map" },
+  { type: "command", id: "map-analytics", title: "Map Analytics", href: "/analytics/map" },
 ];
 
 function isAdminSurface(pathname: string) {
@@ -25,7 +28,14 @@ function isAdminSurface(pathname: string) {
     pathname.startsWith("/operations") ||
     pathname.startsWith("/ai") ||
     pathname.startsWith("/ai-copilot") ||
-    pathname.startsWith("/settings")
+    pathname.startsWith("/settings") ||
+    pathname.startsWith("/map") ||
+    pathname.startsWith("/campus") ||
+    pathname.startsWith("/building") ||
+    pathname.startsWith("/floor") ||
+    pathname.startsWith("/assets") ||
+    pathname.startsWith("/emergency") ||
+    pathname.startsWith("/analytics")
   );
 }
 

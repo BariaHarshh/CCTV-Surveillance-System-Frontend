@@ -34,6 +34,7 @@ import {
   GraduationCap,
   Activity,
   Download,
+  Map,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -52,9 +53,12 @@ const navSections = [
   {
     title: "Campus",
     items: [
+      { href: "/map", label: "Digital Campus Map", icon: Map },
       { href: "/admin/campus/buildings", label: "Buildings", icon: Building2 },
       { href: "/admin/campus/rooms", label: "Rooms", icon: DoorOpen },
       { href: "/admin/cameras", label: "Cameras", icon: Camera },
+      { href: "/assets/map", label: "Asset Map", icon: HardDrive },
+      { href: "/analytics/map", label: "Map Analytics", icon: LineChart },
     ],
   },
   {
@@ -69,6 +73,7 @@ const navSections = [
     title: "Command",
     items: [
       { href: "/admin/command-center", label: "Command Center", icon: Monitor },
+      { href: "/map?mode=EMERGENCY", label: "Emergency Map", icon: AlertTriangle },
       { href: "/admin/emergency", label: "Emergency", icon: AlertTriangle },
       { href: "/admin/response-teams", label: "Response Teams", icon: Users },
       { href: "/admin/playbooks", label: "Playbooks", icon: ScrollText },

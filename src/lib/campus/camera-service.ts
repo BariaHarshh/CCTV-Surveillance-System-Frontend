@@ -33,6 +33,24 @@ export function toCameraPublic(c: ICamera, location?: { building?: string; room?
     lastSeen: c.lastSeen?.toISOString() ?? null,
     lastTestAt: c.lastTestAt?.toISOString() ?? null,
     lastTestSuccess: c.lastTestSuccess,
+    mapLocation: c.mapLocation
+      ? {
+          lat: c.mapLocation.lat,
+          lng: c.mapLocation.lng,
+          viewingDirectionDeg: c.mapLocation.viewingDirectionDeg,
+          coverageRadiusM: c.mapLocation.coverageRadiusM,
+          coverageAngleDeg: c.mapLocation.coverageAngleDeg,
+          mapX: c.mapLocation.mapX,
+          mapY: c.mapLocation.mapY,
+          source: c.mapLocation.source,
+          accuracyM: c.mapLocation.accuracyM,
+          lastUpdated: c.mapLocation.lastUpdated?.toISOString() ?? null,
+          calibrated: Boolean(c.mapLocation.calibrated),
+          coverageNote: c.mapLocation.calibrated
+            ? "Calibrated coverage"
+            : "Coverage is a configuration estimate",
+        }
+      : null,
     createdAt: c.createdAt.toISOString(),
     updatedAt: c.updatedAt.toISOString(),
   };

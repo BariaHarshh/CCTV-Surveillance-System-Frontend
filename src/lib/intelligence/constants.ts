@@ -38,6 +38,8 @@ export const AI_TOOL_NAMES = [
   "getCameraHealth",
   "getRecommendations",
   "getPredictiveRisk",
+  "getMapRisk",
+  "getMapSummary",
 ] as const;
 export type AIToolName = (typeof AI_TOOL_NAMES)[number];
 

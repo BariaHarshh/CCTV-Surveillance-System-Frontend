@@ -22,6 +22,8 @@
 .DS_Store
 *.pem
 .mongodb-data/
+.mongodb-logs/
+.data/
 
 # debug
 npm-debug.log*

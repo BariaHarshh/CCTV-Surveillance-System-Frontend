@@ -134,6 +134,20 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
               <Link href={`/admin/incidents/${incidentId}/tasks`} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-muted hover:text-white">
                 Tasks
               </Link>
+              <Link
+                href={`/map?incident=${encodeURIComponent(String(incident.incidentId || incidentId))}&mode=INCIDENT`}
+                className="rounded-lg border border-sky-500/30 px-3 py-1.5 text-xs text-sky-300 hover:bg-sky-500/10"
+              >
+                View on Map
+              </Link>
+              {incident.emergencyId ? (
+                <Link
+                  href={`/emergency/${encodeURIComponent(String(incident.emergencyId))}/map`}
+                  className="rounded-lg border border-red-500/30 px-3 py-1.5 text-xs text-red-300 hover:bg-red-500/10"
+                >
+                  Emergency Map
+                </Link>
+              ) : null}
             </div>
           </div>
 

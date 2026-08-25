@@ -7,6 +7,16 @@ export interface IResponseTeamMember {
   role: string;
 }
 
+export interface ITeamMapLocation {
+  lat: number | null;
+  lng: number | null;
+  source: string;
+  accuracyM: number | null;
+  lastUpdated: Date | null;
+  /** True only when live GPS/tracking is actually configured for this team. */
+  liveTrackingConfigured: boolean;
+}
+
 export interface IResponseTeam extends Document {
   _id: Types.ObjectId;
   teamId: string;
@@ -17,6 +27,8 @@ export interface IResponseTeam extends Document {
   status: (typeof RESPONSE_TEAM_STATUSES)[number];
   description: string;
   source: string;
+  currentAssignment: string;
+  mapLocation: ITeamMapLocation;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,6 +52,15 @@ const ResponseTeamSchema = new Schema<IResponseTeam>(
     status: { type: String, enum: RESPONSE_TEAM_STATUSES, default: "AVAILABLE" },
     description: { type: String, default: "" },
     source: { type: String, default: "MANUAL" },
+    currentAssignment: { type: String, default: "" },
+    mapLocation: {
+      lat: { type: Number, default: null },
+      lng: { type: Number, default: null },
+      source: { type: String, default: "ADMIN_CONFIGURATION" },
+      accuracyM: { type: Number, default: null },
+      lastUpdated: { type: Date, default: null },
+      liveTrackingConfigured: { type: Boolean, default: false },
+    },
   },
   { timestamps: true }
 );

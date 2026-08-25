@@ -191,21 +191,41 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
 
           {/* Live Monitoring / Campus Map */}
           <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4 lg:col-span-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Campus Status Map</h2>
-              <Link href="/admin/monitoring" className="text-[10px] text-accent hover:underline">Live Monitoring →</Link>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
+                Unified Command Map
+              </h2>
+              <div className="flex flex-wrap gap-2 text-[10px]">
+                <Link href="/map" className="rounded-full border border-sky-500/30 px-2 py-1 text-sky-300 hover:bg-sky-500/10">
+                  Live Map
+                </Link>
+                <Link href="/map?mode=EMERGENCY" className="rounded-full border border-red-500/30 px-2 py-1 text-red-300 hover:bg-red-500/10">
+                  Emergency
+                </Link>
+                <Link href="/map?mode=RISK" className="rounded-full border border-amber-500/30 px-2 py-1 text-amber-300 hover:bg-amber-500/10">
+                  Risk
+                </Link>
+                <Link href="/admin/monitoring" className="text-accent hover:underline">Live Monitoring →</Link>
+              </div>
             </div>
+            <p className="mt-2 text-[11px] text-muted">
+              Geographic campus map with cameras, incidents, coverage estimates, and emergency layers.
+            </p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               {(overview?.buildingStatuses ?? []).length === 0 ? (
                 <p className="text-xs text-muted">No buildings configured</p>
               ) : overview!.buildingStatuses.map((b) => (
-                <div key={b.id} className="flex items-center gap-3 rounded-xl border border-white/[0.06] px-3 py-2.5">
+                <Link
+                  key={b.id}
+                  href={`/map?building=${encodeURIComponent(b.buildingId)}`}
+                  className="flex items-center gap-3 rounded-xl border border-white/[0.06] px-3 py-2.5 hover:bg-white/[0.03]"
+                >
                   <span className={cn("h-2.5 w-2.5 rounded-full", BUILDING_DOT[b.opsStatus] ?? "bg-slate-400")} />
                   <div>
                     <p className="text-sm font-medium">{b.name}</p>
                     <p className="text-[10px] text-muted">{b.buildingId} · {b.opsStatus}</p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
