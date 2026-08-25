@@ -28,6 +28,12 @@ import {
   Plug,
   UserPlus,
   Rocket,
+  Workflow,
+  CheckSquare,
+  LifeBuoy,
+  GraduationCap,
+  Activity,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -98,6 +104,20 @@ const navSections = [
       { href: "/admin/security/login-history", label: "Login History", icon: ScrollText },
       { href: "/admin/sessions", label: "Sessions", icon: ScrollText },
       { href: "/admin/settings/escalation", label: "Escalation Rules", icon: Settings },
+    ],
+  },
+  {
+    title: "Enterprise",
+    items: [
+      { href: "/admin/automation", label: "Automation", icon: Workflow },
+      { href: "/approvals", label: "Approvals", icon: CheckSquare },
+      { href: "/admin/policies", label: "Policies", icon: Shield },
+      { href: "/enterprise", label: "Enterprise Dashboard", icon: LayoutDashboard },
+      { href: "/workspace", label: "Workspace", icon: ClipboardList },
+      { href: "/support", label: "Support", icon: LifeBuoy },
+      { href: "/admin/training", label: "Training", icon: GraduationCap },
+      { href: "/admin/system-readiness", label: "System Readiness", icon: Activity },
+      { href: "/admin/exports", label: "Exports", icon: Download },
     ],
   },
   {

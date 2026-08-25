@@ -25,6 +25,11 @@ import {
   Database,
   AlertOctagon,
   FlaskConical,
+  Bot,
+  Scale,
+  ListTodo,
+  ServerCog,
+  FileSearch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -56,12 +61,17 @@ const navSections = [
       { href: "/super-admin/ai/models", label: "AI Models", icon: Brain },
       { href: "/super-admin/ai/observability", label: "Observability", icon: Activity },
       { href: "/super-admin/ai/testing", label: "Testing", icon: FlaskConical },
+      { href: "/super-admin/ai-agents", label: "AI Agents", icon: Bot },
+      { href: "/super-admin/ai-governance", label: "AI Governance", icon: Scale },
     ],
   },
   {
     title: "Platform",
     items: [
       { href: "/super-admin/system-health", label: "System Health", icon: Server },
+      { href: "/super-admin/system/jobs", label: "Jobs", icon: ListTodo },
+      { href: "/super-admin/services", label: "Services", icon: ServerCog },
+      { href: "/super-admin/incidents/postmortems", label: "Postmortems", icon: FileSearch },
       { href: "/super-admin/analytics", label: "Platform Analytics", icon: BarChart3 },
       { href: "/super-admin/emergency-overview", label: "Emergency Overview", icon: AlertTriangle },
       { href: "/super-admin/feature-flags", label: "Feature Flags", icon: Flag },

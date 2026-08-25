@@ -1,16 +1,49 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
 type Result = { type: string; id: string; title: string; href: string };
 
+const STATIC_COMMANDS: Result[] = [
+  { type: "command", id: "create-incident", title: "Create Incident", href: "/admin/incidents" },
+  { type: "command", id: "approvals", title: "Approvals", href: "/approvals" },
+  { type: "command", id: "ai-copilot", title: "AI Copilot", href: "/ai-copilot" },
+  { type: "command", id: "automation", title: "Automation", href: "/admin/automation" },
+  { type: "command", id: "emergency", title: "Emergency Center", href: "/admin/emergency" },
+];
+
+function isAdminSurface(pathname: string) {
+  return (
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/enterprise") ||
+    pathname.startsWith("/approvals") ||
+    pathname.startsWith("/workspace") ||
+    pathname.startsWith("/team") ||
+    pathname.startsWith("/support") ||
+    pathname.startsWith("/operations") ||
+    pathname.startsWith("/ai") ||
+    pathname.startsWith("/ai-copilot") ||
+    pathname.startsWith("/settings")
+  );
+}
+
 export function CommandPalette() {
   const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const [results, setResults] = useState<Result[]>([]);
+
+  const showAdminCommands = isAdminSurface(pathname);
+
+  const staticMatches = useMemo(() => {
+    if (!showAdminCommands) return [];
+    const needle = q.trim().toLowerCase();
+    if (!needle) return STATIC_COMMANDS;
+    return STATIC_COMMANDS.filter((c) => c.title.toLowerCase().includes(needle));
+  }, [q, showAdminCommands]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -49,6 +82,11 @@ export function CommandPalette() {
 
   if (!open) return null;
 
+  const combined = [
+    ...staticMatches,
+    ...results.filter((r) => !staticMatches.some((s) => s.href === r.href && s.title === r.title)),
+  ];
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-start justify-center bg-black/60 p-4 pt-[12vh]"
@@ -63,13 +101,13 @@ export function CommandPalette() {
           <input
             autoFocus
             className="w-full bg-transparent py-3 text-sm outline-none"
-            placeholder="Search cameras, incidents, alerts… (⌘K)"
+            placeholder="Search or run a command… (⌘K)"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
         <ul className="max-h-80 overflow-y-auto p-2">
-          {results.map((r) => (
+          {combined.map((r) => (
             <li key={`${r.type}-${r.id}`}>
               <button
                 type="button"
@@ -81,12 +119,13 @@ export function CommandPalette() {
               </button>
             </li>
           ))}
-          {q.length >= 2 && results.length === 0 && (
+          {q.length >= 2 && combined.length === 0 && (
             <li className="px-3 py-6 text-center text-sm text-muted">No results</li>
           )}
-          {q.length < 2 && (
+          {q.length < 2 && !showAdminCommands && (
             <li className="px-3 py-6 text-center text-sm text-muted">Type at least 2 characters</li>
           )}
+          {q.length < 2 && showAdminCommands && staticMatches.length > 0 && combined.length === 0 ? null : null}
         </ul>
       </div>
     </div>

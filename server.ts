@@ -83,5 +83,16 @@ app.prepare().then(() => {
     setInterval(runAnalyticsJob, 6 * 60 * 60 * 1000);
     setTimeout(runRetentionJob, 120_000);
     setInterval(runRetentionJob, 24 * 60 * 60 * 1000);
+
+    void (async () => {
+      try {
+        const { startEnterpriseJobWorker } = await import("./src/lib/enterprise/job-queue");
+        startEnterpriseJobWorker();
+        const { ensureDefaultAgents } = await import("./src/lib/enterprise/agent-service");
+        await ensureDefaultAgents();
+      } catch (err) {
+        console.error("[EnterpriseWorker]", err instanceof Error ? err.message : err);
+      }
+    })();
   });
 });

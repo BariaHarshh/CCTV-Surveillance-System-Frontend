@@ -16,6 +16,12 @@ const protectedPaths = [
   "/search",
   "/ai-copilot",
   "/ai",
+  "/enterprise",
+  "/approvals",
+  "/workspace",
+  "/team",
+  "/support",
+  "/operations",
 ];
 
 function addSecurityHeaders(response: NextResponse, requestId: string): NextResponse {

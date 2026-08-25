@@ -14,17 +14,29 @@ const cached: MongooseCache = global.mongooseCache ?? { conn: null, promise: nul
 global.mongooseCache = cached;
 
 export async function connectDB(): Promise<typeof mongoose> {
-  if (cached.conn) {
+  if (cached.conn && mongoose.connection.readyState === 1) {
     return cached.conn;
   }
 
+  // Drop stale cache after disconnect / failed connect so we can retry.
+  if (mongoose.connection.readyState === 0) {
+    cached.conn = null;
+    cached.promise = null;
+  }
+
   if (!cached.promise) {
-    cached.promise = mongoose.connect(authConfig.mongodbUri, {
-      bufferCommands: false,
-      serverSelectionTimeoutMS: 5000,
-      connectTimeoutMS: 5000,
-      socketTimeoutMS: 10000,
-    });
+    cached.promise = mongoose
+      .connect(authConfig.mongodbUri, {
+        bufferCommands: false,
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 5000,
+        socketTimeoutMS: 10000,
+      })
+      .catch((err) => {
+        cached.promise = null;
+        cached.conn = null;
+        throw err;
+      });
   }
 
   cached.conn = await cached.promise;
