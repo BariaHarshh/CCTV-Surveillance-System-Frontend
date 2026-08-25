@@ -74,7 +74,7 @@ export function OnboardingClient({ user }: { user: SafeUser }) {
           return (
             <li
               key={step}
-              className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-surface/50 px-4 py-3"
+              className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-surface/50 px-4 py-3"
             >
               <div className="flex items-center gap-3">
                 {done ? (
@@ -95,7 +95,7 @@ export function OnboardingClient({ user }: { user: SafeUser }) {
                 <button
                   type="button"
                   onClick={() => mark(step)}
-                  className="rounded-lg border border-white/10 px-3 py-1 text-xs hover:border-accent/40"
+                  className="rounded-lg border border-border px-3 py-1 text-xs hover:border-accent/40"
                 >
                   Mark done
                 </button>

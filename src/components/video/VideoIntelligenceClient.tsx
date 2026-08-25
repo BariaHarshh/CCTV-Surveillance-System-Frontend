@@ -120,7 +120,7 @@ export function VideoIntelligenceClient({
       </div>
 
       {message && (
-        <p className="mt-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs">{message}</p>
+        <p className="mt-3 rounded-lg border border-border bg-white/5 px-3 py-2 text-xs">{message}</p>
       )}
 
       <div className="mt-4 flex flex-wrap gap-2 text-xs">
@@ -140,7 +140,7 @@ export function VideoIntelligenceClient({
             onClick={() => setTab(id)}
             className={cn(
               "rounded-full border px-3 py-1.5",
-              tab === id ? "border-sky-500/40 bg-sky-500/15 text-sky-200" : "border-white/10 text-muted"
+              tab === id ? "border-sky-500/40 bg-sky-500/15 text-sky-200" : "border-border text-muted"
             )}
           >
             {label}
@@ -159,7 +159,7 @@ export function VideoIntelligenceClient({
               { label: "Degraded", value: summary.degraded, icon: Activity, color: "text-orange-400" },
               { label: "Detections 24h", value: summary.detections24h, icon: Radio, color: "text-sky-400" },
             ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-white/10 bg-[#0b1220] p-4">
+              <div key={s.label} className="rounded-xl border border-border bg-[#0b1220] p-4">
                 <div className={cn("flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted")}>
                   <s.icon className={cn("h-3.5 w-3.5", s.color)} /> {s.label}
                 </div>
@@ -168,7 +168,7 @@ export function VideoIntelligenceClient({
             ))}
           </div>
           <div className="grid gap-4 lg:grid-cols-2">
-            <section className="rounded-xl border border-white/10 p-4">
+            <section className="rounded-xl border border-border p-4">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">AI Processing</h2>
               <p className="mt-2 text-sm">Mode: {String(summary.processingMode ?? "—")}</p>
               <p className="text-xs text-muted">
@@ -178,7 +178,7 @@ export function VideoIntelligenceClient({
                 Critical video events (24h): {String(summary.criticalVideoEvents24h ?? 0)}
               </p>
             </section>
-            <section className="rounded-xl border border-white/10 p-4">
+            <section className="rounded-xl border border-border p-4">
               <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
                 Recent detections
               </h2>
@@ -210,7 +210,7 @@ export function VideoIntelligenceClient({
                 onClick={() => setLayout(n)}
                 className={cn(
                   "rounded border px-2 py-1",
-                  layout === n ? "border-sky-500/40 text-sky-300" : "border-white/10"
+                  layout === n ? "border-sky-500/40 text-sky-300" : "border-border"
                 )}
               >
                 {n}
@@ -226,7 +226,7 @@ export function VideoIntelligenceClient({
             {gridCams.map((c) => (
               <div
                 key={String(c.id)}
-                className="relative aspect-video overflow-hidden rounded-xl border border-white/10 bg-[#060a12]"
+                className="relative aspect-video overflow-hidden rounded-xl border border-border bg-[#060a12]"
               >
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 p-3 text-center">
                   <Camera className="h-6 w-6 text-muted" />
@@ -275,7 +275,7 @@ export function VideoIntelligenceClient({
           ).map((d) => (
             <article
               key={String(d.videoEventId)}
-              className="rounded-xl border border-white/10 bg-[#0b1220] p-4 text-xs"
+              className="rounded-xl border border-border bg-[#0b1220] p-4 text-xs"
             >
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
@@ -328,9 +328,9 @@ export function VideoIntelligenceClient({
       )}
 
       {tab === "evidence" && (
-        <div className="mt-6 overflow-auto rounded-xl border border-white/10">
+        <div className="mt-6 overflow-auto rounded-xl border border-border">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-white/10 bg-white/5 text-muted">
+            <thead className="border-b border-border bg-white/5 text-muted">
               <tr>
                 <th className="px-3 py-2">ID</th>
                 <th className="px-3 py-2">Type</th>
@@ -366,12 +366,12 @@ export function VideoIntelligenceClient({
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Camera name / ID"
-              className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5"
+              className="rounded-lg border border-border bg-black/30 px-3 py-1.5"
             />
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5"
+              className="rounded-lg border border-border bg-black/30 px-3 py-1.5"
             >
               {["ALL", "ONLINE", "OFFLINE", "DEGRADED", "MAINTENANCE"].map((s) => (
                 <option key={s} value={s}>
@@ -385,7 +385,7 @@ export function VideoIntelligenceClient({
           </div>
           <ul className="space-y-2 text-xs">
             {cameras.map((c) => (
-              <li key={String(c.id)} className="flex items-center justify-between rounded-lg border border-white/10 px-3 py-2">
+              <li key={String(c.id)} className="flex items-center justify-between rounded-lg border border-border px-3 py-2">
                 <span>
                   <label className="mr-2 inline-flex items-center gap-1">
                     <input

@@ -192,7 +192,7 @@ export function LoginForm() {
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5" noValidate>
           <div>
-            <label htmlFor="userIdOrEmail" className="block text-sm font-medium text-white/90">
+            <label htmlFor="userIdOrEmail" className="block text-sm font-medium text-foreground/90">
               User ID / Email
             </label>
             <input
@@ -206,9 +206,9 @@ export function LoginForm() {
               aria-invalid={Boolean(fieldErrors.userIdOrEmail)}
               aria-describedby={fieldErrors.userIdOrEmail ? "userIdOrEmail-error" : undefined}
               className={cn(
-                "mt-2 w-full rounded-xl border bg-white/[0.03] px-4 py-3 text-sm text-white outline-none transition-all",
+                "mt-2 w-full rounded-xl border bg-glass px-4 py-3 text-sm text-foreground outline-none transition-all",
                 "placeholder:text-muted/50 focus:border-accent/50 focus:ring-2 focus:ring-accent/20",
-                fieldErrors.userIdOrEmail ? "border-red-500/50" : "border-white/[0.08]"
+                fieldErrors.userIdOrEmail ? "border-red-500/50" : "border-border"
               )}
               placeholder="Enter your User ID or email"
             />
@@ -220,7 +220,7 @@ export function LoginForm() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-white/90">
+            <label htmlFor="password" className="block text-sm font-medium text-foreground/90">
               Password
             </label>
             <div className="relative mt-2">
@@ -235,16 +235,16 @@ export function LoginForm() {
                 aria-invalid={Boolean(fieldErrors.password)}
                 aria-describedby={fieldErrors.password ? "password-error" : undefined}
                 className={cn(
-                  "w-full rounded-xl border bg-white/[0.03] px-4 py-3 pr-12 text-sm text-white outline-none transition-all",
+                  "w-full rounded-xl border bg-glass px-4 py-3 pr-12 text-sm text-foreground outline-none transition-all",
                   "placeholder:text-muted/50 focus:border-accent/50 focus:ring-2 focus:ring-accent/20",
-                  fieldErrors.password ? "border-red-500/50" : "border-white/[0.08]"
+                  fieldErrors.password ? "border-red-500/50" : "border-border"
                 )}
                 placeholder="Enter your password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-muted transition-colors hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-muted transition-colors hover:text-foreground"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -264,7 +264,7 @@ export function LoginForm() {
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
                 disabled={state === "loading"}
-                className="h-4 w-4 rounded border-white/20 bg-white/[0.03] text-accent focus:ring-accent/30"
+                className="h-4 w-4 rounded border-white/20 bg-glass text-accent focus:ring-accent/30"
               />
               <span className="text-sm text-muted">Remember Me</span>
             </label>
@@ -294,7 +294,7 @@ export function LoginForm() {
 
         <Link
           href="/"
-          className="mt-8 inline-flex items-center text-sm text-muted transition-colors hover:text-white"
+          className="mt-8 inline-flex items-center text-sm text-muted transition-colors hover:text-foreground"
         >
           ← Back to Platform
         </Link>

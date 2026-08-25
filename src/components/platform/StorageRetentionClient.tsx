@@ -66,21 +66,21 @@ export function StorageRetentionClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">Storage & retention</h1>
       <p className="mt-1 text-muted">Data lifecycle and storage usage</p>
       {usage && (
-        <div className="mt-6 rounded-2xl border border-white/10 bg-surface/50 p-5">
+        <div className="mt-6 rounded-2xl border border-border bg-surface/50 p-5">
           <div className="text-xs uppercase text-muted">Storage</div>
           <div className="mt-1 text-2xl font-semibold">
             {usage.used} <span className="text-sm font-normal text-muted">/ {usage.max} MB</span>
           </div>
         </div>
       )}
-      <section className="mt-6 grid gap-4 rounded-2xl border border-white/10 bg-surface/50 p-6 sm:grid-cols-2">
+      <section className="mt-6 grid gap-4 rounded-2xl border border-border bg-surface/50 p-6 sm:grid-cols-2">
         {FIELDS.map((field) => (
           <label key={field} className="block text-sm">
             <span className="text-muted">{field}</span>
             <input
               type="number"
               min={1}
-              className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
               value={retention[field]}
               onChange={(e) =>
                 setRetention({ ...retention, [field]: Number(e.target.value) })

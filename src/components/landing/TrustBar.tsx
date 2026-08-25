@@ -11,7 +11,7 @@ const badges = [
 
 export function TrustBar() {
   return (
-    <section className="border-y border-white/[0.06] bg-surface/40 backdrop-blur-sm">
+    <section className="border-y border-border bg-surface/40 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -31,7 +31,7 @@ export function TrustBar() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 font-mono text-[10px] tracking-wider text-white/70 sm:text-xs"
+                className="rounded-full border border-border bg-glass px-4 py-1.5 font-mono text-[10px] tracking-wider text-foreground/70 sm:text-xs"
               >
                 {badge}
               </motion.span>

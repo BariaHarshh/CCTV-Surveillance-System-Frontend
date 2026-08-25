@@ -103,7 +103,7 @@ export function MfaClient({ user, bare }: { user: SafeUser; bare?: boolean }) {
 
       <div className="mt-8 space-y-6">
         {!enabled && (
-          <section className="rounded-2xl border border-white/10 bg-surface/50 p-6">
+          <section className="rounded-2xl border border-border bg-surface/50 p-6">
             <button
               type="button"
               onClick={begin}
@@ -114,7 +114,7 @@ export function MfaClient({ user, bare }: { user: SafeUser; bare?: boolean }) {
             {secret && (
               <div className="mt-4 space-y-3 text-sm">
                 <p className="text-muted">Add this secret in your authenticator app:</p>
-                <code className="block break-all rounded-xl border border-white/10 bg-background p-3 font-mono text-accent">
+                <code className="block break-all rounded-xl border border-border bg-background p-3 font-mono text-accent">
                   {secret}
                 </code>
                 <a href={otpauth} className="text-accent underline">
@@ -122,7 +122,7 @@ export function MfaClient({ user, bare }: { user: SafeUser; bare?: boolean }) {
                 </a>
                 <div className="flex gap-2 pt-2">
                   <input
-                    className="rounded-xl border border-white/10 bg-background px-3 py-2"
+                    className="rounded-xl border border-border bg-background px-3 py-2"
                     placeholder="6-digit code"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
@@ -130,7 +130,7 @@ export function MfaClient({ user, bare }: { user: SafeUser; bare?: boolean }) {
                   <button
                     type="button"
                     onClick={verify}
-                    className="rounded-xl border border-white/10 px-4 py-2 hover:border-accent/40"
+                    className="rounded-xl border border-border px-4 py-2 hover:border-accent/40"
                   >
                     Verify & enable
                   </button>
@@ -141,11 +141,11 @@ export function MfaClient({ user, bare }: { user: SafeUser; bare?: boolean }) {
         )}
 
         {enabled && (
-          <section className="rounded-2xl border border-white/10 bg-surface/50 p-6 space-y-3">
+          <section className="rounded-2xl border border-border bg-surface/50 p-6 space-y-3">
             <button
               type="button"
               onClick={regenerate}
-              className="rounded-xl border border-white/10 px-4 py-2 text-sm hover:border-accent/40"
+              className="rounded-xl border border-border px-4 py-2 text-sm hover:border-accent/40"
             >
               Regenerate recovery codes
             </button>

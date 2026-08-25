@@ -29,7 +29,7 @@ export function SuperAdminAnalyticsClient({ user }: { user: SafeUser }) {
       {!data ? (
         <div className="mt-8 grid gap-3 sm:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="h-20 animate-pulse rounded-xl bg-white/[0.04]" />
+            <div key={i} className="h-20 animate-pulse rounded-xl bg-glass" />
           ))}
         </div>
       ) : (
@@ -45,7 +45,7 @@ export function SuperAdminAnalyticsClient({ user }: { user: SafeUser }) {
             <KpiCard label="Platform Health" value={String(health.overall ?? "—")} />
           </div>
 
-          <section className="mt-6 rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+          <section className="mt-6 rounded-2xl border border-border bg-surface/40 p-5">
             <h2 className="text-sm font-semibold">Platform Health</h2>
             <dl className="mt-4 grid gap-3 sm:grid-cols-3 text-sm">
               {Object.entries(health).map(([k, v]) => (
@@ -57,7 +57,7 @@ export function SuperAdminAnalyticsClient({ user }: { user: SafeUser }) {
             </dl>
           </section>
 
-          <section className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+          <section className="mt-6 overflow-x-auto rounded-2xl border border-border bg-surface/40 p-5">
             <h2 className="text-sm font-semibold">Organization Comparison</h2>
             <table className="mt-4 w-full text-left text-xs">
               <thead className="text-muted">

@@ -17,7 +17,7 @@ export function StatusBadge({ status }: { status: string }) {
     <span
       className={cn(
         "inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase",
-        statusStyles[status] ?? "border-white/10 bg-white/5 text-muted"
+        statusStyles[status] ?? "border-border bg-white/5 text-muted"
       )}
     >
       {status.replace("_", " ")}

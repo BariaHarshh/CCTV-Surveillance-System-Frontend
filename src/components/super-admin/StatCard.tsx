@@ -40,8 +40,8 @@ export function StatCard({ label, value, icon: Icon, trend, className, delay = 0
 
 export function StatCardSkeleton() {
   return (
-    <div className="animate-pulse rounded-2xl border border-white/[0.06] bg-surface/40 p-5">
-      <div className="h-3 w-24 rounded bg-white/[0.06]" />
+    <div className="animate-pulse rounded-2xl border border-border bg-surface/40 p-5">
+      <div className="h-3 w-24 rounded bg-glass" />
       <div className="mt-4 h-8 w-16 rounded bg-white/[0.08]" />
     </div>
   );

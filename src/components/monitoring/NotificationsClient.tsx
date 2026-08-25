@@ -75,7 +75,7 @@ export function NotificationsClient({ user }: { user: SafeUser }) {
         </div>
         <div className="flex items-center gap-3">
           <RealtimeIndicator status={realtimeStatus} />
-          <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted hover:text-white">
+          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
             <RefreshCw className="h-4 w-4" />
           </button>
           {unread > 0 && (
@@ -94,7 +94,7 @@ export function NotificationsClient({ user }: { user: SafeUser }) {
           { label: "Security", value: stats.security },
           { label: "System", value: stats.system },
         ].map((s) => (
-          <div key={s.label} className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+          <div key={s.label} className="rounded-xl border border-border bg-surface/50 p-4">
             <p className="text-xs text-muted">{s.label}</p>
             <p className="mt-1 text-2xl font-bold">{s.value}</p>
           </div>
@@ -107,7 +107,7 @@ export function NotificationsClient({ user }: { user: SafeUser }) {
             key={f}
             type="button"
             onClick={() => setFilter(f)}
-            className={`rounded-lg px-4 py-2 text-xs font-medium capitalize ${filter === f ? "bg-accent/10 text-accent" : "text-muted hover:text-white"}`}
+            className={`rounded-lg px-4 py-2 text-xs font-medium capitalize ${filter === f ? "bg-accent/10 text-accent" : "text-muted hover:text-foreground"}`}
           >
             {f}
           </button>
@@ -116,9 +116,9 @@ export function NotificationsClient({ user }: { user: SafeUser }) {
 
       <div className="mt-6 space-y-2">
         {loading ? (
-          Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-white/[0.04]" />)
+          Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-glass" />)
         ) : items.length === 0 ? (
-          <p className="rounded-xl border border-white/[0.06] p-8 text-center text-muted">No notifications.</p>
+          <p className="rounded-xl border border-border p-8 text-center text-muted">No notifications.</p>
         ) : (
           items.map((n) => (
             <div key={n.id} className={`flex items-start justify-between gap-4 rounded-xl border px-4 py-4 ${n.read ? "border-white/[0.04] opacity-70" : "border-accent/20 bg-accent/5"}`}>

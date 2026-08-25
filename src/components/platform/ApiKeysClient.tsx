@@ -65,10 +65,10 @@ export function ApiKeysClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">API keys</h1>
       <p className="mt-1 text-muted">Create and revoke organization API keys</p>
 
-      <section className="mt-8 rounded-2xl border border-white/10 bg-surface/50 p-6">
+      <section className="mt-8 rounded-2xl border border-border bg-surface/50 p-6">
         <div className="flex flex-wrap gap-2">
           <input
-            className="min-w-[200px] flex-1 rounded-xl border border-white/10 bg-background px-3 py-2 text-sm"
+            className="min-w-[200px] flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm"
             placeholder="Key name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -93,9 +93,9 @@ export function ApiKeysClient({ user }: { user: SafeUser }) {
       {loading ? (
         <Loader2 className="mt-8 h-8 w-8 animate-spin text-accent" />
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full min-w-[560px] text-left text-sm">
-            <thead className="border-b border-white/10 text-xs uppercase text-muted">
+            <thead className="border-b border-border text-xs uppercase text-muted">
               <tr>
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Prefix</th>

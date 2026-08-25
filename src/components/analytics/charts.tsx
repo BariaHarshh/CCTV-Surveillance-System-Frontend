@@ -90,7 +90,7 @@ export function CompositionDonut({ data }: { data: Array<{ name: string; value: 
 
 function EmptyChart() {
   return (
-    <div className="flex h-56 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-muted">
+    <div className="flex h-56 items-center justify-center rounded-xl border border-dashed border-border text-xs text-muted">
       No data available for this period.
     </div>
   );
@@ -108,7 +108,7 @@ export function KpiCard({
   hint?: string;
 }) {
   const inner = (
-    <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-4 transition hover:border-white/20">
+    <div className="rounded-xl border border-border bg-surface/50 p-4 transition hover:border-white/20">
       <p className="text-[10px] uppercase tracking-wider text-muted">{label}</p>
       <p className="mt-1 text-2xl font-bold">{value}</p>
       {hint && <p className="mt-1 text-[10px] text-muted">{hint}</p>}
@@ -131,18 +131,18 @@ export function AnalyticsFiltersBar({
         type="date"
         value={filters.from ?? ""}
         onChange={(e) => onChange({ ...filters, from: e.target.value })}
-        className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5 text-xs"
+        className="rounded-lg border border-border bg-black/30 px-3 py-1.5 text-xs"
       />
       <input
         type="date"
         value={filters.to ?? ""}
         onChange={(e) => onChange({ ...filters, to: e.target.value })}
-        className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5 text-xs"
+        className="rounded-lg border border-border bg-black/30 px-3 py-1.5 text-xs"
       />
       <select
         value={filters.severity ?? ""}
         onChange={(e) => onChange({ ...filters, severity: e.target.value })}
-        className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5 text-xs"
+        className="rounded-lg border border-border bg-black/30 px-3 py-1.5 text-xs"
       >
         <option value="">All Severities</option>
         {["CRITICAL", "HIGH", "MEDIUM", "LOW"].map((s) => (
@@ -152,7 +152,7 @@ export function AnalyticsFiltersBar({
       <select
         value={filters.granularity ?? "day"}
         onChange={(e) => onChange({ ...filters, granularity: e.target.value })}
-        className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5 text-xs"
+        className="rounded-lg border border-border bg-black/30 px-3 py-1.5 text-xs"
       >
         <option value="day">Daily</option>
         <option value="week">Weekly</option>

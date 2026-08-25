@@ -43,9 +43,9 @@ export function IntegrationsClient({ user }: { user: SafeUser }) {
           <Link
             key={item.href}
             href={item.href}
-            className="group flex items-start gap-4 rounded-2xl border border-white/10 bg-surface/50 p-5 transition hover:border-accent/40"
+            className="group flex items-start gap-4 rounded-2xl border border-border bg-surface/50 p-5 transition hover:border-accent/40"
           >
-            <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-accent">
+            <div className="rounded-xl border border-border bg-glass p-2.5 text-accent">
               <item.icon className="h-5 w-5" />
             </div>
             <div className="flex-1">

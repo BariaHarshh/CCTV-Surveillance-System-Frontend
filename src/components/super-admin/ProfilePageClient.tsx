@@ -87,7 +87,7 @@ export function ProfilePageClient({ user }: { user: SafeUser }) {
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-2 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm"
+              className="mt-2 w-full rounded-xl border border-border bg-glass px-4 py-2.5 text-sm"
             />
           </label>
           {message && <p className="mt-3 text-sm text-accent">{message}</p>}
@@ -108,25 +108,25 @@ export function ProfilePageClient({ user }: { user: SafeUser }) {
               placeholder="Current password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm"
+              className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm"
             />
             <input
               type="password"
               placeholder="New password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm"
+              className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm"
             />
             <input
               type="password"
               placeholder="Confirm password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm"
+              className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm"
             />
           </div>
           {pwMessage && <p className="mt-3 text-sm text-accent">{pwMessage}</p>}
-          <button type="submit" className="mt-4 rounded-full border border-white/[0.08] px-6 py-2.5 text-sm hover:bg-white/[0.04]">
+          <button type="submit" className="mt-4 rounded-full border border-border px-6 py-2.5 text-sm hover:bg-glass">
             Update Password
           </button>
         </form>

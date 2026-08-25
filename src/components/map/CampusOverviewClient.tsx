@@ -35,26 +35,26 @@ export function CampusOverviewClient({ user }: { user: SafeUser }) {
         </Link>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-xl border border-white/10 p-4 text-sm">
+        <div className="rounded-xl border border-border p-4 text-sm">
           <p className="text-xs text-muted">Buildings</p>
           <p className="text-2xl font-semibold">
             {((bootstrap?.buildings as unknown[]) || []).length}
           </p>
         </div>
-        <div className="rounded-xl border border-white/10 p-4 text-sm">
+        <div className="rounded-xl border border-border p-4 text-sm">
           <p className="text-xs text-muted">Active emergency</p>
           <p className="text-2xl font-semibold">
             {bootstrap?.activeEmergency ? "YES" : "None"}
           </p>
         </div>
-        <div className="rounded-xl border border-white/10 p-4 text-sm">
+        <div className="rounded-xl border border-border p-4 text-sm">
           <p className="text-xs text-muted">Coordinates</p>
           <p className="text-sm">
             {campus?.hasCoordinates ? "Configured" : "Not configured"}
           </p>
         </div>
       </div>
-      <section className="mt-6 rounded-xl border border-white/10 p-4">
+      <section className="mt-6 rounded-xl border border-border p-4">
         <h2 className="text-sm font-semibold">Risk areas (30d)</h2>
         <ul className="mt-3 space-y-2 text-xs">
           {((heatmap?.cells as Array<Record<string, unknown>>) || []).map((c) => (

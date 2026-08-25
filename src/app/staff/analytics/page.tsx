@@ -14,15 +14,15 @@ export default async function Page() {
         Limited operational metrics for authorized staff. Avoids individual surveillance profiles.
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        <Link href="/staff/alerts" className="rounded-xl border border-white/[0.08] bg-surface/40 p-4 hover:border-accent/30">
+        <Link href="/staff/alerts" className="rounded-xl border border-border bg-surface/40 p-4 hover:border-accent/30">
           <p className="font-medium">Assigned Alerts</p>
           <p className="mt-1 text-xs text-muted">Open your alert workspace</p>
         </Link>
-        <Link href="/staff/incidents" className="rounded-xl border border-white/[0.08] bg-surface/40 p-4 hover:border-accent/30">
+        <Link href="/staff/incidents" className="rounded-xl border border-border bg-surface/40 p-4 hover:border-accent/30">
           <p className="font-medium">Incidents</p>
           <p className="mt-1 text-xs text-muted">Incident participation view</p>
         </Link>
-        <Link href="/staff/reports" className="rounded-xl border border-white/[0.08] bg-surface/40 p-4 hover:border-accent/30">
+        <Link href="/staff/reports" className="rounded-xl border border-border bg-surface/40 p-4 hover:border-accent/30">
           <p className="font-medium">Authorized Reports</p>
           <p className="mt-1 text-xs text-muted">Reports you are permitted to view</p>
         </Link>

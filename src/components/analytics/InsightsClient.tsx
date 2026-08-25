@@ -71,17 +71,17 @@ export function InsightsClient({ user }: { user: SafeUser }) {
       {loading ? (
         <div className="mt-8 space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-28 animate-pulse rounded-xl bg-white/[0.04]" />
+            <div key={i} className="h-28 animate-pulse rounded-xl bg-glass" />
           ))}
         </div>
       ) : insights.length === 0 ? (
-        <p className="mt-10 rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-muted">
+        <p className="mt-10 rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted">
           {message ?? "No data available for this period."}
         </p>
       ) : (
         <div className="mt-6 space-y-4">
           {insights.map((ins) => (
-            <article key={ins.id} className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+            <article key={ins.id} className="rounded-2xl border border-border bg-surface/40 p-5">
               <p className="text-[10px] uppercase tracking-wider text-accent">Insight</p>
               <h2 className="mt-1 text-lg font-semibold">{ins.title}</h2>
               <div className="mt-3 text-sm">
@@ -113,7 +113,7 @@ export function InsightsClient({ user }: { user: SafeUser }) {
                     key={f}
                     type="button"
                     onClick={() => feedback(ins.id, f)}
-                    className="rounded-full border border-white/10 px-2 py-1 hover:text-accent"
+                    className="rounded-full border border-border px-2 py-1 hover:text-accent"
                   >
                     {f.replace(/_/g, " ")}
                   </button>

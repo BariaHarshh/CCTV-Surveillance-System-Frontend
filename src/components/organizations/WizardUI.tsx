@@ -13,7 +13,7 @@ export function WizardProgress({ step }: { step: number }) {
             <div
               className={cn(
                 "flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold",
-                i <= step ? "bg-accent text-background" : "bg-white/[0.06] text-muted"
+                i <= step ? "bg-accent text-background" : "bg-glass text-muted"
               )}
             >
               {String(i + 1).padStart(2, "0")}
@@ -52,7 +52,7 @@ export function FormField({
 }
 
 export const inputClass =
-  "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm outline-none focus:border-accent/40";
+  "w-full rounded-xl border border-border bg-glass px-4 py-2.5 text-sm outline-none focus:border-accent/40";
 
 export const selectClass = inputClass;
 
@@ -78,7 +78,7 @@ export function CheckboxGroup({
             "flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-sm transition-colors",
             selected.includes(opt)
               ? "border-accent/40 bg-accent/10 text-white"
-              : "border-white/[0.08] hover:bg-white/[0.03]"
+              : "border-border hover:bg-glass"
           )}
         >
           <input

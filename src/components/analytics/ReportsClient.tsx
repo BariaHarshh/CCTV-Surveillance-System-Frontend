@@ -61,20 +61,20 @@ export function ReportsClient({ user }: { user: SafeUser }) {
           <h1 className="text-2xl font-bold">Reports</h1>
           <p className="mt-1 text-muted">Generate PDF, CSV, or Excel safety intelligence reports from live operational data.</p>
         </div>
-        <Link href="/admin/reports/scheduled" className="rounded-full border border-white/10 px-3 py-1.5 text-xs hover:text-accent">
+        <Link href="/admin/reports/scheduled" className="rounded-full border border-border px-3 py-1.5 text-xs hover:text-accent">
           Scheduled →
         </Link>
       </div>
 
-      <section className="mt-6 rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+      <section className="mt-6 rounded-2xl border border-border bg-surface/40 p-5">
         <h2 className="text-sm font-semibold">Report Generator</h2>
         <div className="mt-4 flex flex-wrap gap-3">
-          <select value={type} onChange={(e) => setType(e.target.value)} className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm">
+          <select value={type} onChange={(e) => setType(e.target.value)} className="rounded-lg border border-border bg-black/30 px-3 py-2 text-sm">
             {REPORT_TYPES.map((t) => (
               <option key={t} value={t}>{t.replace(/_/g, " ")}</option>
             ))}
           </select>
-          <select value={format} onChange={(e) => setFormat(e.target.value)} className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm">
+          <select value={format} onChange={(e) => setFormat(e.target.value)} className="rounded-lg border border-border bg-black/30 px-3 py-2 text-sm">
             {REPORT_FORMATS.map((f) => (
               <option key={f} value={f}>{f}</option>
             ))}
@@ -92,7 +92,7 @@ export function ReportsClient({ user }: { user: SafeUser }) {
         <p className="mt-2 text-[10px] text-muted">Large reports generate asynchronously. Failed jobs show a safe error — stack traces stay server-side.</p>
       </section>
 
-      <section className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+      <section className="mt-6 overflow-x-auto rounded-2xl border border-border bg-surface/40 p-5">
         <h2 className="text-sm font-semibold">Recent Reports</h2>
         <table className="mt-4 w-full text-left text-xs">
           <thead className="text-muted">
@@ -120,7 +120,7 @@ export function ReportsClient({ user }: { user: SafeUser }) {
                   {(r.status === "QUEUED" || r.status === "GENERATING") && (
                     <button
                       type="button"
-                      className="text-muted hover:text-white"
+                      className="text-muted hover:text-foreground"
                       onClick={async () => {
                         await fetch(`/api/reports/${r.id}/cancel`, { method: "POST", credentials: "include" });
                         load();

@@ -36,21 +36,21 @@ export function BuildingOverviewClient({ user }: { user: SafeUser }) {
       </div>
 
       <div className="grid gap-3 md:grid-cols-4 text-sm">
-        <div className="rounded-xl border border-white/10 p-3">
+        <div className="rounded-xl border border-border p-3">
           <p className="text-xs text-muted">Floors</p>
           <p className="text-xl font-semibold">{String(b?.floors ?? "—")}</p>
         </div>
-        <div className="rounded-xl border border-white/10 p-3">
+        <div className="rounded-xl border border-border p-3">
           <p className="text-xs text-muted">Rooms</p>
           <p className="text-xl font-semibold">{String(data?.rooms ?? "—")}</p>
         </div>
-        <div className="rounded-xl border border-white/10 p-3">
+        <div className="rounded-xl border border-border p-3">
           <p className="text-xs text-muted">Cameras</p>
           <p className="text-xl font-semibold">
             {String((data?.cameras as { total?: number } | undefined)?.total ?? "—")}
           </p>
         </div>
-        <div className="rounded-xl border border-white/10 p-3">
+        <div className="rounded-xl border border-border p-3">
           <p className="text-xs text-muted">Risk</p>
           <p className="text-xl font-semibold">
             {String((data?.risk as { level?: string } | undefined)?.level ?? "INSUFFICIENT_DATA")}
@@ -58,7 +58,7 @@ export function BuildingOverviewClient({ user }: { user: SafeUser }) {
         </div>
       </div>
 
-      <section className="mt-6 rounded-xl border border-white/10 p-4">
+      <section className="mt-6 rounded-xl border border-border p-4">
         <h2 className="text-sm font-semibold">Risk factors</h2>
         <ul className="mt-2 list-disc pl-5 text-xs text-muted">
           {(((data?.risk as { factors?: string[] })?.factors) || ["Insufficient Data"]).map((f) => (
@@ -67,7 +67,7 @@ export function BuildingOverviewClient({ user }: { user: SafeUser }) {
         </ul>
       </section>
 
-      <section className="mt-6 rounded-xl border border-white/10 p-4">
+      <section className="mt-6 rounded-xl border border-border p-4">
         <h2 className="mb-2 text-sm font-semibold">Floors</h2>
         <ul className="space-y-2 text-xs">
           {((data?.floors as Array<Record<string, unknown>>) || []).map((f) => (

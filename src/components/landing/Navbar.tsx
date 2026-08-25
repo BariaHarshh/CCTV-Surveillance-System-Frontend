@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const navLinks = [
   { href: "#platform", label: "Platform" },
@@ -39,7 +40,7 @@ export function Navbar() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-500",
           scrolled
-            ? "border-b border-white/[0.06] bg-[#030508]/85 backdrop-blur-xl"
+            ? "border-b border-border bg-background/85 backdrop-blur-xl"
             : "bg-transparent"
         )}
       >
@@ -49,7 +50,7 @@ export function Navbar() {
         >
           <Link
             href="/"
-            className="text-xs font-semibold tracking-[0.2em] text-white transition-colors hover:text-accent sm:text-sm"
+            className="text-xs font-semibold tracking-[0.2em] text-foreground transition-colors hover:text-accent sm:text-sm"
           >
             AI CAMPUS GUARDIAN
           </Link>
@@ -59,7 +60,7 @@ export function Navbar() {
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="text-sm text-muted transition-colors hover:text-white"
+                  className="text-sm text-muted transition-colors hover:text-foreground"
                 >
                   {link.label}
                 </a>
@@ -67,49 +68,48 @@ export function Navbar() {
             ))}
           </ul>
 
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="flex items-center gap-2 md:gap-3">
+            <ThemeToggle size="sm" />
             <Link
               href="/login"
-              className="gradient-border inline-flex items-center rounded-full bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-white/[0.08] hover:shadow-[0_0_30px_rgba(56,189,248,0.15)]"
+              className="gradient-border hidden items-center rounded-full bg-glass px-5 py-2.5 text-sm font-medium text-foreground transition-all hover:bg-glass-hover hover:shadow-[0_0_30px_var(--color-accent-glow)] md:inline-flex"
             >
               Access Platform
             </Link>
+            <button
+              type="button"
+              className="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+            >
+              <span
+                className={cn(
+                  "h-0.5 w-5 bg-foreground transition-all duration-300",
+                  mobileOpen && "translate-y-2 rotate-45"
+                )}
+              />
+              <span
+                className={cn(
+                  "h-0.5 w-5 bg-foreground transition-all duration-300",
+                  mobileOpen && "opacity-0"
+                )}
+              />
+              <span
+                className={cn(
+                  "h-0.5 w-5 bg-foreground transition-all duration-300",
+                  mobileOpen && "-translate-y-2 -rotate-45"
+                )}
+              />
+            </button>
           </div>
-
-          <button
-            type="button"
-            className="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-          >
-            <span
-              className={cn(
-                "h-0.5 w-5 bg-white transition-all duration-300",
-                mobileOpen && "translate-y-2 rotate-45"
-              )}
-            />
-            <span
-              className={cn(
-                "h-0.5 w-5 bg-white transition-all duration-300",
-                mobileOpen && "opacity-0"
-              )}
-            />
-            <span
-              className={cn(
-                "h-0.5 w-5 bg-white transition-all duration-300",
-                mobileOpen && "-translate-y-2 -rotate-45"
-              )}
-            />
-          </button>
         </nav>
       </motion.header>
 
-      {/* Mobile menu */}
       <motion.div
         initial={false}
         animate={{ opacity: mobileOpen ? 1 : 0, pointerEvents: mobileOpen ? "auto" : "none" }}
-        className="fixed inset-0 z-40 bg-[#030508]/95 backdrop-blur-xl md:hidden"
+        className="fixed inset-0 z-40 bg-background/95 backdrop-blur-xl md:hidden"
       >
         <div className="flex h-full flex-col items-center justify-center gap-8 pt-16">
           {navLinks.map((link, i) => (
@@ -120,7 +120,7 @@ export function Navbar() {
               animate={mobileOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
               transition={{ delay: i * 0.05 }}
               onClick={() => setMobileOpen(false)}
-              className="text-lg text-white/90"
+              className="text-lg text-foreground/90"
             >
               {link.label}
             </motion.a>
@@ -128,7 +128,7 @@ export function Navbar() {
           <Link
             href="/login"
             onClick={() => setMobileOpen(false)}
-            className="gradient-border mt-4 rounded-full bg-white/[0.06] px-8 py-3 text-sm font-medium text-white"
+            className="gradient-border mt-4 rounded-full bg-glass px-8 py-3 text-sm font-medium text-foreground"
           >
             Access Platform
           </Link>

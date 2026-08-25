@@ -63,13 +63,13 @@ export function SessionsClient({ user }: { user: SafeUser }) {
       <p className="mt-1 text-sm text-muted">Devices signed in to your account</p>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Link href="/change-password" className="rounded-xl border border-white/10 px-4 py-2 text-sm hover:border-accent/40">
+        <Link href="/change-password" className="rounded-xl border border-border px-4 py-2 text-sm hover:border-accent/40">
           Change password
         </Link>
         <button
           type="button"
           onClick={revokeOthers}
-          className="rounded-xl border border-white/10 px-4 py-2 text-sm hover:border-accent/40"
+          className="rounded-xl border border-border px-4 py-2 text-sm hover:border-accent/40"
         >
           Log out other sessions
         </button>
@@ -78,15 +78,15 @@ export function SessionsClient({ user }: { user: SafeUser }) {
       {msg && <p className="mt-4 text-sm text-accent">{msg}</p>}
       {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
 
-      <section className="mt-6 overflow-hidden rounded-2xl border border-white/10">
+      <section className="mt-6 overflow-hidden rounded-2xl border border-border">
         {loading ? (
           <div className="p-6">
-            <div className="h-24 animate-pulse rounded-xl bg-white/[0.04]" />
+            <div className="h-24 animate-pulse rounded-xl bg-glass" />
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-left text-sm">
-              <thead className="border-b border-white/10 text-xs uppercase text-muted">
+              <thead className="border-b border-border text-xs uppercase text-muted">
                 <tr>
                   <th className="px-4 py-3">Device</th>
                   <th className="px-4 py-3">IP</th>

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { LoginVisual } from "@/components/auth/LoginVisual";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 function LoginFormFallback() {
   return (
@@ -15,8 +16,17 @@ function LoginFormFallback() {
 
 export function LoginPageContent() {
   return (
-    <div className="relative flex min-h-screen overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(56,189,248,0.08),transparent)]" />
+    <div className="relative flex min-h-screen overflow-hidden bg-background text-foreground">
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% -20%, var(--color-accent-glow), transparent)",
+        }}
+      />
+      <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6">
+        <ThemeToggle />
+      </div>
       <div className="relative grid min-h-screen w-full lg:grid-cols-2">
         <LoginVisual />
         <Suspense fallback={<LoginFormFallback />}>

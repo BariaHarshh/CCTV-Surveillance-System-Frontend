@@ -77,10 +77,10 @@ export function SecuritySection() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: i * 0.06 }}
                 whileHover={{ y: -3 }}
-                className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 transition-all hover:border-white/[0.12] hover:bg-white/[0.04]"
+                className="group rounded-2xl border border-border bg-glass p-7 transition-all hover:border-white/[0.12] hover:bg-glass"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/[0.04] transition-colors group-hover:bg-accent/10">
-                  <Icon className="h-5 w-5 text-white/70 transition-colors group-hover:text-accent" strokeWidth={1.5} />
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-glass transition-colors group-hover:bg-accent/10">
+                  <Icon className="h-5 w-5 text-foreground/70 transition-colors group-hover:text-accent" strokeWidth={1.5} />
                 </div>
                 <h3 className="mt-5 text-base font-semibold">{feature.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{feature.description}</p>

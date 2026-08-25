@@ -93,7 +93,7 @@ export function OrganizationSettingsClient({ user }: { user: SafeUser }) {
       <p className="mt-1 text-muted">Profile, locale, and branding</p>
 
       <div className="mt-8 space-y-6">
-        <section className="rounded-2xl border border-white/10 bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Basic information</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {(
@@ -107,7 +107,7 @@ export function OrganizationSettingsClient({ user }: { user: SafeUser }) {
               <label key={key} className="block text-sm">
                 <span className="text-muted">{label}</span>
                 <input
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+                  className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
                   value={form[key]}
                   onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                 />
@@ -116,13 +116,13 @@ export function OrganizationSettingsClient({ user }: { user: SafeUser }) {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Locale & branding</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <label className="block text-sm">
               <span className="text-muted">Timezone</span>
               <input
-                className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+                className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
                 value={form.timezone}
                 onChange={(e) => setForm({ ...form, timezone: e.target.value })}
               />
@@ -130,7 +130,7 @@ export function OrganizationSettingsClient({ user }: { user: SafeUser }) {
             <label className="block text-sm">
               <span className="text-muted">Language</span>
               <input
-                className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+                className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
                 value={form.language}
                 onChange={(e) => setForm({ ...form, language: e.target.value })}
               />
@@ -138,7 +138,7 @@ export function OrganizationSettingsClient({ user }: { user: SafeUser }) {
             <label className="block text-sm">
               <span className="text-muted">Currency</span>
               <input
-                className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+                className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
                 value={form.currency}
                 onChange={(e) => setForm({ ...form, currency: e.target.value })}
               />
@@ -147,7 +147,7 @@ export function OrganizationSettingsClient({ user }: { user: SafeUser }) {
               <span className="text-muted">Primary color</span>
               <input
                 type="color"
-                className="mt-1 h-10 w-full rounded-xl border border-white/10 bg-background px-2"
+                className="mt-1 h-10 w-full rounded-xl border border-border bg-background px-2"
                 value={form.primaryColor}
                 onChange={(e) => setForm({ ...form, primaryColor: e.target.value })}
               />

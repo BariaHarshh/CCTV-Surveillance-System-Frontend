@@ -101,7 +101,7 @@ export function RiskEngine() {
               </div>
 
               {/* Progress ring visual */}
-              <div className="relative mx-auto my-10 h-3 overflow-hidden rounded-full bg-white/[0.06]">
+              <div className="relative mx-auto my-10 h-3 overflow-hidden rounded-full bg-glass">
                 <motion.div
                   initial={{ width: 0 }}
                   whileInView={{ width: "85%" }}
@@ -129,7 +129,7 @@ export function RiskEngine() {
                       className={`flex items-center gap-4 rounded-xl border p-4 ${colors[event.severity as keyof typeof colors]}`}
                     >
                       <Icon className="h-5 w-5 shrink-0" strokeWidth={1.5} />
-                      <span className="text-sm font-medium text-white/90">{event.label}</span>
+                      <span className="text-sm font-medium text-foreground/90">{event.label}</span>
                       <span className="ml-auto text-[10px] tracking-wider uppercase opacity-70">
                         {event.severity}
                       </span>

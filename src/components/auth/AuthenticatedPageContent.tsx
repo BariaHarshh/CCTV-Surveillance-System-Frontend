@@ -63,7 +63,7 @@ function AuthenticatedContent() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="gradient-border mt-12 rounded-3xl bg-surface/80 p-8 backdrop-blur-sm"
         >
-          <div className="flex items-center gap-3 border-b border-white/[0.06] pb-6">
+          <div className="flex items-center gap-3 border-b border-border pb-6">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
               <User className="h-6 w-6 text-accent" />
             </div>
@@ -99,7 +99,7 @@ function AuthenticatedContent() {
           <button
             type="button"
             onClick={() => logout()}
-            className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-8 py-3.5 text-sm font-medium text-muted transition-all hover:bg-white/[0.08] hover:text-white"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-glass px-8 py-3.5 text-sm font-medium text-muted transition-all hover:bg-glass-hover hover:text-foreground"
           >
             <LogOut className="h-4 w-4" />
             Sign Out

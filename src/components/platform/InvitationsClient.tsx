@@ -72,7 +72,7 @@ export function InvitationsClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">User Invitations</h1>
       <p className="mt-1 text-sm text-muted">Invite administrators and staff to your organization</p>
 
-      <form onSubmit={invite} className="mt-8 rounded-2xl border border-white/10 bg-surface/50 p-6">
+      <form onSubmit={invite} className="mt-8 rounded-2xl border border-border bg-surface/50 p-6">
         <h2 className="font-semibold">Send invitation</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <label className="block text-sm sm:col-span-2">
@@ -81,7 +81,7 @@ export function InvitationsClient({ user }: { user: SafeUser }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
               placeholder="user@campus.edu"
             />
           </label>
@@ -90,7 +90,7 @@ export function InvitationsClient({ user }: { user: SafeUser }) {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as "ADMIN" | "STAFF")}
-              className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
             >
               <option value="STAFF">Staff</option>
               <option value="ADMIN">Admin</option>
@@ -101,7 +101,7 @@ export function InvitationsClient({ user }: { user: SafeUser }) {
             <input
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
             />
           </label>
         </div>
@@ -119,9 +119,9 @@ export function InvitationsClient({ user }: { user: SafeUser }) {
       {loading ? (
         <Loader2 className="mt-8 h-8 w-8 animate-spin text-accent" />
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="border-b border-white/10 text-xs uppercase text-muted">
+            <thead className="border-b border-border text-xs uppercase text-muted">
               <tr>
                 <th className="px-4 py-3">Email</th>
                 <th className="px-4 py-3">Role</th>

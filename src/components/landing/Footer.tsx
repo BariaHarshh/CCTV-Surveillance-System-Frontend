@@ -12,7 +12,7 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.06] bg-surface/30">
+    <footer className="border-t border-border bg-surface/30">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-10 md:flex-row md:items-start">
           <div className="text-center md:text-left">
@@ -27,21 +27,21 @@ export function Footer() {
                   {link.href.startsWith("mailto:") ? (
                     <a
                       href={link.href}
-                      className="text-sm text-muted transition-colors hover:text-white"
+                      className="text-sm text-muted transition-colors hover:text-foreground"
                     >
                       {link.label}
                     </a>
                   ) : link.href.startsWith("#") ? (
                     <a
                       href={link.href}
-                      className="text-sm text-muted transition-colors hover:text-white"
+                      className="text-sm text-muted transition-colors hover:text-foreground"
                     >
                       {link.label}
                     </a>
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-sm text-muted transition-colors hover:text-white"
+                      className="text-sm text-muted transition-colors hover:text-foreground"
                     >
                       {link.label}
                     </Link>
@@ -52,7 +52,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="mt-12 border-t border-white/[0.06] pt-8 text-center">
+        <div className="mt-12 border-t border-border pt-8 text-center">
           <p className="text-xs text-muted/70">© 2026 AI Campus Guardian</p>
         </div>
       </div>

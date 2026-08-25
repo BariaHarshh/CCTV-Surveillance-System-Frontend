@@ -80,7 +80,7 @@ export function StaffSuccessClient({ user }: { user: SafeUser }) {
             <Link href="/admin/staff/new" className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-background">
               Create Staff
             </Link>
-            <Link href="/admin/staff" className="rounded-full border border-white/[0.08] px-6 py-2.5 text-sm">
+            <Link href="/admin/staff" className="rounded-full border border-border px-6 py-2.5 text-sm">
               Back to Staff
             </Link>
           </div>
@@ -108,7 +108,7 @@ export function StaffSuccessClient({ user }: { user: SafeUser }) {
           </p>
         )}
 
-        <div className="mt-6 space-y-3 rounded-xl border border-white/[0.08] bg-surface/60 p-4 text-left text-sm">
+        <div className="mt-6 space-y-3 rounded-xl border border-border bg-surface/60 p-4 text-left text-sm">
           <div>
             <span className="text-muted">Staff Name</span>
             <p className="font-medium">{name}</p>
@@ -149,7 +149,7 @@ export function StaffSuccessClient({ user }: { user: SafeUser }) {
           <button
             type="button"
             onClick={() => copy(userId, "id")}
-            className="inline-flex items-center gap-1 rounded-full border border-white/[0.08] px-4 py-2 text-sm"
+            className="inline-flex items-center gap-1 rounded-full border border-border px-4 py-2 text-sm"
           >
             <Copy className="h-3 w-3" /> {copied === "id" ? "Copied!" : "Copy Staff ID"}
           </button>
@@ -157,7 +157,7 @@ export function StaffSuccessClient({ user }: { user: SafeUser }) {
             <button
               type="button"
               onClick={() => copy(password, "pw")}
-              className="inline-flex items-center gap-1 rounded-full border border-white/[0.08] px-4 py-2 text-sm"
+              className="inline-flex items-center gap-1 rounded-full border border-border px-4 py-2 text-sm"
             >
               <Copy className="h-3 w-3" /> {copied === "pw" ? "Copied!" : "Copy Password"}
             </button>
@@ -169,7 +169,7 @@ export function StaffSuccessClient({ user }: { user: SafeUser }) {
           >
             View Staff
           </Link>
-          <Link href="/admin/staff" onClick={clearStoredCredentials} className="rounded-full border border-white/[0.08] px-6 py-2.5 text-sm">
+          <Link href="/admin/staff" onClick={clearStoredCredentials} className="rounded-full border border-border px-6 py-2.5 text-sm">
             Back to Staff
           </Link>
         </div>

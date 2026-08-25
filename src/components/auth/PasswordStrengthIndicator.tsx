@@ -37,7 +37,7 @@ export function PasswordStrengthIndicator({
           {config.label}
         </span>
       </div>
-      <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/[0.06]">
+      <div className="mt-2 h-1 overflow-hidden rounded-full bg-glass">
         <div
           className={cn("h-full rounded-full transition-all duration-300", config.color, config.width)}
         />

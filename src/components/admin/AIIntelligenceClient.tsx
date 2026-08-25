@@ -19,7 +19,7 @@ interface ModuleRow {
 
 const STATUS_COLORS: Record<string, string> = {
   ACTIVE: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-  INACTIVE: "text-muted bg-white/5 border-white/10",
+  INACTIVE: "text-muted bg-white/5 border-border",
   CONFIGURATION_REQUIRED: "text-amber-400 bg-amber-500/10 border-amber-500/20",
   ERROR: "text-red-400 bg-red-500/10 border-red-500/20",
   MAINTENANCE: "text-violet-400 bg-violet-500/10 border-violet-500/20",
@@ -57,28 +57,28 @@ export function AIIntelligenceClient({ user }: { user: SafeUser }) {
           <p className="mt-1 text-muted">Configure intelligent safety detection across your campus.</p>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin/ai/health" className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs text-muted hover:text-white">
+          <Link href="/admin/ai/health" className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs text-muted hover:text-foreground">
             <Activity className="h-3.5 w-3.5" /> AI Health
           </Link>
-          <Link href="/admin/settings/ai" className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs text-muted hover:text-white">
+          <Link href="/admin/settings/ai" className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs text-muted hover:text-foreground">
             <Settings className="h-3.5 w-3.5" /> Org Settings
           </Link>
-          <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted hover:text-white">
+          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
             <RefreshCw className="h-4 w-4" />
           </button>
         </div>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+        <div className="rounded-xl border border-border bg-surface/50 p-4">
           <p className="text-xs text-muted">Total Cameras</p>
           <p className="mt-1 text-2xl font-bold">{stats.totalCameras}</p>
         </div>
-        <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+        <div className="rounded-xl border border-border bg-surface/50 p-4">
           <p className="text-xs text-muted">AI Configured</p>
           <p className="mt-1 text-2xl font-bold">{stats.configuredCameras}</p>
         </div>
-        <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+        <div className="rounded-xl border border-border bg-surface/50 p-4">
           <p className="text-xs text-muted">Active Modules</p>
           <p className="mt-1 text-2xl font-bold">{modules.filter((m) => m.status === "ACTIVE").length}</p>
         </div>
@@ -86,10 +86,10 @@ export function AIIntelligenceClient({ user }: { user: SafeUser }) {
 
       <div className="mt-8 grid gap-4 lg:grid-cols-2">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-32 animate-pulse rounded-2xl bg-white/[0.04]" />)
+          Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-32 animate-pulse rounded-2xl bg-glass" />)
         ) : (
           modules.map((m) => (
-            <div key={m.type} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+            <div key={m.type} className="rounded-2xl border border-border bg-surface/50 p-5">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="rounded-xl bg-accent/10 p-2"><Brain className="h-5 w-5 text-accent" /></div>
@@ -112,13 +112,13 @@ export function AIIntelligenceClient({ user }: { user: SafeUser }) {
       </div>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/admin/ai/restricted-zones" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm hover:bg-white/[0.03]">
+        <Link href="/admin/ai/restricted-zones" className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm hover:bg-glass">
           <Shield className="h-4 w-4 text-accent" /> Restricted Zones
         </Link>
-        <Link href="/admin/ai/schedules" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm hover:bg-white/[0.03]">
+        <Link href="/admin/ai/schedules" className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm hover:bg-glass">
           <Settings className="h-4 w-4 text-accent" /> Schedules
         </Link>
-        <Link href="/admin/incidents" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm hover:bg-white/[0.03]">
+        <Link href="/admin/incidents" className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm hover:bg-glass">
           <Activity className="h-4 w-4 text-accent" /> Incident Center
         </Link>
       </div>

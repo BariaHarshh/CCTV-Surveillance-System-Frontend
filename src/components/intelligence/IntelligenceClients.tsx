@@ -68,7 +68,7 @@ export function DailyBriefingClient({ user }: { user: SafeUser }) {
           <h1 className="text-2xl font-bold">Daily Safety Briefing</h1>
           <p className="mt-1 text-sm text-muted">Generated from current organization-scoped system data.</p>
         </div>
-        <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted hover:text-white">
+        <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
           <RefreshCw className="h-4 w-4" />
         </button>
       </div>
@@ -87,13 +87,13 @@ export function DailyBriefingClient({ user }: { user: SafeUser }) {
               { label: "Open Incidents", value: data.openIncidents },
               { label: "Offline Cameras", value: data.offlineCameras },
             ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+              <div key={s.label} className="rounded-xl border border-border bg-surface/50 p-4">
                 <p className="text-xs text-muted">{s.label}</p>
                 <p className="mt-1 text-2xl font-bold">{String(s.value)}</p>
               </div>
             ))}
           </div>
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6 space-y-3 text-sm">
+          <div className="rounded-2xl border border-border bg-surface/50 p-6 space-y-3 text-sm">
             <p><span className="text-muted">Risk trend:</span> {String(data.riskTrend)}</p>
             <p><span className="text-muted">Highest risk note:</span> {String(data.highestRiskNote)}</p>
             <p><span className="text-muted">Recommended attention:</span> {String(data.recommendedAttention)}</p>
@@ -145,7 +145,7 @@ export function ExecutiveSummaryClient({ user }: { user: SafeUser }) {
               key={r}
               type="button"
               onClick={() => setRange(r)}
-              className={cn("rounded-full px-3 py-1.5 text-xs capitalize", range === r ? "bg-accent/15 text-accent" : "border border-white/10 text-muted")}
+              className={cn("rounded-full px-3 py-1.5 text-xs capitalize", range === r ? "bg-accent/15 text-accent" : "border border-border text-muted")}
             >
               {r}
             </button>
@@ -166,7 +166,7 @@ export function ExecutiveSummaryClient({ user }: { user: SafeUser }) {
               { label: "Emergencies", value: data.emergencyEvents },
               { label: "Cameras Offline", value: data.cameraHealthOffline },
             ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+              <div key={s.label} className="rounded-xl border border-border bg-surface/50 p-4">
                 <p className="text-xs text-muted">{s.label}</p>
                 <p className="mt-1 text-2xl font-bold">{String(s.value)}</p>
               </div>
@@ -177,7 +177,7 @@ export function ExecutiveSummaryClient({ user }: { user: SafeUser }) {
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted">Recommended actions</h2>
             <ul className="mt-3 space-y-2">
               {recs.map((r, i) => (
-                <li key={i} className="rounded-xl border border-white/[0.08] px-4 py-3 text-sm">
+                <li key={i} className="rounded-xl border border-border px-4 py-3 text-sm">
                   <span className="text-accent">{r.priority}</span> — {r.reason}
                   <p className="mt-1 text-xs text-muted">{r.evidence} · {r.suggestedAction}</p>
                 </li>
@@ -223,26 +223,26 @@ export function PredictiveRiskClient({ user }: { user: SafeUser }) {
           <h1 className="flex items-center gap-2 text-2xl font-bold"><Shield className="h-6 w-6 text-accent" /> Predictive Risk</h1>
           <p className="mt-1 text-sm text-muted">Estimate from historical org patterns — not a guarantee of future incidents.</p>
         </div>
-        <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted hover:text-white"><RefreshCw className="h-4 w-4" /></button>
+        <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground"><RefreshCw className="h-4 w-4" /></button>
       </div>
       {banner?.toolsOnly && <div className="mt-4"><StatusBanner toolsOnly message={banner.message} /></div>}
       {loading ? <Loader2 className="mt-12 h-8 w-8 animate-spin text-accent" /> : error ? <p className="mt-8 text-red-400">{error}</p> : data ? (
         <div className="mt-8 space-y-6">
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-6">
+            <div className="rounded-xl border border-border bg-surface/50 p-6">
               <p className="text-xs text-muted">Current risk</p>
               <p className="mt-2 text-4xl font-bold">{String(data.currentRisk)}<span className="text-lg text-muted">/100</span></p>
             </div>
-            <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-6">
+            <div className="rounded-xl border border-border bg-surface/50 p-6">
               <p className="text-xs text-muted">Trend</p>
               <p className="mt-2 text-2xl font-bold">{String(data.trend)}</p>
             </div>
-            <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-6">
+            <div className="rounded-xl border border-border bg-surface/50 p-6">
               <p className="text-xs text-muted">Confidence</p>
               <p className="mt-2 text-2xl font-bold">{String(data.confidence)}</p>
             </div>
           </div>
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+          <div className="rounded-2xl border border-border bg-surface/50 p-6">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted">Potential factors</h2>
             <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
               {factors.length === 0 ? <li className="text-muted">No elevated factors from available metrics.</li> : factors.map((f) => <li key={f}>{f}</li>)}
@@ -284,7 +284,7 @@ export function RecommendationsClient({ user }: { user: SafeUser }) {
       {loading ? <Loader2 className="mt-12 h-8 w-8 animate-spin text-accent" /> : error ? <p className="mt-8 text-red-400">{error}</p> : (
         <ul className="mt-8 space-y-3">
           {recs.map((r, i) => (
-            <li key={i} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+            <li key={i} className="rounded-2xl border border-border bg-surface/50 p-5">
               <p className="text-xs font-semibold uppercase tracking-wider text-accent">{r.priority}</p>
               <p className="mt-2 text-sm font-medium">{r.reason}</p>
               <p className="mt-1 text-xs text-muted">Evidence: {r.evidence}</p>
@@ -355,12 +355,12 @@ export function KnowledgeAdminClient({ user }: { user: SafeUser }) {
       <p className="mt-1 text-sm text-muted">Upload text/markdown policies. Only published docs are searchable by Copilot.</p>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-2">
-        <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6 space-y-3">
+        <div className="rounded-2xl border border-border bg-surface/50 p-6 space-y-3">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-muted">Add document</h2>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm" />
-          <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Type" className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm" />
-          <textarea value={text} onChange={(e) => setText(e.target.value)} rows={12} placeholder="Markdown / plain text…" className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm font-mono" />
-          <select value={status} onChange={(e) => setStatus(e.target.value as "DRAFT" | "PUBLISHED")} className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm">
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm" />
+          <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Type" className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm" />
+          <textarea value={text} onChange={(e) => setText(e.target.value)} rows={12} placeholder="Markdown / plain text…" className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm font-mono" />
+          <select value={status} onChange={(e) => setStatus(e.target.value as "DRAFT" | "PUBLISHED")} className="rounded-lg border border-border bg-black/30 px-3 py-2 text-sm">
             <option value="DRAFT">Draft</option>
             <option value="PUBLISHED">Published</option>
           </select>
@@ -370,12 +370,12 @@ export function KnowledgeAdminClient({ user }: { user: SafeUser }) {
           </button>
         </div>
 
-        <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <div className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-muted">Documents</h2>
           <ul className="mt-4 space-y-2">
             {docs.length === 0 && <li className="text-xs text-muted">No documents yet.</li>}
             {docs.map((d) => (
-              <li key={String(d.documentId)} className="rounded-xl border border-white/[0.06] px-4 py-3">
+              <li key={String(d.documentId)} className="rounded-xl border border-border px-4 py-3">
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <p className="text-sm font-medium">{String(d.title)}</p>
@@ -449,7 +449,7 @@ export function PrivacyAdminClient({ user }: { user: SafeUser }) {
       ) : (
         <div className="mt-8 max-w-xl space-y-4">
           {flags.map((f) => (
-            <label key={f.key} className="flex items-start justify-between gap-4 rounded-xl border border-white/[0.08] px-4 py-3">
+            <label key={f.key} className="flex items-start justify-between gap-4 rounded-xl border border-border px-4 py-3">
               <div>
                 <p className="text-sm font-medium">{f.label}</p>
                 <p className="text-xs text-muted">{f.hint}</p>
@@ -462,7 +462,7 @@ export function PrivacyAdminClient({ user }: { user: SafeUser }) {
               />
             </label>
           ))}
-          <label className="block rounded-xl border border-white/[0.08] px-4 py-3">
+          <label className="block rounded-xl border border-border px-4 py-3">
             <p className="text-sm font-medium">Conversation retention (days)</p>
             <input
               type="number"
@@ -470,7 +470,7 @@ export function PrivacyAdminClient({ user }: { user: SafeUser }) {
               max={365}
               value={Number(privacy.conversationRetentionDays ?? 90)}
               onChange={(e) => setPrivacy({ ...privacy, conversationRetentionDays: Number(e.target.value) })}
-              className="mt-2 w-32 rounded-lg border border-white/10 bg-black/30 px-3 py-1.5 text-sm"
+              className="mt-2 w-32 rounded-lg border border-border bg-black/30 px-3 py-1.5 text-sm"
             />
           </label>
           <button type="button" onClick={save} disabled={saving} className="rounded-xl bg-accent/90 px-4 py-2 text-sm font-medium text-black disabled:opacity-40">
@@ -536,7 +536,7 @@ export function SuperAdminModelsClient({ user }: { user: SafeUser }) {
               <p className="mt-2 text-lg font-semibold">{row.value}</p>
             </div>
           ))}
-          <div className="sm:col-span-2 rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+          <div className="sm:col-span-2 rounded-2xl border border-border bg-surface/50 p-5">
             <p className="text-xs text-muted mb-2">{String(models.message)}</p>
             <pre className="text-[11px] text-muted overflow-x-auto">{JSON.stringify(env, null, 2)}</pre>
           </div>
@@ -552,7 +552,7 @@ export function SuperAdminModelsClient({ user }: { user: SafeUser }) {
           {videoDeployments.map((d) => (
             <li
               key={String(d.deploymentId)}
-              className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 px-3 py-2"
+              className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border px-3 py-2"
             >
               <span>
                 {String(d.modelId)} v{String(d.version)} · {String(d.lifecycle)}
@@ -615,13 +615,13 @@ export function SuperAdminObservabilityClient({ user }: { user: SafeUser }) {
               ["Out tokens", totals.outputTokens],
               ["Avg latency", `${totals.avgLatencyMs ?? 0}ms`],
             ].map(([label, value]) => (
-              <div key={String(label)} className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+              <div key={String(label)} className="rounded-xl border border-border bg-surface/50 p-4">
                 <p className="text-[10px] uppercase text-muted">{label}</p>
                 <p className="mt-1 text-xl font-bold">{String(value ?? 0)}</p>
               </div>
             ))}
           </div>
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+          <div className="rounded-2xl border border-border bg-surface/50 p-5">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted">By provider</h2>
             <ul className="mt-3 space-y-2 text-sm">
               {byProvider.length === 0 && <li className="text-muted">No usage recorded.</li>}
@@ -633,7 +633,7 @@ export function SuperAdminObservabilityClient({ user }: { user: SafeUser }) {
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+          <div className="rounded-2xl border border-border bg-surface/50 p-5">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted">Recent errors</h2>
             <ul className="mt-3 space-y-2 text-xs">
               {recentErrors.length === 0 && <li className="text-muted">No recent errors.</li>}
@@ -686,16 +686,16 @@ export function SuperAdminTestingClient({ user }: { user: SafeUser }) {
           value={organizationId}
           onChange={(e) => setOrganizationId(e.target.value)}
           placeholder="Organization ObjectId"
-          className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm font-mono"
+          className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm font-mono"
         />
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           rows={3}
-          className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm"
         />
         <div className="flex gap-2">
-          <button type="button" onClick={() => run(true)} disabled={loading} className="rounded-xl border border-white/10 px-4 py-2 text-sm text-muted hover:text-white">
+          <button type="button" onClick={() => run(true)} disabled={loading} className="rounded-xl border border-border px-4 py-2 text-sm text-muted hover:text-foreground">
             Status echo
           </button>
           <button type="button" onClick={() => run(false)} disabled={loading || !organizationId.trim()} className="rounded-xl bg-accent/90 px-4 py-2 text-sm font-medium text-black disabled:opacity-40">
@@ -704,7 +704,7 @@ export function SuperAdminTestingClient({ user }: { user: SafeUser }) {
         </div>
         {error && <p className="text-xs text-red-400">{error}</p>}
         {result && (
-          <pre className="overflow-x-auto rounded-xl border border-white/[0.08] bg-black/40 p-4 text-[11px] text-muted">
+          <pre className="overflow-x-auto rounded-xl border border-border bg-black/40 p-4 text-[11px] text-muted">
             {JSON.stringify(result, null, 2)}
           </pre>
         )}

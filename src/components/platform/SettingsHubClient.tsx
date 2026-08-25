@@ -36,9 +36,9 @@ export function SettingsHubClient({ user }: { user: SafeUser }) {
           <Link
             key={s.href}
             href={s.href}
-            className="group flex items-start gap-4 rounded-2xl border border-white/10 bg-surface/50 p-5 transition hover:border-accent/40 hover:bg-surface/80"
+            className="group flex items-start gap-4 rounded-2xl border border-border bg-surface/50 p-5 transition hover:border-accent/40 hover:bg-surface/80"
           >
-            <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-accent">
+            <div className="rounded-xl border border-border bg-glass p-2.5 text-accent">
               <s.icon className="h-5 w-5" />
             </div>
             <div className="flex-1">

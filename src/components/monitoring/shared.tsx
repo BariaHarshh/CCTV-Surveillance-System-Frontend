@@ -11,7 +11,7 @@ export function SeverityBadge({ severity, className }: { severity: string; class
     LOW: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
   };
   return (
-    <span className={cn("inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase", colors[severity] ?? "bg-white/10 text-muted border-white/10", className)}>
+    <span className={cn("inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase", colors[severity] ?? "bg-white/10 text-muted border-border", className)}>
       {severity}
     </span>
   );

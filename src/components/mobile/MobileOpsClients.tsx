@@ -43,7 +43,7 @@ export function TasksClient({ user, taskId }: { user: SafeUser; taskId?: string 
       <MobileShell user={user} title="Task">
         <h2 className="text-xl font-semibold">{String(t.title || "…")}</h2>
         <p className="mt-1 text-sm text-white/60">{String(t.description || "")}</p>
-        <p className="mt-2 text-xs text-white/50">
+        <p className="mt-2 text-xs text-muted">
           {String(t.status)} · {String(t.priority)} · {String(t.locationLabel || "No location")}
         </p>
         {Boolean(t.demo) && <p className="text-xs text-amber-300">DEMO DATA</p>}
@@ -80,7 +80,7 @@ export function TasksClient({ user, taskId }: { user: SafeUser; taskId?: string 
         {msg && <p className="mt-2 text-xs text-sky-300">{msg}</p>}
 
         <section className="mt-6">
-          <h3 className="text-xs uppercase tracking-wider text-white/50">Checklist</h3>
+          <h3 className="text-xs uppercase tracking-wider text-muted">Checklist</h3>
           <ul className="mt-2 space-y-2">
             {((t.checklist as Array<Record<string, unknown>>) || []).map((c) => (
               <li key={String(c.key)}>
@@ -98,8 +98,8 @@ export function TasksClient({ user, taskId }: { user: SafeUser; taskId?: string 
         </section>
 
         <section className="mt-6">
-          <h3 className="text-xs uppercase tracking-wider text-white/50">Timeline</h3>
-          <ul className="mt-2 space-y-1 text-xs text-white/70">
+          <h3 className="text-xs uppercase tracking-wider text-muted">Timeline</h3>
+          <ul className="mt-2 space-y-1 text-xs text-foreground/70">
             {((t.timeline as Array<Record<string, unknown>>) || []).map((e, i) => (
               <li key={i}>
                 {e.at ? new Date(String(e.at)).toLocaleString() : ""} · {String(e.action)} ·{" "}
@@ -110,7 +110,7 @@ export function TasksClient({ user, taskId }: { user: SafeUser; taskId?: string 
         </section>
 
         <section className="mt-6">
-          <h3 className="text-xs uppercase tracking-wider text-white/50">Attachments</h3>
+          <h3 className="text-xs uppercase tracking-wider text-muted">Attachments</h3>
           <ul className="mt-2 space-y-1 text-xs">
             {((t.attachments as Array<Record<string, unknown>>) || []).map((a, i) => (
               <li key={i}>
@@ -148,9 +148,9 @@ export function TasksClient({ user, taskId }: { user: SafeUser; taskId?: string 
           ["Overdue", buckets.overdue],
           ["Done", buckets.completed],
         ].map(([l, v]) => (
-          <div key={String(l)} className="rounded-lg border border-white/10 p-2">
+          <div key={String(l)} className="rounded-lg border border-border p-2">
             <p className="text-sm font-semibold">{v ?? 0}</p>
-            <p className="text-white/50">{l}</p>
+            <p className="text-muted">{l}</p>
           </div>
         ))}
       </div>
@@ -161,7 +161,7 @@ export function TasksClient({ user, taskId }: { user: SafeUser; taskId?: string 
             type="button"
             onClick={() => setFilter(f)}
             className={`min-h-10 rounded-lg border px-2 text-[10px] ${
-              filter === f ? "border-sky-400 text-sky-200" : "border-white/10 text-white/60"
+              filter === f ? "border-sky-400 text-sky-200" : "border-border text-white/60"
             }`}
           >
             {f}
@@ -171,9 +171,9 @@ export function TasksClient({ user, taskId }: { user: SafeUser; taskId?: string 
       <ul className="mt-4 space-y-2">
         {tasks.map((t) => (
           <li key={String(t.id)}>
-            <Link href={`/tasks/${t.id}`} className="block rounded-xl border border-white/10 p-3 text-sm">
+            <Link href={`/tasks/${t.id}`} className="block rounded-xl border border-border p-3 text-sm">
               <p className="font-medium">{String(t.title)}</p>
-              <p className="text-xs text-white/50">
+              <p className="text-xs text-muted">
                 {String(t.status)} · {String(t.priority)}
                 {t.overdue ? " · Overdue" : ""}
               </p>
@@ -203,7 +203,7 @@ export function TeamsClient({ user, teamId }: { user: SafeUser; teamId?: string 
         <p className="text-sm text-white/60">
           {String(team.status)} · {String(team.currentAssignment || "No assignment")}
         </p>
-        <h3 className="mt-4 text-xs uppercase text-white/50">Members</h3>
+        <h3 className="mt-4 text-xs uppercase text-muted">Members</h3>
         <ul className="mt-2 space-y-1 text-sm">
           {((team.members as Array<Record<string, unknown>>) || []).map((m) => (
             <li key={String(m.userId)}>
@@ -211,7 +211,7 @@ export function TeamsClient({ user, teamId }: { user: SafeUser; teamId?: string 
             </li>
           ))}
         </ul>
-        <h3 className="mt-4 text-xs uppercase text-white/50">Tasks</h3>
+        <h3 className="mt-4 text-xs uppercase text-muted">Tasks</h3>
         <ul className="mt-2 space-y-2">
           {((data?.tasks as Array<Record<string, unknown>>) || []).map((t) => (
             <li key={String(t.id)}>
@@ -231,9 +231,9 @@ export function TeamsClient({ user, teamId }: { user: SafeUser; teamId?: string 
       <ul className="space-y-2">
         {teams.map((t) => (
           <li key={String(t.id)}>
-            <Link href={`/teams/${t.id}`} className="block rounded-xl border border-white/10 p-3">
+            <Link href={`/teams/${t.id}`} className="block rounded-xl border border-border p-3">
               <p className="font-medium">{String(t.name)}</p>
-              <p className="text-xs text-white/50">
+              <p className="text-xs text-muted">
                 {String(t.status)} · {String(t.memberCount)} members
                 {t.supervisor ? ` · Sup: ${String(t.supervisor)}` : ""}
               </p>
@@ -321,7 +321,7 @@ export function OpsDashClient({
                 {String((data.emergency as { severity?: string }).severity)}
               </p>
             ) : (
-              <p className="mt-1 text-sm text-white/70">No active emergency in system data.</p>
+              <p className="mt-1 text-sm text-foreground/70">No active emergency in system data.</p>
             )}
           </div>
           <div className="grid grid-cols-1 gap-2">
@@ -340,7 +340,7 @@ export function OpsDashClient({
               </button>
             ))}
           </div>
-          <p className="text-[11px] text-white/50">
+          <p className="text-[11px] text-muted">
             Safety status is only shown from submitted check-ins — never inferred.
           </p>
           <Link href="/map?mode=EMERGENCY" className="text-sm text-sky-300">
@@ -367,7 +367,7 @@ export function OpsDashClient({
       )}
 
       {(view === "field" || view === "supervisor" || view === "operations" || view === "analytics") && (
-        <pre className="overflow-auto rounded-xl border border-white/10 p-3 text-[10px] text-white/70">
+        <pre className="overflow-auto rounded-xl border border-border p-3 text-[10px] text-foreground/70">
           {JSON.stringify(data, null, 2)}
         </pre>
       )}
@@ -375,19 +375,19 @@ export function OpsDashClient({
       {view === "patrol" && (
         <div className="space-y-2 text-sm">
           {((data?.runs as Array<Record<string, unknown>>) || []).map((p) => (
-            <div key={String(p.patrolId)} className="rounded-xl border border-white/10 p-3">
+            <div key={String(p.patrolId)} className="rounded-xl border border-border p-3">
               {String(p.routeName)} · {String(p.status)}
               {p.demo ? " · DEMO DATA" : ""}
             </div>
           ))}
-          {!data?.runs && <p className="text-white/50">No patrols. Create routes via ops API.</p>}
+          {!data?.runs && <p className="text-muted">No patrols. Create routes via ops API.</p>}
         </div>
       )}
 
       {view === "inspections" && (
         <div className="space-y-2 text-sm">
           {((data?.inspections as Array<Record<string, unknown>>) || []).map((i) => (
-            <div key={String(i.inspectionId)} className="rounded-xl border border-white/10 p-3">
+            <div key={String(i.inspectionId)} className="rounded-xl border border-border p-3">
               {String(i.title)} · {String(i.status)} · {String(i.result || "—")}
             </div>
           ))}
@@ -397,7 +397,7 @@ export function OpsDashClient({
       {view === "directory" && (
         <ul className="space-y-2 text-sm">
           {((data?.directory as Array<Record<string, unknown>>) || []).map((d) => (
-            <li key={String(d.id)} className="rounded-xl border border-white/10 p-3">
+            <li key={String(d.id)} className="rounded-xl border border-border p-3">
               {String(d.name)} · {String(d.role)} · {String(d.availability)}
             </li>
           ))}
@@ -407,9 +407,9 @@ export function OpsDashClient({
       {(view === "announcements" || view === "communication") && (
         <ul className="space-y-2 text-sm">
           {((data?.announcements as Array<Record<string, unknown>>) || []).map((a) => (
-            <li key={String(a.announcementId)} className="rounded-xl border border-white/10 p-3">
+            <li key={String(a.announcementId)} className="rounded-xl border border-border p-3">
               <p className="font-medium">{String(a.title)}</p>
-              <p className="text-xs text-white/50">{String(a.kind)}</p>
+              <p className="text-xs text-muted">{String(a.kind)}</p>
               {a.testMode ? <p className="text-amber-300 text-xs">TEST</p> : null}
             </li>
           ))}
@@ -435,7 +435,7 @@ export function MobileMapClient({ user }: { user: SafeUser }) {
       >
         Open full map
       </Link>
-      <pre className="mt-4 overflow-auto rounded-xl border border-white/10 p-3 text-[10px] text-white/60">
+      <pre className="mt-4 overflow-auto rounded-xl border border-border p-3 text-[10px] text-white/60">
         {JSON.stringify(data?.map || {}, null, 2)}
       </pre>
     </MobileShell>

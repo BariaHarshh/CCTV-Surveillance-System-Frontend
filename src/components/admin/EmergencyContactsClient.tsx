@@ -33,22 +33,22 @@ export function EmergencyContactsClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">Emergency Contacts</h1>
       <p className="mt-1 text-muted">Organization-approved contact directory. Does not auto-call emergency services.</p>
 
-      <div className="mt-6 grid gap-2 rounded-xl border border-white/[0.08] p-4 sm:grid-cols-3">
+      <div className="mt-6 grid gap-2 rounded-xl border border-border p-4 sm:grid-cols-3">
         {(["name", "department", "role", "phone", "email"] as const).map((k) => (
           <input
             key={k}
             value={form[k]}
             onChange={(e) => setForm((f) => ({ ...f, [k]: e.target.value }))}
             placeholder={k}
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
         ))}
         <button type="button" onClick={create} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">Add Contact</button>
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.08]">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full min-w-[700px] text-left text-sm">
-          <thead className="border-b border-white/[0.06] text-xs uppercase text-muted">
+          <thead className="border-b border-border text-xs uppercase text-muted">
             <tr>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Department</th>

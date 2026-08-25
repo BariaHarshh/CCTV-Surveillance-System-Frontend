@@ -23,7 +23,7 @@ export function HelpClient({ user }: { user: SafeUser }) {
           <Link
             key={l.href}
             href={l.href}
-            className="rounded-2xl border border-white/10 bg-surface/50 p-5 hover:border-accent/40"
+            className="rounded-2xl border border-border bg-surface/50 p-5 hover:border-accent/40"
           >
             <div className="font-semibold">{l.label}</div>
             {"description" in l && l.description && (
@@ -32,7 +32,7 @@ export function HelpClient({ user }: { user: SafeUser }) {
           </Link>
         ))}
       </div>
-      <section className="mt-8 rounded-2xl border border-white/10 bg-surface/50 p-6">
+      <section className="mt-8 rounded-2xl border border-border bg-surface/50 p-6">
         <h2 className="font-semibold">Contact support</h2>
         <p className="mt-2 text-sm text-muted">
           Email support@aicampusguardian.com with your organization ID and a short description of the

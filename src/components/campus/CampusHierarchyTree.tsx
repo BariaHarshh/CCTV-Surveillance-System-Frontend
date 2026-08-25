@@ -17,11 +17,11 @@ export function CampusHierarchyTree({ node, depth = 0 }: { node: HierarchyNode; 
   const hasChildren = Boolean(node.children?.length);
 
   return (
-    <div className={cn(depth > 0 && "ml-4 border-l border-white/[0.06] pl-3")}>
+    <div className={cn(depth > 0 && "ml-4 border-l border-border pl-3")}>
       <button
         type="button"
         onClick={() => hasChildren && setOpen(!open)}
-        className={cn("flex w-full items-center gap-2 rounded-lg py-1.5 text-left text-sm hover:bg-white/[0.03]", !hasChildren && "cursor-default")}
+        className={cn("flex w-full items-center gap-2 rounded-lg py-1.5 text-left text-sm hover:bg-glass", !hasChildren && "cursor-default")}
       >
         {hasChildren ? (open ? <ChevronDown className="h-4 w-4 text-muted" /> : <ChevronRight className="h-4 w-4 text-muted" />) : <span className="w-4" />}
         <span className={cn(node.type === "campus" && "font-semibold text-accent", node.type === "building" && "font-medium")}>{node.label}</span>

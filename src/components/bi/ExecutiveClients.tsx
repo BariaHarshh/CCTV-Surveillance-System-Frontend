@@ -67,25 +67,25 @@ export function ExecutiveCommandClient({
               key={p}
               type="button"
               onClick={() => setPeriod(p)}
-              className={`rounded-full border px-3 py-1.5 ${period === p ? "border-accent text-accent" : "border-white/10"}`}
+              className={`rounded-full border px-3 py-1.5 ${period === p ? "border-accent text-accent" : "border-border"}`}
             >
               {p}
             </button>
           ))}
-          <Link href="/admin/executive" className="rounded-full border border-white/10 px-3 py-1.5">
+          <Link href="/admin/executive" className="rounded-full border border-border px-3 py-1.5">
             Classic overview
           </Link>
-          <Link href="/governance" className="rounded-full border border-white/10 px-3 py-1.5">
+          <Link href="/governance" className="rounded-full border border-border px-3 py-1.5">
             Governance
           </Link>
         </div>
       </div>
 
       {loading && !pack ? (
-        <div className="mt-8 h-40 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="mt-8 h-40 animate-pulse rounded-2xl bg-glass" />
       ) : (
         <>
-          <section className="mt-6 rounded-2xl border border-white/10 bg-surface/40 p-6">
+          <section className="mt-6 rounded-2xl border border-border bg-surface/40 p-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="text-xs text-muted">{String(pack?.organizationName || "Organization")}</p>
@@ -135,7 +135,7 @@ export function ExecutiveCommandClient({
                 <Link
                   key={c.label}
                   href={c.href}
-                  className="rounded-xl border border-white/[0.08] bg-surface/50 p-4"
+                  className="rounded-xl border border-border bg-surface/50 p-4"
                 >
                   <p className="text-[10px] uppercase tracking-wider text-muted">{c.label}</p>
                   <p className="mt-1 text-2xl font-bold">{String(c.value)}</p>
@@ -154,7 +154,7 @@ export function ExecutiveCommandClient({
                 </p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 text-xs">
                   {((pack?.kpis as Array<Record<string, unknown>>) || []).slice(0, 6).map((k) => (
-                    <div key={String(k.kpiId)} className="rounded-xl border border-white/10 p-3">
+                    <div key={String(k.kpiId)} className="rounded-xl border border-border p-3">
                       <p className="font-medium">{String(k.name)}</p>
                       <p className="mt-1 text-lg">
                         {k.value == null ? "NO DATA" : `${k.value}${k.unit ? ` ${k.unit}` : ""}`}
@@ -173,7 +173,7 @@ export function ExecutiveCommandClient({
                   <h3 className="text-sm font-semibold">Top Risks</h3>
                   <ul className="mt-2 space-y-2 text-sm">
                     {((pack?.topRisks as Array<Record<string, unknown>>) || []).map((r, i) => (
-                      <li key={i} className="flex justify-between rounded-lg border border-white/10 px-3 py-2">
+                      <li key={i} className="flex justify-between rounded-lg border border-border px-3 py-2">
                         <span>
                           {i + 1}. {String(r.name)}
                         </span>
@@ -212,7 +212,7 @@ export function ExecutiveCommandClient({
                 (pack?.items as Array<Record<string, unknown>>) ||
                 []
               ).map((c, i) => (
-                <article key={i} className="rounded-xl border border-white/10 p-4 text-sm">
+                <article key={i} className="rounded-xl border border-border p-4 text-sm">
                   <p className="text-[10px] uppercase text-muted">Issue</p>
                   <p className="font-semibold">{String(c.issue)}</p>
                   <p className="mt-2 text-[10px] uppercase text-muted">Impact</p>
@@ -236,7 +236,7 @@ export function ExecutiveCommandClient({
                   value={ask}
                   onChange={(e) => setAsk(e.target.value)}
                   placeholder="What changed this month?"
-                  className="min-h-11 flex-1 rounded-xl border border-white/10 bg-black/30 px-3 text-sm"
+                  className="min-h-11 flex-1 rounded-xl border border-border bg-black/30 px-3 text-sm"
                 />
                 <button
                   type="button"
@@ -307,16 +307,16 @@ export function GovernanceClient({
           <Link
             key={v}
             href={v === "center" ? "/governance" : v === "strategy" ? "/strategy" : `/governance/${v === "decisions" ? "decisions" : v}`}
-            className="rounded-full border border-white/10 px-3 py-1.5"
+            className="rounded-full border border-border px-3 py-1.5"
           >
             {v}
           </Link>
         ))}
-        <Link href="/governance/ai" className="rounded-full border border-white/10 px-3 py-1.5">
+        <Link href="/governance/ai" className="rounded-full border border-border px-3 py-1.5">
           AI
         </Link>
       </div>
-      <pre className="mt-6 max-h-[70vh] overflow-auto rounded-xl border border-white/10 p-4 text-[11px] text-muted">
+      <pre className="mt-6 max-h-[70vh] overflow-auto rounded-xl border border-border p-4 text-[11px] text-muted">
         {JSON.stringify(data, null, 2)}
       </pre>
     </AdminShell>

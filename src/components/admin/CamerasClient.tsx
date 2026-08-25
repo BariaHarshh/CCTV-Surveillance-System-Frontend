@@ -143,7 +143,7 @@ export function CamerasClient({ user }: { user: SafeUser }) {
       )}
 
       {showForm && (
-        <div className="mt-6 rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <div className="mt-6 rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">New Camera</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div><label className="text-xs text-muted">Name</label><input className={inputClass + " mt-1"} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
@@ -179,21 +179,21 @@ export function CamerasClient({ user }: { user: SafeUser }) {
           </div>
           <div className="mt-4 flex gap-2">
             <button type="button" disabled={saving} onClick={submit} className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-background disabled:opacity-70">{saving ? "Saving..." : "Save Camera"}</button>
-            <button type="button" onClick={() => setShowForm(false)} className="rounded-full border border-white/[0.08] px-5 py-2 text-sm">Cancel</button>
+            <button type="button" onClick={() => setShowForm(false)} className="rounded-full border border-border px-5 py-2 text-sm">Cancel</button>
           </div>
         </div>
       )}
 
-      <div className="mt-8 overflow-hidden rounded-2xl border border-white/[0.08]">
+      <div className="mt-8 overflow-hidden rounded-2xl border border-border">
         {loading ? (
-          <div className="p-6"><div className="h-40 animate-pulse rounded-xl bg-white/[0.04]" /></div>
+          <div className="p-6"><div className="h-40 animate-pulse rounded-xl bg-glass" /></div>
         ) : cameras.length === 0 ? (
           <div className="p-8"><EmptyState title="No cameras configured" description="Add your first campus camera to prepare the monitoring network." icon="inbox" /></div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-xs text-muted">
+                <tr className="border-b border-border text-xs text-muted">
                   <th className="px-4 py-3">Camera</th>
                   <th className="px-4 py-3">ID</th>
                   <th className="px-4 py-3">Location</th>

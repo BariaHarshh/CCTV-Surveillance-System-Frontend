@@ -19,7 +19,7 @@ const futureFeatures = [
 
 export function FutureIntelligence() {
   return (
-    <section className="relative border-t border-white/[0.06] py-24 lg:py-32">
+    <section className="relative border-t border-border py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -37,17 +37,17 @@ export function ExecutiveDashboardClient({ user }: { user: SafeUser }) {
           <p className="mt-1 text-muted">Leadership view of risk posture, trends, and response — without raw event noise.</p>
         </div>
         <div className="flex gap-2 text-xs">
-          <Link href="/admin/analytics" className="rounded-full border border-white/10 px-3 py-1.5 hover:text-accent">Full Analytics</Link>
-          <Link href="/admin/reports" className="rounded-full border border-white/10 px-3 py-1.5 hover:text-accent">Reports</Link>
+          <Link href="/admin/analytics" className="rounded-full border border-border px-3 py-1.5 hover:text-accent">Full Analytics</Link>
+          <Link href="/admin/reports" className="rounded-full border border-border px-3 py-1.5 hover:text-accent">Reports</Link>
         </div>
       </div>
 
       <div className="mt-6"><AnalyticsFiltersBar filters={filters} onChange={setFilters} /></div>
 
       {loading && !overview ? (
-        <div className="mt-8 h-40 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="mt-8 h-40 animate-pulse rounded-2xl bg-glass" />
       ) : overview?.empty ? (
-        <p className="mt-10 rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-muted">
+        <p className="mt-10 rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted">
           No data available for this period.
         </p>
       ) : (
@@ -88,7 +88,7 @@ export function ExecutiveDashboardClient({ user }: { user: SafeUser }) {
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <button type="button" onClick={() => setScoreOpen(true)} className="text-left">
-              <div className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+              <div className="rounded-xl border border-border bg-surface/50 p-4">
                 <p className="text-[10px] uppercase tracking-wider text-muted">Configured Safety Performance Score</p>
                 <p className="mt-1 text-2xl font-bold">{String(score?.overall ?? "—")} / 100</p>
               </div>
@@ -119,7 +119,7 @@ export function ExecutiveDashboardClient({ user }: { user: SafeUser }) {
           </div>
 
           <div className="mt-6 grid gap-4 lg:grid-cols-2">
-            <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+            <section className="rounded-2xl border border-border bg-surface/40 p-5">
               <h2 className="text-sm font-semibold">Where are the major risks?</h2>
               <ul className="mt-3 space-y-2 text-sm">
                 {risks.map((r) => (
@@ -131,7 +131,7 @@ export function ExecutiveDashboardClient({ user }: { user: SafeUser }) {
                 {risks.length === 0 && <li className="text-muted text-xs">No data available for this period.</li>}
               </ul>
             </section>
-            <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+            <section className="rounded-2xl border border-border bg-surface/40 p-5">
               <h2 className="text-sm font-semibold">Major Insights</h2>
               <ul className="mt-3 space-y-3 text-sm">
                 {insights.map((ins, i) => (
@@ -150,7 +150,7 @@ export function ExecutiveDashboardClient({ user }: { user: SafeUser }) {
 
       {scoreOpen && score && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setScoreOpen(false)}>
-          <div className="max-w-md rounded-2xl border border-white/10 bg-surface p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="max-w-md rounded-2xl border border-border bg-surface p-6" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold">Safety Performance</h3>
             <p className="mt-1 text-xs text-muted">{String(score.disclaimer)}</p>
             <p className="mt-4 text-3xl font-bold">Overall: {String(score.overall)} / 100</p>
@@ -166,7 +166,7 @@ export function ExecutiveDashboardClient({ user }: { user: SafeUser }) {
             <ul className="mt-1 list-inside list-disc text-xs text-muted">
               {((score.factors as string[]) ?? []).map((f) => <li key={f}>{f}</li>)}
             </ul>
-            <button type="button" onClick={() => setScoreOpen(false)} className="mt-4 w-full rounded-lg border border-white/10 py-2 text-xs">Close</button>
+            <button type="button" onClick={() => setScoreOpen(false)} className="mt-4 w-full rounded-lg border border-border py-2 text-xs">Close</button>
           </div>
         </div>
       )}

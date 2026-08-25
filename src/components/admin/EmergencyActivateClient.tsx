@@ -50,30 +50,30 @@ export function EmergencyActivateClient({ user }: { user: SafeUser }) {
       <p className="mt-1 text-muted">Activate organization emergency mode with confirmation required.</p>
 
       {step === "form" ? (
-        <div className="mt-8 max-w-xl space-y-4 rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <div className="mt-8 max-w-xl space-y-4 rounded-2xl border border-border bg-surface/50 p-6">
           <div>
             <label className="text-xs text-muted">Emergency Type</label>
-            <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm">
+            <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm">
               {EMERGENCY_TYPES.map((t) => <option key={t} value={t}>{t.replace(/_/g, " ")}</option>)}
             </select>
           </div>
           <div>
             <label className="text-xs text-muted">Mode</label>
-            <select value={mode} onChange={(e) => setMode(e.target.value)} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm">
+            <select value={mode} onChange={(e) => setMode(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm">
               {CAMPUS_EMERGENCY_MODES.filter((m) => m !== "NORMAL").map((m) => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
           <div>
             <label className="text-xs text-muted">Reason *</label>
-            <input value={reason} onChange={(e) => setReason(e.target.value)} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm" placeholder="Why is emergency mode required?" />
+            <input value={reason} onChange={(e) => setReason(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm" placeholder="Why is emergency mode required?" />
           </div>
           <div>
             <label className="text-xs text-muted">Location</label>
-            <input value={location} onChange={(e) => setLocation(e.target.value)} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm" placeholder="Building / area" />
+            <input value={location} onChange={(e) => setLocation(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm" placeholder="Building / area" />
           </div>
           <div>
             <label className="text-xs text-muted">Description</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm" />
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm" />
           </div>
           <button
             type="button"
@@ -96,7 +96,7 @@ export function EmergencyActivateClient({ user }: { user: SafeUser }) {
           </dl>
           {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
           <div className="mt-6 flex gap-3">
-            <button type="button" onClick={() => setStep("form")} className="flex-1 rounded-xl border border-white/10 py-3 text-sm">Cancel</button>
+            <button type="button" onClick={() => setStep("form")} className="flex-1 rounded-xl border border-border py-3 text-sm">Cancel</button>
             <button type="button" disabled={submitting} onClick={activate} className="flex-1 rounded-xl bg-red-600 py-3 text-sm font-semibold text-white disabled:opacity-50">
               {submitting ? "Activating…" : "Activate Emergency"}
             </button>

@@ -58,7 +58,7 @@ export function AdminSuccessClient({ user, organizationId }: { user: SafeUser; o
         className="mx-auto max-w-lg text-center">
         <CheckCircle2 className="mx-auto h-16 w-16 text-emerald-400" />
         <h1 className="mt-6 text-3xl font-bold">Administrator Created Successfully</h1>
-        <div className="mt-8 space-y-4 rounded-2xl border border-white/[0.08] bg-surface/60 p-6 text-left text-sm">
+        <div className="mt-8 space-y-4 rounded-2xl border border-border bg-surface/60 p-6 text-left text-sm">
           <div>
             <p className="text-muted">Admin Name</p>
             <p className="font-medium">{data.name}</p>
@@ -87,11 +87,11 @@ export function AdminSuccessClient({ user, organizationId }: { user: SafeUser; o
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <button type="button" onClick={() => copy(data.userId, "id")}
-            className="inline-flex items-center gap-1 rounded-full border border-white/[0.08] px-4 py-2 text-sm">
+            className="inline-flex items-center gap-1 rounded-full border border-border px-4 py-2 text-sm">
             <Copy className="h-3 w-3" /> {copied === "id" ? "Copied!" : "Copy Admin ID"}
           </button>
           <button type="button" onClick={() => copy(data.password, "pw")}
-            className="inline-flex items-center gap-1 rounded-full border border-white/[0.08] px-4 py-2 text-sm">
+            className="inline-flex items-center gap-1 rounded-full border border-border px-4 py-2 text-sm">
             <Copy className="h-3 w-3" /> {copied === "pw" ? "Copied!" : "Copy Temporary Password"}
           </button>
           <Link href={`/super-admin/organizations/${organizationId}`}

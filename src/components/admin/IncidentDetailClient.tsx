@@ -48,7 +48,7 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
       </Link>
 
       {loading ? (
-        <div className="mt-8 h-64 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="mt-8 h-64 animate-pulse rounded-2xl bg-glass" />
       ) : !incident ? (
         <p className="mt-8 text-red-400">Incident not found.</p>
       ) : (
@@ -59,11 +59,11 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
               <h1 className="text-2xl font-bold">{String(incident.title)}</h1>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-white/[0.08] p-4">
+              <div className="rounded-xl border border-border p-4">
                 <p className="text-xs text-muted">Severity</p>
                 <div className="mt-2"><SeverityBadge severity={String(incident.severity)} /></div>
               </div>
-              <div className="rounded-xl border border-white/[0.08] p-4">
+              <div className="rounded-xl border border-border p-4">
                 <p className="text-xs text-muted">Risk Score</p>
                 <p className="mt-2 text-2xl font-bold">{String(incident.riskScore)} / 100</p>
               </div>
@@ -73,7 +73,7 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">Timeline</h2>
               <div className="space-y-2">
                 {events.map((e) => (
-                  <div key={String(e.id)} className="rounded-xl border border-white/[0.06] px-4 py-3">
+                  <div key={String(e.id)} className="rounded-xl border border-border px-4 py-3">
                     <p className="text-xs text-muted">{new Date(String(e.detectedAt)).toLocaleString()}</p>
                     <p className="text-sm font-medium">{String(e.eventType).replace(/_/g, " ")}</p>
                   </div>
@@ -85,7 +85,7 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
               <div>
                 <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">Related Alerts</h2>
                 {alerts.map((a) => (
-                  <Link key={String(a.id)} href={`${base}/alerts/${a.id}`} className="block rounded-xl border border-white/[0.06] px-4 py-3 hover:bg-white/[0.02]">
+                  <Link key={String(a.id)} href={`${base}/alerts/${a.id}`} className="block rounded-xl border border-border px-4 py-3 hover:bg-glass">
                     <p className="text-sm">{String(a.title)}</p>
                     <p className="text-xs text-muted">{String(a.status)}</p>
                   </Link>
@@ -95,7 +95,7 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
           </div>
 
           <div className="space-y-4">
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+          <div className="rounded-2xl border border-border bg-surface/50 p-6">
             <p className="text-xs text-muted">Status: {String(incident.status)}</p>
             <p className="mt-2 text-xs text-muted">Location: {String((incident.location as Record<string, string>)?.label ?? "—")}</p>
             {incident.assignedToName ? <p className="mt-2 text-xs">Assigned: {String(incident.assignedToName)}</p> : null}
@@ -131,7 +131,7 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
                   Escalate to Emergency
                 </button>
               )}
-              <Link href={`/admin/incidents/${incidentId}/tasks`} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-muted hover:text-white">
+              <Link href={`/admin/incidents/${incidentId}/tasks`} className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted hover:text-foreground">
                 Tasks
               </Link>
               <Link
@@ -187,7 +187,7 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
                   ))}
                 </ul>
                 {((aiSummary.timeline as Array<{ at: string; label: string }>) ?? []).length > 0 && (
-                  <div className="mt-2 space-y-1 border-t border-white/[0.06] pt-2">
+                  <div className="mt-2 space-y-1 border-t border-border pt-2">
                     {((aiSummary.timeline as Array<{ at: string; label: string }>) ?? []).map((t) => (
                       <p key={t.at + t.label} className="text-muted">
                         {new Date(t.at).toLocaleString()} — {t.label}

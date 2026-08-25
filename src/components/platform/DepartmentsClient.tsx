@@ -64,7 +64,7 @@ export function DepartmentsClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">Departments</h1>
       <p className="mt-1 text-sm text-muted">Organize staff and invitations by department</p>
 
-      <form onSubmit={create} className="mt-8 rounded-2xl border border-white/10 bg-surface/50 p-6">
+      <form onSubmit={create} className="mt-8 rounded-2xl border border-border bg-surface/50 p-6">
         <h2 className="font-semibold">Add department</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <label className="block text-sm">
@@ -72,7 +72,7 @@ export function DepartmentsClient({ user }: { user: SafeUser }) {
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
               placeholder="Campus Security"
             />
           </label>
@@ -81,7 +81,7 @@ export function DepartmentsClient({ user }: { user: SafeUser }) {
             <input
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
               placeholder="Optional"
             />
           </label>
@@ -101,7 +101,7 @@ export function DepartmentsClient({ user }: { user: SafeUser }) {
       ) : (
         <div className="mt-6 space-y-3">
           {departments.map((d) => (
-            <div key={d.id} className="rounded-2xl border border-white/10 bg-surface/40 p-4">
+            <div key={d.id} className="rounded-2xl border border-border bg-surface/40 p-4">
               <div className="font-mono text-xs text-muted">{d.departmentId}</div>
               <div className="mt-1 font-semibold">{d.name}</div>
               {d.description && <p className="mt-1 text-sm text-muted">{d.description}</p>}

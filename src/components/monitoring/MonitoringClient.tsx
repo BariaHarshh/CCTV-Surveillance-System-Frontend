@@ -111,13 +111,13 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <RealtimeIndicator status={realtimeStatus} />
-          <button type="button" onClick={load} className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs font-medium text-muted hover:text-white">
+          <button type="button" onClick={load} className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium text-muted hover:text-foreground">
             <RefreshCw className="h-3.5 w-3.5" /> Refresh
           </button>
           <button
             type="button"
             onClick={() => toggleSound(!soundEnabled)}
-            className={`rounded-full border px-4 py-2 text-xs font-medium ${soundEnabled ? "border-accent/30 text-accent" : "border-white/10 text-muted"}`}
+            className={`rounded-full border px-4 py-2 text-xs font-medium ${soundEnabled ? "border-accent/30 text-accent" : "border-border text-muted"}`}
           >
             Sound {soundEnabled ? "ON" : "OFF"}
           </button>
@@ -163,11 +163,11 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
         {loading ? (
           <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-64 animate-pulse rounded-2xl bg-white/[0.04]" />
+              <div key={i} className="h-64 animate-pulse rounded-2xl bg-glass" />
             ))}
           </div>
         ) : cameras.length === 0 ? (
-          <p className="mt-6 rounded-xl border border-white/[0.06] bg-white/[0.02] p-8 text-center text-sm text-muted">No cameras configured. Add cameras in Campus Management.</p>
+          <p className="mt-6 rounded-xl border border-border bg-glass p-8 text-center text-sm text-muted">No cameras configured. Add cameras in Campus Management.</p>
         ) : (
           <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {cameras.map((cam, i) => (
@@ -176,9 +176,9 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.03 }}
-                className="overflow-hidden rounded-2xl border border-white/[0.08] bg-surface/50"
+                className="overflow-hidden rounded-2xl border border-border bg-surface/50"
               >
-                <div className="border-b border-white/[0.06] p-4">
+                <div className="border-b border-border p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <p className="font-mono text-[10px] text-muted">{cam.cameraId}</p>
@@ -199,7 +199,7 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
                       type="button"
                       onClick={() => setExpandedId(cam.id)}
                       className={cn(
-                        "flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 py-8 text-xs font-semibold tracking-wider text-accent hover:bg-accent/5",
+                        "flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border py-8 text-xs font-semibold tracking-wider text-accent hover:bg-accent/5",
                         cam.status !== "ONLINE" && "text-muted"
                       )}
                     >
@@ -207,7 +207,7 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
                     </button>
                   )}
                 </div>
-                <div className="flex border-t border-white/[0.06]">
+                <div className="flex border-t border-border">
                   <Link href={`${base}/monitoring/cameras/${cam.id}`} className="flex flex-1 items-center justify-center gap-1 py-3 text-xs text-muted hover:text-accent">
                     <Maximize2 className="h-3.5 w-3.5" /> Details
                   </Link>

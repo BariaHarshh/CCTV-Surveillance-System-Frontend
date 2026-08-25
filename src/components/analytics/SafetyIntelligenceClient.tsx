@@ -49,10 +49,10 @@ export function SafetyIntelligenceClient({ user }: { user: SafeUser }) {
           <p className="mt-1 text-muted">Understand campus safety performance, trends, risks, and response effectiveness.</p>
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
-          <Link href="/admin/executive" className="rounded-full border border-white/10 px-3 py-1.5 hover:text-accent">Executive</Link>
-          <Link href="/admin/reports" className="rounded-full border border-white/10 px-3 py-1.5 hover:text-accent">Reports</Link>
-          <Link href="/admin/insights" className="rounded-full border border-white/10 px-3 py-1.5 hover:text-accent">Insights</Link>
-          <Link href="/admin/actions" className="rounded-full border border-white/10 px-3 py-1.5 hover:text-accent">Actions</Link>
+          <Link href="/admin/executive" className="rounded-full border border-border px-3 py-1.5 hover:text-accent">Executive</Link>
+          <Link href="/admin/reports" className="rounded-full border border-border px-3 py-1.5 hover:text-accent">Reports</Link>
+          <Link href="/admin/insights" className="rounded-full border border-border px-3 py-1.5 hover:text-accent">Insights</Link>
+          <Link href="/admin/actions" className="rounded-full border border-border px-3 py-1.5 hover:text-accent">Actions</Link>
         </div>
       </div>
 
@@ -60,7 +60,7 @@ export function SafetyIntelligenceClient({ user }: { user: SafeUser }) {
         <AnalyticsFiltersBar filters={filters} onChange={setFilters} />
         <button
           type="button"
-          className="rounded-lg border border-white/10 px-3 py-1.5 text-xs hover:text-accent"
+          className="rounded-lg border border-border px-3 py-1.5 text-xs hover:text-accent"
           onClick={async () => {
             const name = window.prompt("Saved view name", "My Security Overview");
             if (!name) return;
@@ -77,9 +77,9 @@ export function SafetyIntelligenceClient({ user }: { user: SafeUser }) {
       </div>
 
       {loading && !overview ? (
-        <div className="mt-8 grid gap-4 sm:grid-cols-4">{Array.from({ length: 8 }).map((_, i) => <div key={i} className="h-24 animate-pulse rounded-xl bg-white/[0.04]" />)}</div>
+        <div className="mt-8 grid gap-4 sm:grid-cols-4">{Array.from({ length: 8 }).map((_, i) => <div key={i} className="h-24 animate-pulse rounded-xl bg-glass" />)}</div>
       ) : overview?.empty ? (
-        <p className="mt-10 rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-muted">No data available for this period.</p>
+        <p className="mt-10 rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted">No data available for this period.</p>
       ) : (
         <>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -96,15 +96,15 @@ export function SafetyIntelligenceClient({ user }: { user: SafeUser }) {
           </div>
 
           <div className="mt-6 grid gap-4 lg:grid-cols-2">
-            <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+            <section className="rounded-2xl border border-border bg-surface/40 p-5">
               <h2 className="text-sm font-semibold">Incidents Over Time</h2>
               <div className="mt-3"><TrendLineChart data={trend} /></div>
             </section>
-            <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+            <section className="rounded-2xl border border-border bg-surface/40 p-5">
               <h2 className="text-sm font-semibold">Event Type Distribution</h2>
               <div className="mt-3"><CompositionDonut data={eventTypes} /></div>
             </section>
-            <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5 lg:col-span-2">
+            <section className="rounded-2xl border border-border bg-surface/40 p-5 lg:col-span-2">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-semibold">Highest-Risk Buildings</h2>
                 <Link href="/admin/analytics/locations" className="text-[10px] text-accent">View all →</Link>
@@ -127,7 +127,7 @@ export function SafetyIntelligenceClient({ user }: { user: SafeUser }) {
               ["/admin/analytics/patterns", "Patterns"],
               ["/admin/analytics/data-quality", "Data Quality"],
             ].map(([href, label]) => (
-              <Link key={href} href={href} className="rounded-lg border border-white/10 px-3 py-1.5 hover:bg-white/[0.03]">{label}</Link>
+              <Link key={href} href={href} className="rounded-lg border border-border px-3 py-1.5 hover:bg-glass">{label}</Link>
             ))}
           </div>
         </>
@@ -135,7 +135,7 @@ export function SafetyIntelligenceClient({ user }: { user: SafeUser }) {
 
       {scoreOpen && score && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setScoreOpen(false)}>
-          <div className="max-w-md rounded-2xl border border-white/10 bg-surface p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="max-w-md rounded-2xl border border-border bg-surface p-6" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold">Safety Performance</h3>
             <p className="mt-1 text-xs text-muted">{String(score.disclaimer)}</p>
             <p className="mt-4 text-3xl font-bold">Overall: {String(score.overall)} / 100</p>
@@ -151,7 +151,7 @@ export function SafetyIntelligenceClient({ user }: { user: SafeUser }) {
             <ul className="mt-1 list-inside list-disc text-xs text-muted">
               {((score.factors as string[]) ?? []).map((f) => <li key={f}>{f}</li>)}
             </ul>
-            <button type="button" onClick={() => setScoreOpen(false)} className="mt-4 w-full rounded-lg border border-white/10 py-2 text-xs">Close</button>
+            <button type="button" onClick={() => setScoreOpen(false)} className="mt-4 w-full rounded-lg border border-border py-2 text-xs">Close</button>
           </div>
         </div>
       )}

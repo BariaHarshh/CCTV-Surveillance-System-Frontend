@@ -21,7 +21,7 @@ export function StaffProfileClient({ user, staffId }: { user: SafeUser; staffId:
   if (loading) {
     return (
       <AdminShell user={user}>
-        <div className="space-y-4">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-32 animate-pulse rounded-2xl bg-white/[0.04]" />)}</div>
+        <div className="space-y-4">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-32 animate-pulse rounded-2xl bg-glass" />)}</div>
       </AdminShell>
     );
   }
@@ -50,7 +50,7 @@ export function StaffProfileClient({ user, staffId }: { user: SafeUser; staffId:
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Profile</h2>
           <dl className="mt-4 space-y-2 text-sm">
             <div><dt className="text-muted">Email</dt><dd>{staff.email as string}</dd></div>
@@ -58,7 +58,7 @@ export function StaffProfileClient({ user, staffId }: { user: SafeUser; staffId:
             <div><dt className="text-muted">Address</dt><dd>{profile?.address || "—"}</dd></div>
           </dl>
         </section>
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Employment</h2>
           <dl className="mt-4 space-y-2 text-sm">
             <div><dt className="text-muted">Employee ID</dt><dd>{professional?.employeeId || "—"}</dd></div>
@@ -67,7 +67,7 @@ export function StaffProfileClient({ user, staffId }: { user: SafeUser; staffId:
             <div><dt className="text-muted">Joining Date</dt><dd>{professional?.joiningDate || "—"}</dd></div>
           </dl>
         </section>
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Account</h2>
           <dl className="mt-4 space-y-2 text-sm">
             <div><dt className="text-muted">Staff ID</dt><dd className="font-mono">{staff.userId as string}</dd></div>
@@ -75,7 +75,7 @@ export function StaffProfileClient({ user, staffId }: { user: SafeUser; staffId:
             <div><dt className="text-muted">Status</dt><dd>{staff.status as string}</dd></div>
           </dl>
         </section>
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Activity & Security</h2>
           <dl className="mt-4 space-y-2 text-sm">
             <div><dt className="text-muted">Last Login</dt><dd>{staff.lastLogin ? formatRelativeTime(new Date(staff.lastLogin as string)) : "Never"}</dd></div>

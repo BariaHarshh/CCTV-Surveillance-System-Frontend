@@ -19,7 +19,7 @@ export function OrganizationProfileClient({ user }: { user: SafeUser }) {
   if (loading) {
     return (
       <AdminShell user={user}>
-        <div className="space-y-4">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-40 animate-pulse rounded-2xl bg-white/[0.04]" />)}</div>
+        <div className="space-y-4">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-40 animate-pulse rounded-2xl bg-glass" />)}</div>
       </AdminShell>
     );
   }
@@ -44,7 +44,7 @@ export function OrganizationProfileClient({ user }: { user: SafeUser }) {
       )}
 
       <div className="mt-8 space-y-6">
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Organization</h2>
           <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
             <div><dt className="text-muted">Organization Name</dt><dd className="font-medium">{basic?.name}</dd></div>
@@ -57,7 +57,7 @@ export function OrganizationProfileClient({ user }: { user: SafeUser }) {
           </dl>
         </section>
 
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Location</h2>
           <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
             <div><dt className="text-muted">Country</dt><dd>{location?.country}</dd></div>
@@ -68,7 +68,7 @@ export function OrganizationProfileClient({ user }: { user: SafeUser }) {
           </dl>
         </section>
 
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Campus</h2>
           <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
             <div><dt className="text-muted">Campus Name</dt><dd>{campus?.name as string}</dd></div>
@@ -82,7 +82,7 @@ export function OrganizationProfileClient({ user }: { user: SafeUser }) {
           </dl>
         </section>
 
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Purpose</h2>
           <dl className="mt-4 space-y-3 text-sm">
             <div><dt className="text-muted">Use Cases</dt><dd>{purpose?.useCases?.join(", ") || "—"}</dd></div>

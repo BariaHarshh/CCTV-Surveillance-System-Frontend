@@ -36,7 +36,7 @@ function AssetMapInner({ user }: { user: SafeUser }) {
         </Link>
       </div>
       <div className="grid gap-4 lg:grid-cols-[1fr_300px]">
-        <ul className="divide-y divide-white/10 rounded-xl border border-white/10">
+        <ul className="divide-y divide-white/10 rounded-xl border border-border">
           {assets.map((a) => (
             <li key={String(a.assetId)}>
               <button
@@ -62,7 +62,7 @@ function AssetMapInner({ user }: { user: SafeUser }) {
             <li className="px-4 py-8 text-center text-sm text-muted">No assets configured.</li>
           )}
         </ul>
-        <aside className="rounded-xl border border-white/10 p-4 text-xs">
+        <aside className="rounded-xl border border-border p-4 text-xs">
           {!detail ? (
             <p className="text-muted">Select an asset.</p>
           ) : (

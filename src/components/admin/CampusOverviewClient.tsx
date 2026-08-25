@@ -33,8 +33,8 @@ export function CampusOverviewClient({ user }: { user: SafeUser }) {
           <p className="mt-1 text-muted">{String(campus?.name ?? "")} · {String(campus?.type ?? "")}</p>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin/campus/buildings" className="rounded-full border border-white/[0.08] px-4 py-2 text-sm">Buildings</Link>
-          <Link href="/admin/campus/rooms" className="rounded-full border border-white/[0.08] px-4 py-2 text-sm">Rooms</Link>
+          <Link href="/admin/campus/buildings" className="rounded-full border border-border px-4 py-2 text-sm">Buildings</Link>
+          <Link href="/admin/campus/rooms" className="rounded-full border border-border px-4 py-2 text-sm">Rooms</Link>
           <Link href="/admin/cameras" className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-background">Cameras</Link>
         </div>
       </div>
@@ -52,9 +52,9 @@ export function CampusOverviewClient({ user }: { user: SafeUser }) {
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Campus Details</h2>
-          {loading ? <div className="mt-4 h-32 animate-pulse rounded-xl bg-white/[0.04]" /> : (
+          {loading ? <div className="mt-4 h-32 animate-pulse rounded-xl bg-glass" /> : (
             <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
               <div><dt className="text-muted">Students</dt><dd>{String(campus?.students ?? 0)}</dd></div>
               <div><dt className="text-muted">Faculty</dt><dd>{String(campus?.faculty ?? 0)}</dd></div>
@@ -64,7 +64,7 @@ export function CampusOverviewClient({ user }: { user: SafeUser }) {
             </dl>
           )}
         </section>
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Campus Structure</h2>
           <p className="mt-1 text-xs text-muted">Click Campus → Building → Floor → Room</p>
           <div className="mt-4 max-h-80 overflow-y-auto">

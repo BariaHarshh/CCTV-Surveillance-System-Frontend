@@ -61,7 +61,7 @@ export function VideoCameraDetailClient({ user }: { user: SafeUser }) {
       {testMsg && <p className="mb-3 text-xs text-amber-200">{testMsg}</p>}
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <section className="rounded-xl border border-white/10 p-4 text-xs lg:col-span-2">
+        <section className="rounded-xl border border-border p-4 text-xs lg:col-span-2">
           <h2 className="mb-2 text-sm font-semibold">Stream</h2>
           <div className="flex aspect-video items-center justify-center rounded-lg bg-[#060a12] text-muted">
             {stream?.live ? (
@@ -89,7 +89,7 @@ export function VideoCameraDetailClient({ user }: { user: SafeUser }) {
         </section>
 
         <aside className="space-y-4">
-          <section className="rounded-xl border border-white/10 p-4 text-xs">
+          <section className="rounded-xl border border-border p-4 text-xs">
             <h2 className="mb-2 font-semibold">Health timeline</h2>
             <ul className="max-h-64 space-y-2 overflow-auto">
               {((data?.timeline as Array<Record<string, unknown>>) || []).map((t, i) => (
@@ -103,7 +103,7 @@ export function VideoCameraDetailClient({ user }: { user: SafeUser }) {
               )}
             </ul>
           </section>
-          <section className="rounded-xl border border-white/10 p-4 text-xs">
+          <section className="rounded-xl border border-border p-4 text-xs">
             <h2 className="mb-2 font-semibold">Recent AI events</h2>
             <ul className="space-y-2">
               {((data?.recentEvents as Array<Record<string, unknown>>) || []).map((e) => (
@@ -114,7 +114,7 @@ export function VideoCameraDetailClient({ user }: { user: SafeUser }) {
               ))}
             </ul>
           </section>
-          <section className="rounded-xl border border-white/10 p-4 text-xs">
+          <section className="rounded-xl border border-border p-4 text-xs">
             <h2 className="mb-2 font-semibold">Privacy masks</h2>
             <p>{((data?.privacyZones as unknown[]) || []).length} active zone(s)</p>
           </section>

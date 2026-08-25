@@ -88,7 +88,7 @@ export function EventDetailClient({ user, portal, eventId }: { user: SafeUser; p
       </Link>
 
       {loading ? (
-        <div className="mt-8 h-64 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="mt-8 h-64 animate-pulse rounded-2xl bg-glass" />
       ) : !event ? (
         <p className="mt-8 text-red-400">Event not found.</p>
       ) : (
@@ -100,21 +100,21 @@ export function EventDetailClient({ user, portal, eventId }: { user: SafeUser; p
             </div>
 
             {event.hasSnapshot ? (
-              <div className="overflow-hidden rounded-xl border border-white/[0.08]">
+              <div className="overflow-hidden rounded-xl border border-border">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={`/api/events/${event.id}/snapshot`} alt="Event snapshot" className="w-full object-cover" />
               </div>
             ) : (
-              <p className="rounded-xl border border-white/[0.06] p-4 text-sm text-muted">No snapshot available</p>
+              <p className="rounded-xl border border-border p-4 text-sm text-muted">No snapshot available</p>
             )}
 
-            <div className="rounded-xl border border-white/[0.08] p-4">
+            <div className="rounded-xl border border-border p-4">
               <h2 className="text-sm font-semibold">Metadata</h2>
               <pre className="mt-2 overflow-x-auto text-xs text-muted">{JSON.stringify(event.metadata, null, 2)}</pre>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+          <div className="rounded-2xl border border-border bg-surface/50 p-6">
             <dl className="space-y-3 text-sm">
               <div><dt className="text-muted">Type</dt><dd>{formatEventType(event.eventType)}</dd></div>
               <div><dt className="text-muted">Camera</dt><dd>{event.cameraName ?? "—"}</dd></div>
@@ -138,20 +138,20 @@ export function EventDetailClient({ user, portal, eventId }: { user: SafeUser; p
               </div>
             )}
 
-            <div className="mt-6 border-t border-white/[0.06] pt-4">
+            <div className="mt-6 border-t border-border pt-4">
               <h3 className="text-sm font-semibold">Detection Feedback</h3>
               <p className="mt-1 text-xs text-muted">Was this detection useful?</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <button type="button" onClick={() => setUseful(true)} className={`rounded-lg border px-3 py-1.5 text-xs ${useful === true ? "border-emerald-400/40 text-emerald-400" : "border-white/10 text-muted"}`}>Yes</button>
-                <button type="button" onClick={() => setUseful(false)} className={`rounded-lg border px-3 py-1.5 text-xs ${useful === false ? "border-red-400/40 text-red-400" : "border-white/10 text-muted"}`}>No</button>
+                <button type="button" onClick={() => setUseful(true)} className={`rounded-lg border px-3 py-1.5 text-xs ${useful === true ? "border-emerald-400/40 text-emerald-400" : "border-border text-muted"}`}>Yes</button>
+                <button type="button" onClick={() => setUseful(false)} className={`rounded-lg border px-3 py-1.5 text-xs ${useful === false ? "border-red-400/40 text-red-400" : "border-border text-muted"}`}>No</button>
               </div>
-              <select value={feedbackType} onChange={(e) => setFeedbackType(e.target.value)} className="mt-3 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs">
+              <select value={feedbackType} onChange={(e) => setFeedbackType(e.target.value)} className="mt-3 w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-xs">
                 <option value="">Select feedback type…</option>
                 {FEEDBACK_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
                 ))}
               </select>
-              <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Optional reason…" rows={2} className="mt-2 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs" />
+              <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Optional reason…" rows={2} className="mt-2 w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-xs" />
               <button type="button" onClick={submitFeedback} disabled={!feedbackType || submitting} className="mt-3 w-full rounded-lg bg-accent/20 py-2 text-xs font-semibold text-accent disabled:opacity-40">
                 {submitting ? "Submitting…" : "Submit Feedback"}
               </button>

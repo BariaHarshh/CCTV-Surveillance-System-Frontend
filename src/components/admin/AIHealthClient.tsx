@@ -24,7 +24,7 @@ export function AIHealthClient({ user }: { user: SafeUser }) {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {services.map((s) => (
-          <div key={s.name} className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+          <div key={s.name} className="rounded-xl border border-border bg-surface/50 p-4">
             <div className="flex items-center justify-between">
               <p className="font-medium">{s.name}</p>
               <span className={cn("text-[10px] font-semibold uppercase", s.status === "HEALTHY" ? "text-emerald-400" : s.status === "DEGRADED" ? "text-amber-400" : "text-red-400")}>{s.status}</span>
@@ -44,7 +44,7 @@ export function AIHealthClient({ user }: { user: SafeUser }) {
             { label: "Avg Latency (ms)", value: metrics.averageDetectionLatencyMs ?? "N/A" },
             { label: "Last Processed", value: metrics.aiServiceUptime ? new Date(String(metrics.aiServiceUptime)).toLocaleString() : "—" },
           ].map((m) => (
-            <div key={m.label} className="rounded-xl border border-white/[0.08] p-4">
+            <div key={m.label} className="rounded-xl border border-border p-4">
               <p className="text-xs text-muted">{m.label}</p>
               <p className="mt-1 text-xl font-bold">{String(m.value)}</p>
             </div>

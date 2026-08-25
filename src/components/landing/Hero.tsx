@@ -8,9 +8,14 @@ import { HeroVisual } from "./HeroVisual";
 export function Hero() {
   return (
     <section className="relative flex min-h-screen flex-col justify-center overflow-hidden pt-16">
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(56,189,248,0.12),transparent)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_80%_50%,rgba(12,21,36,0.8),transparent)]" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% -20%, var(--color-accent-glow), transparent)",
+        }}
+      />
+      <div className="absolute inset-0 opacity-40 [background:radial-gradient(ellipse_60%_40%_at_80%_50%,var(--color-navy),transparent)]" />
       <div className="absolute inset-0 grid-pattern opacity-30" />
 
       <div className="relative mx-auto grid max-w-7xl flex-1 items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-28">
@@ -40,7 +45,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-6 text-lg font-medium text-white/90 sm:text-xl lg:text-2xl"
+            className="mt-6 text-lg font-medium text-foreground/90 sm:text-xl lg:text-2xl"
           >
             From Passive CCTV to Proactive AI-Powered Campus Safety
           </motion.h2>
@@ -71,7 +76,7 @@ export function Hero() {
             </Link>
             <a
               href="#platform"
-              className="gradient-border inline-flex items-center justify-center gap-2 rounded-full bg-white/[0.04] px-8 py-3.5 text-sm font-medium text-white transition-all hover:bg-white/[0.08]"
+              className="gradient-border inline-flex items-center justify-center gap-2 rounded-full bg-glass px-8 py-3.5 text-sm font-medium text-foreground transition-all hover:bg-glass-hover"
             >
               Explore Intelligence
               <ChevronDown className="h-4 w-4" />

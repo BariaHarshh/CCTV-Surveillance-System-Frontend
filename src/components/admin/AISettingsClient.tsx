@@ -44,19 +44,19 @@ export function AISettingsClient({ user, variant }: { user: SafeUser; variant: "
             <span className="text-muted">Default confidence threshold</span>
             <input type="number" step="0.05" min="0" max="1" defaultValue={Number(settings.defaultConfidenceThreshold ?? 0.7)}
               onBlur={(e) => save({ defaultConfidenceThreshold: Number(e.target.value) })}
-              className="mt-1 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2" />
+              className="mt-1 w-full rounded-lg border border-border bg-glass px-3 py-2" />
           </label>
           <label className="block text-sm">
             <span className="text-muted">Event cooldown (seconds)</span>
             <input type="number" min="0" defaultValue={Number(settings.eventCooldownSeconds ?? 30)}
               onBlur={(e) => save({ eventCooldownSeconds: Number(e.target.value) })}
-              className="mt-1 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2" />
+              className="mt-1 w-full rounded-lg border border-border bg-glass px-3 py-2" />
           </label>
           <label className="block text-sm">
             <span className="text-muted">Abandoned object threshold (seconds)</span>
             <input type="number" min="0" defaultValue={Number(settings.abandonedObjectThresholdSeconds ?? 120)}
               onBlur={(e) => save({ abandonedObjectThresholdSeconds: Number(e.target.value) })}
-              className="mt-1 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2" />
+              className="mt-1 w-full rounded-lg border border-border bg-glass px-3 py-2" />
           </label>
         </div>
       )}
@@ -68,7 +68,7 @@ export function AISettingsClient({ user, variant }: { user: SafeUser; variant: "
               <span className="text-muted">{key.replace("Days", " retention (days)")}</span>
               <input type="number" min="1" defaultValue={Number((settings.dataRetention as Record<string, number>)?.[key] ?? 90)}
                 onBlur={(e) => save({ dataRetention: { ...(settings.dataRetention as object), [key]: Number(e.target.value) } })}
-                className="mt-1 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2" />
+                className="mt-1 w-full rounded-lg border border-border bg-glass px-3 py-2" />
             </label>
           ))}
           <p className="text-xs text-muted">Audit records are never auto-deleted without explicit policy.</p>
@@ -83,7 +83,7 @@ export function AISettingsClient({ user, variant }: { user: SafeUser; variant: "
             { severity: "Medium Alert", rule: "Dashboard" },
             { severity: "Low Event", rule: "Event Timeline" },
           ].map((r) => (
-            <div key={r.severity} className="flex justify-between rounded-lg border border-white/[0.06] px-4 py-3">
+            <div key={r.severity} className="flex justify-between rounded-lg border border-border px-4 py-3">
               <span>{r.severity}</span>
               <span className="text-muted">{r.rule}</span>
             </div>

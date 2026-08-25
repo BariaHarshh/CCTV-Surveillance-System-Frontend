@@ -111,19 +111,19 @@ export function AdminDashboard({ user }: { user: SafeUser }) {
         )}
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+          <div className="rounded-2xl border border-border bg-surface/50 p-6">
             <h2 className="text-lg font-semibold">Staff Overview</h2>
             <p className="mt-1 text-sm text-muted">Active, inactive, suspended, and online staff</p>
             <div className="mt-6 flex justify-center">
               {loading ? (
-                <div className="h-48 w-48 animate-pulse rounded-full bg-white/[0.04]" />
+                <div className="h-48 w-48 animate-pulse rounded-full bg-glass" />
               ) : data?.staffOverview ? (
                 <DonutChart title="Staff" data={data.staffOverview.filter((d) => d.value > 0)} />
               ) : null}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+          <div className="rounded-2xl border border-border bg-surface/50 p-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Organization Activity</h2>
               <Link href="/admin/security" className="text-xs text-accent hover:underline">View all</Link>
@@ -131,11 +131,11 @@ export function AdminDashboard({ user }: { user: SafeUser }) {
             <div className="mt-4 space-y-3">
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="h-12 animate-pulse rounded-xl bg-white/[0.04]" />
+                  <div key={i} className="h-12 animate-pulse rounded-xl bg-glass" />
                 ))
               ) : data?.activity.length ? (
                 data.activity.map((item) => (
-                  <div key={item.id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                  <div key={item.id} className="rounded-xl border border-border bg-glass px-4 py-3">
                     <p className="text-sm">{item.description}</p>
                     <p className="mt-1 text-xs text-muted">{formatRelativeTime(new Date(item.createdAt))}</p>
                   </div>

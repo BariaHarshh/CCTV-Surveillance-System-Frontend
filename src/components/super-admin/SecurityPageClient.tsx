@@ -88,7 +88,7 @@ export function SecurityPageClient({ user }: { user: SafeUser }) {
                 {sessions.map((s) => (
                   <div
                     key={s.id}
-                    className="flex flex-col gap-2 rounded-xl border border-white/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between"
+                    className="flex flex-col gap-2 rounded-xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="text-sm">
                       <p className="font-medium truncate max-w-md">{s.userAgent || "Unknown device"}</p>

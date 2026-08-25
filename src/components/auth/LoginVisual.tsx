@@ -88,7 +88,7 @@ export function LoginVisual() {
               />
             ))}
 
-            <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-white/[0.08] bg-surface-elevated/80 px-3 py-1.5">
+            <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-border bg-surface-elevated/80 px-3 py-1.5">
               <Radio className="h-3 w-3 text-emerald-400" />
               <span className="text-[10px] tracking-wider text-muted uppercase">
                 Secure Connection

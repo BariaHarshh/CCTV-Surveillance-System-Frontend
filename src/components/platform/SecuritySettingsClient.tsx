@@ -71,7 +71,7 @@ export function SecuritySettingsClient({ user }: { user: SafeUser }) {
       <p className="mt-1 text-muted">Password policy, sessions, and MFA</p>
 
       <div className="mt-8 space-y-6">
-        <section className="rounded-2xl border border-white/10 bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Password policy</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <label className="block text-sm">
@@ -79,7 +79,7 @@ export function SecuritySettingsClient({ user }: { user: SafeUser }) {
               <input
                 type="number"
                 min={8}
-                className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+                className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
                 value={pp.minLength}
                 onChange={(e) =>
                   setData({
@@ -94,7 +94,7 @@ export function SecuritySettingsClient({ user }: { user: SafeUser }) {
               <input
                 type="number"
                 min={0}
-                className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+                className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
                 value={pp.historyCount}
                 onChange={(e) =>
                   setData({
@@ -129,7 +129,7 @@ export function SecuritySettingsClient({ user }: { user: SafeUser }) {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Session policy</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             {(
@@ -144,7 +144,7 @@ export function SecuritySettingsClient({ user }: { user: SafeUser }) {
                 <input
                   type="number"
                   min={1}
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+                  className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
                   value={sp[key]}
                   onChange={(e) =>
                     setData({
@@ -158,12 +158,12 @@ export function SecuritySettingsClient({ user }: { user: SafeUser }) {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Multi-factor authentication</h2>
           <p className="mt-1 text-sm text-muted">Manage your personal MFA enrollment.</p>
           <Link
             href="/settings/security/mfa"
-            className="mt-4 inline-flex rounded-xl border border-white/10 px-4 py-2 text-sm hover:border-accent/40"
+            className="mt-4 inline-flex rounded-xl border border-border px-4 py-2 text-sm hover:border-accent/40"
           >
             Open MFA settings
           </Link>

@@ -217,11 +217,11 @@ export function AnalyticsDomainClient({
       {loading && !data ? (
         <div className="mt-8 grid gap-3 sm:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="h-20 animate-pulse rounded-xl bg-white/[0.04]" />
+            <div key={i} className="h-20 animate-pulse rounded-xl bg-glass" />
           ))}
         </div>
       ) : empty && domain !== "data-quality" && domain !== "cameras" ? (
-        <p className="mt-10 rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-muted">
+        <p className="mt-10 rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted">
           No data available for this period.
         </p>
       ) : (
@@ -241,13 +241,13 @@ export function AnalyticsDomainClient({
           {(trend.length > 0 || eventTypes.length > 0) && (
             <div className="mt-6 grid gap-4 lg:grid-cols-2">
               {trend.length > 0 && (
-                <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+                <section className="rounded-2xl border border-border bg-surface/40 p-5">
                   <h2 className="text-sm font-semibold">Over Time</h2>
                   <div className="mt-3"><TrendLineChart data={trend} /></div>
                 </section>
               )}
               {eventTypes.length > 0 && (
-                <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+                <section className="rounded-2xl border border-border bg-surface/40 p-5">
                   <h2 className="text-sm font-semibold">Type Distribution</h2>
                   <div className="mt-3"><CompositionDonut data={eventTypes} /></div>
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -255,7 +255,7 @@ export function AnalyticsDomainClient({
                       <Link
                         key={t.name}
                         href={`/admin/incidents?eventType=${encodeURIComponent(t.name.replace(/ /g, "_").toUpperCase())}`}
-                        className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] hover:text-accent"
+                        className="rounded-full border border-border px-2 py-0.5 text-[10px] hover:text-accent"
                       >
                         {t.name} ({t.value})
                       </Link>
@@ -267,7 +267,7 @@ export function AnalyticsDomainClient({
           )}
 
           {domain === "alerts" && payload.volume && (
-            <section className="mt-6 rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+            <section className="mt-6 rounded-2xl border border-border bg-surface/40 p-5">
               <h2 className="text-sm font-semibold">Alert Fatigue Analysis</h2>
               <p className="mt-1 text-xs text-muted">Helps identify excessive alert volume so high-value alerts remain visible.</p>
               <div className="mt-4 overflow-x-auto">
@@ -303,7 +303,7 @@ export function AnalyticsDomainClient({
 
           {domain === "locations" && (
             <div className="mt-6 grid gap-4 lg:grid-cols-2">
-              <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+              <section className="rounded-2xl border border-border bg-surface/40 p-5">
                 <h2 className="text-sm font-semibold">Risk Heatmap (by building activity)</h2>
                 <div className="mt-4 space-y-2">
                   {heatmap.map((h) => (
@@ -322,7 +322,7 @@ export function AnalyticsDomainClient({
                 </div>
                 <p className="mt-3 text-[10px] text-muted">Based on incident aggregation — not a prediction that a location is dangerous.</p>
               </section>
-              <section className="rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+              <section className="rounded-2xl border border-border bg-surface/40 p-5">
                 <h2 className="text-sm font-semibold">Highest-Risk Buildings</h2>
                 <div className="mt-3"><RankBarChart data={buildings.slice(0, 10)} /></div>
                 <div className="mt-4 overflow-x-auto">
@@ -358,7 +358,7 @@ export function AnalyticsDomainClient({
           )}
 
           {domain === "cameras" && (
-            <section className="mt-6 rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+            <section className="mt-6 rounded-2xl border border-border bg-surface/40 p-5">
               <h2 className="text-sm font-semibold">Camera Availability</h2>
               <p className="mt-1 text-xs text-muted">Historical uptime telemetry is limited — values below are current status snapshots.</p>
               <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -376,7 +376,7 @@ export function AnalyticsDomainClient({
           )}
 
           {domain === "teams" && (
-            <section className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+            <section className="mt-6 overflow-x-auto rounded-2xl border border-border bg-surface/40 p-5">
               <table className="w-full text-left text-xs">
                 <thead className="text-muted">
                   <tr>
@@ -411,7 +411,7 @@ export function AnalyticsDomainClient({
           {domain === "patterns" && (
             <div className="mt-6 space-y-3">
               {patterns.map((p) => (
-                <div key={String(p.patternId ?? p.id)} className="rounded-xl border border-white/[0.08] bg-surface/40 p-4">
+                <div key={String(p.patternId ?? p.id)} className="rounded-xl border border-border bg-surface/40 p-4">
                   <h3 className="font-semibold">{String(p.description ?? p.type)}</h3>
                   <p className="mt-1 text-xs text-muted">
                     Observed: {String(p.frequency ?? "—")} · Confidence in pattern detection: {String(p.confidence ?? "—")}
@@ -423,7 +423,7 @@ export function AnalyticsDomainClient({
                 </div>
               ))}
               {patterns.length === 0 && (
-                <p className="rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-muted">
+                <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted">
                   No recurring patterns detected for this period.
                 </p>
               )}

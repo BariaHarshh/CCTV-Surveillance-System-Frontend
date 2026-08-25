@@ -49,7 +49,7 @@ export function EmergencyBanner() {
           <span className="text-red-200/70">Started {started}</span>
           <span className="rounded border border-red-400/30 px-2 py-0.5 text-[10px] uppercase">{emergency.mode}</span>
         </div>
-        <Link href={`/admin/emergencies/${emergency.id}`} className="text-xs font-semibold text-red-200 underline hover:text-white">
+        <Link href={`/admin/emergencies/${emergency.id}`} className="text-xs font-semibold text-red-200 underline hover:text-foreground">
           Open Command View
         </Link>
       </div>

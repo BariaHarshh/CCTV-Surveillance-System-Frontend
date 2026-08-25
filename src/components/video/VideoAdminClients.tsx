@@ -59,7 +59,7 @@ export function VideoAdminClients({
 
       {view === "ai" && policy?.policy ? (
         <div className="space-y-4 text-sm">
-          <div className="rounded-xl border border-white/10 p-4">
+          <div className="rounded-xl border border-border p-4">
             <p>Processing mode: {String((policy.policy as Record<string, unknown>).processingMode)}</p>
             <p className="text-xs text-muted">
               Demo mode: {String((policy.policy as Record<string, unknown>).demoMode)}
@@ -92,7 +92,7 @@ export function VideoAdminClients({
       ) : null}
 
       {view === "privacy" ? (
-        <div className="rounded-xl border border-white/10 p-4 text-xs">
+        <div className="rounded-xl border border-border p-4 text-xs">
           <p className="font-semibold">Privacy zones</p>
           <ul className="mt-2 space-y-1">
             {((policy?.privacyZones as Array<Record<string, unknown>>) || []).map((z) => (
@@ -109,14 +109,14 @@ export function VideoAdminClients({
       ) : null}
 
       {view === "analytics" && data?.analytics ? (
-        <pre className="overflow-auto rounded-xl border border-white/10 p-4 text-[11px] text-muted">
+        <pre className="overflow-auto rounded-xl border border-border p-4 text-[11px] text-muted">
           {JSON.stringify(data.analytics, null, 2)}
         </pre>
       ) : null}
 
       {view === "inventory" && data?.inventory ? (
         <div className="space-y-3 text-sm">
-          <pre className="rounded-xl border border-white/10 p-4 text-xs">
+          <pre className="rounded-xl border border-border p-4 text-xs">
             {JSON.stringify(data.inventory, null, 2)}
           </pre>
         </div>
@@ -124,7 +124,7 @@ export function VideoAdminClients({
 
       {view === "maintenance" && (
         <div className="space-y-4 text-xs">
-          <section className="rounded-xl border border-white/10 p-4">
+          <section className="rounded-xl border border-border p-4">
             <h2 className="font-semibold">Suggestions (evidence-based, not failure claims)</h2>
             <ul className="mt-2 space-y-2">
               {((data?.suggestions as Array<Record<string, unknown>>) || []).map((s) => (
@@ -134,7 +134,7 @@ export function VideoAdminClients({
               ))}
             </ul>
           </section>
-          <section className="rounded-xl border border-white/10 p-4">
+          <section className="rounded-xl border border-border p-4">
             <h2 className="font-semibold">Tickets</h2>
             <ul className="mt-2 space-y-1">
               {((data?.tickets as Array<Record<string, unknown>>) || []).map((t) => (

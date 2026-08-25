@@ -56,7 +56,7 @@ function CardGrid({ items }: { items: Array<{ label: string; value: string | num
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((c) => (
-        <div key={c.label} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4">
+        <div key={c.label} className="rounded-2xl border border-border bg-surface/50 p-4">
           <p className="text-xs uppercase tracking-wide text-muted">{c.label}</p>
           <p className="mt-2 text-2xl font-semibold">{c.value}</p>
         </div>
@@ -67,7 +67,7 @@ function CardGrid({ items }: { items: Array<{ label: string; value: string | num
 
 function StatusPill({ value }: { value: string }) {
   return (
-    <span className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] uppercase text-muted">
+    <span className="rounded-full border border-border px-2 py-0.5 text-[10px] uppercase text-muted">
       {value}
     </span>
   );
@@ -134,12 +134,12 @@ export function AutomationDashboardClient({ user }: { user: SafeUser }) {
             Sandbox
           </Link>
         </div>
-        <div className="flex flex-wrap gap-2 rounded-xl border border-white/[0.08] p-4">
+        <div className="flex flex-wrap gap-2 rounded-xl border border-border p-4">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Automation name"
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <button type="button" onClick={create} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">
             Create draft
@@ -149,7 +149,7 @@ export function AutomationDashboardClient({ user }: { user: SafeUser }) {
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
         <div className="space-y-3">
           {(data?.automations ?? []).map((a) => (
-            <div key={String(a.automationId)} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4">
+            <div key={String(a.automationId)} className="rounded-2xl border border-border bg-surface/50 p-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <h3 className="font-semibold">{String(a.name)}</h3>
@@ -198,7 +198,7 @@ export function AutomationTemplatesClient({ user }: { user: SafeUser }) {
       <Panel title="Automation templates" subtitle="Install a draft copy into your organization.">
         <div className="grid gap-4 lg:grid-cols-2">
           {(data?.templates ?? []).map((t) => (
-            <div key={String(t.key)} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+            <div key={String(t.key)} className="rounded-2xl border border-border bg-surface/50 p-5">
               <h3 className="font-semibold">{String(t.name)}</h3>
               <p className="mt-1 text-sm text-muted">{String(t.description)}</p>
               <p className="mt-2 text-xs text-muted">Risk: {String(t.risk)}</p>
@@ -237,7 +237,7 @@ export function AutomationRunsClient({ user }: { user: SafeUser }) {
                 key={String(r.runId)}
                 type="button"
                 onClick={() => openRun(String(r.runId))}
-                className="block w-full rounded-xl border border-white/[0.08] bg-surface/50 p-3 text-left"
+                className="block w-full rounded-xl border border-border bg-surface/50 p-3 text-left"
               >
                 <div className="flex justify-between gap-2">
                   <span className="text-sm font-medium">{String(r.runId)}</span>
@@ -249,7 +249,7 @@ export function AutomationRunsClient({ user }: { user: SafeUser }) {
               </button>
             ))}
           </div>
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4">
+          <div className="rounded-2xl border border-border bg-surface/50 p-4">
             <h3 className="font-semibold">Timeline</h3>
             {!selected ? <p className="mt-2 text-sm text-muted">Select a run</p> : null}
             <ul className="mt-3 space-y-2 text-sm">
@@ -294,11 +294,11 @@ export function AutomationSandboxClient({ user }: { user: SafeUser }) {
   return (
     <AdminShell user={user}>
       <Panel title="Automation sandbox" subtitle="Dry-run simulateAutomation — no live side effects.">
-        <div className="space-y-3 rounded-xl border border-white/[0.08] p-4">
+        <div className="space-y-3 rounded-xl border border-border p-4">
           <select
             value={automationId}
             onChange={(e) => setAutomationId(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           >
             <option value="">Select automation</option>
             {(autos.data?.automations ?? []).map((a) => (
@@ -311,7 +311,7 @@ export function AutomationSandboxClient({ user }: { user: SafeUser }) {
             value={contextJson}
             onChange={(e) => setContextJson(e.target.value)}
             rows={5}
-            className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 font-mono text-xs"
+            className="w-full rounded-lg border border-border bg-black/20 px-3 py-2 font-mono text-xs"
           />
           <button
             type="button"
@@ -323,7 +323,7 @@ export function AutomationSandboxClient({ user }: { user: SafeUser }) {
           </button>
         </div>
         {result ? (
-          <pre className="overflow-auto rounded-xl border border-white/[0.08] bg-black/30 p-4 text-xs">
+          <pre className="overflow-auto rounded-xl border border-border bg-black/30 p-4 text-xs">
             {JSON.stringify(result, null, 2)}
           </pre>
         ) : null}
@@ -357,23 +357,23 @@ export function PoliciesClient({ user }: { user: SafeUser }) {
         <Link href="/admin/policies/test" className="text-sm text-accent">
           Policy test console
         </Link>
-        <div className="flex flex-wrap gap-2 rounded-xl border border-white/[0.08] p-4">
+        <div className="flex flex-wrap gap-2 rounded-xl border border-border p-4">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Policy name"
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <input
             value={action}
             onChange={(e) => setAction(e.target.value)}
             placeholder="Action"
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <select
             value={effect}
             onChange={(e) => setEffect(e.target.value)}
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           >
             {["ALLOW", "DENY", "REQUIRE_APPROVAL", "AUDIT_ONLY"].map((e) => (
               <option key={e} value={e}>
@@ -387,7 +387,7 @@ export function PoliciesClient({ user }: { user: SafeUser }) {
         </div>
         <div className="space-y-2">
           {(data?.policies ?? []).map((p) => (
-            <div key={String(p.policyId)} className="rounded-xl border border-white/[0.08] p-3">
+            <div key={String(p.policyId)} className="rounded-xl border border-border p-3">
               <div className="flex justify-between gap-2">
                 <span className="font-medium">{String(p.name)}</span>
                 <StatusPill value={`${String(p.effect)} · ${String(p.status)}`} />
@@ -425,14 +425,14 @@ export function PolicyTestClient({ user }: { user: SafeUser }) {
           <input
             value={action}
             onChange={(e) => setAction(e.target.value)}
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <button type="button" onClick={run} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">
             Test
           </button>
         </div>
         {decision ? (
-          <pre className="overflow-auto rounded-xl border border-white/[0.08] bg-black/30 p-4 text-xs">
+          <pre className="overflow-auto rounded-xl border border-border bg-black/30 p-4 text-xs">
             {JSON.stringify(decision, null, 2)}
           </pre>
         ) : null}
@@ -452,7 +452,7 @@ export function SystemReadinessClient({ user }: { user: SafeUser }) {
           Re-run
         </button>
         {health.data?.health ? (
-          <div className="rounded-2xl border border-white/[0.08] p-4">
+          <div className="rounded-2xl border border-border p-4">
             <p className="text-sm">
               Org health: <strong>{String((health.data.health as Row).label)}</strong> (
               {String((health.data.health as Row).score)})
@@ -461,7 +461,7 @@ export function SystemReadinessClient({ user }: { user: SafeUser }) {
         ) : null}
         <div className="space-y-2">
           {(data?.readiness?.checks ?? []).map((c) => (
-            <div key={String(c.key)} className="flex items-start justify-between rounded-xl border border-white/[0.08] p-3">
+            <div key={String(c.key)} className="flex items-start justify-between rounded-xl border border-border p-3">
               <div>
                 <p className="font-medium">{String(c.key)}</p>
                 {c.problem ? <p className="text-xs text-muted">{String(c.problem)}</p> : null}
@@ -497,7 +497,7 @@ export function ExportsClient({ user }: { user: SafeUser }) {
           <input
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <button type="button" onClick={create} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">
             Request export
@@ -505,7 +505,7 @@ export function ExportsClient({ user }: { user: SafeUser }) {
         </div>
         <div className="space-y-2">
           {(data?.exports ?? []).map((e) => (
-            <div key={String(e.exportId)} className="rounded-xl border border-white/[0.08] p-3 text-sm">
+            <div key={String(e.exportId)} className="rounded-xl border border-border p-3 text-sm">
               {String(e.exportId)} · {String(e.type)} · <StatusPill value={String(e.status)} />
               <p className="text-xs text-muted">Expires {String(e.expiresAt)}</p>
             </div>
@@ -541,13 +541,13 @@ export function TrainingClient({ user }: { user: SafeUser }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Drill name"
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <input
             type="datetime-local"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <button type="button" onClick={create} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">
             Add
@@ -555,7 +555,7 @@ export function TrainingClient({ user }: { user: SafeUser }) {
         </div>
         <div className="space-y-2">
           {(data?.drills ?? []).map((d) => (
-            <div key={String(d.drillId)} className="rounded-xl border border-white/[0.08] p-3">
+            <div key={String(d.drillId)} className="rounded-xl border border-border p-3">
               <p className="font-medium">{String(d.name)}</p>
               <p className="text-xs text-muted">
                 {String(d.type)} · {String(d.date)} · {String(d.location || "—")}
@@ -575,7 +575,7 @@ export function IntegrationsHealthClient({ user }: { user: SafeUser }) {
       <Panel title="Integration health" subtitle="Connected vs not configured — no secrets exposed.">
         <div className="space-y-2">
           {(data?.integrations ?? []).map((i) => (
-            <div key={String(i.key)} className="flex justify-between rounded-xl border border-white/[0.08] p-3">
+            <div key={String(i.key)} className="flex justify-between rounded-xl border border-border p-3">
               <span>{String(i.name)}</span>
               <StatusPill value={String(i.status)} />
             </div>
@@ -612,7 +612,7 @@ export function ApprovalsClient({ user }: { user: SafeUser }) {
         </button>
         <div className="space-y-3">
           {list.map((a) => (
-            <div key={String(a.approvalId)} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4">
+            <div key={String(a.approvalId)} className="rounded-2xl border border-border bg-surface/50 p-4">
               <div className="flex justify-between gap-2">
                 <div>
                   <p className="font-medium">{String(a.action)}</p>
@@ -635,7 +635,7 @@ export function ApprovalsClient({ user }: { user: SafeUser }) {
                   <button
                     type="button"
                     onClick={() => decide(String(a.approvalId), "REJECTED")}
-                    className="rounded-lg border border-white/10 px-3 py-1.5 text-sm"
+                    className="rounded-lg border border-border px-3 py-1.5 text-sm"
                   >
                     Reject
                   </button>
@@ -716,7 +716,7 @@ export function WorkspaceClient({ user }: { user: SafeUser }) {
           <section>
             <h2 className="mb-2 text-sm font-semibold">Tasks</h2>
             {(data?.tasks ?? []).map((t) => (
-              <div key={String(t.actionId ?? t._id)} className="mb-2 rounded-xl border border-white/[0.08] p-3 text-sm">
+              <div key={String(t.actionId ?? t._id)} className="mb-2 rounded-xl border border-border p-3 text-sm">
                 {String(t.title)}
               </div>
             ))}
@@ -724,7 +724,7 @@ export function WorkspaceClient({ user }: { user: SafeUser }) {
           <section>
             <h2 className="mb-2 text-sm font-semibold">Approvals</h2>
             {(data?.approvals ?? []).map((a) => (
-              <div key={String(a.approvalId)} className="mb-2 rounded-xl border border-white/[0.08] p-3 text-sm">
+              <div key={String(a.approvalId)} className="mb-2 rounded-xl border border-border p-3 text-sm">
                 {String(a.action)}
               </div>
             ))}
@@ -732,7 +732,7 @@ export function WorkspaceClient({ user }: { user: SafeUser }) {
           <section>
             <h2 className="mb-2 text-sm font-semibold">Incidents</h2>
             {(data?.incidents ?? []).map((i) => (
-              <div key={String(i.incidentId)} className="mb-2 rounded-xl border border-white/[0.08] p-3 text-sm">
+              <div key={String(i.incidentId)} className="mb-2 rounded-xl border border-border p-3 text-sm">
                 {String(i.title || i.incidentId)}
               </div>
             ))}
@@ -761,7 +761,7 @@ export function TeamWorkspaceClient({ user }: { user: SafeUser }) {
         />
         <ul className="space-y-2 text-sm">
           {(data?.tasks ?? []).map((t) => (
-            <li key={String(t.actionId ?? t._id)} className="rounded-xl border border-white/[0.08] p-3">
+            <li key={String(t.actionId ?? t._id)} className="rounded-xl border border-border p-3">
               {String(t.title)} · {String(t.status)}
             </li>
           ))}
@@ -795,7 +795,7 @@ export function SupportClient({ user }: { user: SafeUser }) {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Subject"
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <button type="button" onClick={create} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">
             Open ticket
@@ -803,7 +803,7 @@ export function SupportClient({ user }: { user: SafeUser }) {
         </div>
         <div className="space-y-2">
           {(data?.tickets ?? []).map((t) => (
-            <div key={String(t.ticketId)} className="rounded-xl border border-white/[0.08] p-3">
+            <div key={String(t.ticketId)} className="rounded-xl border border-border p-3">
               <div className="flex justify-between">
                 <span className="font-medium">{String(t.subject)}</span>
                 <StatusPill value={String(t.status)} />
@@ -843,7 +843,7 @@ export function OperationsCalendarClient({ user }: { user: SafeUser }) {
       <Panel title="Operations calendar" subtitle="Training drills and task due dates.">
         <ul className="space-y-2">
           {items.map((i) => (
-            <li key={`${i.kind}-${i.id}`} className="rounded-xl border border-white/[0.08] p-3 text-sm">
+            <li key={`${i.kind}-${i.id}`} className="rounded-xl border border-border p-3 text-sm">
               <span className="text-xs text-muted">{i.kind}</span> {i.title}
               <p className="text-xs text-muted">{i.date || "No date"}</p>
             </li>
@@ -883,7 +883,7 @@ export function AiAgentsClient({ user }: { user: SafeUser }) {
       <Panel title="AI Agents" subtitle="Platform agent registry with kill switches.">
         <div className="space-y-3">
           {(data?.agents ?? []).map((a) => (
-            <div key={String(a.agentId)} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4">
+            <div key={String(a.agentId)} className="rounded-2xl border border-border bg-surface/50 p-4">
               <div className="flex justify-between gap-2">
                 <div>
                   <p className="font-semibold">{String(a.name)}</p>
@@ -919,7 +919,7 @@ export function AiAgentToolsClient({ user }: { user: SafeUser }) {
       <Panel title="Agent tools" subtitle="Registered tools across all agents.">
         <div className="space-y-2">
           {(data?.tools ?? []).map((t, i) => (
-            <div key={`${String(t.agentId)}-${String(t.tool)}-${i}`} className="rounded-xl border border-white/[0.08] p-3 text-sm">
+            <div key={`${String(t.agentId)}-${String(t.tool)}-${i}`} className="rounded-xl border border-border p-3 text-sm">
               <span className="font-medium">{String(t.tool)}</span>
               <p className="text-xs text-muted">
                 {String(t.agentName)} · {String(t.actionMode)} · {String(t.status)}
@@ -939,7 +939,7 @@ export function AiAgentTracesClient({ user }: { user: SafeUser }) {
       <Panel title="Agent traces" subtitle="Recent agent tool decisions and outcomes.">
         <div className="space-y-2">
           {(data?.traces ?? []).map((t) => (
-            <div key={String(t.traceId)} className="rounded-xl border border-white/[0.08] p-3 text-sm">
+            <div key={String(t.traceId)} className="rounded-xl border border-border p-3 text-sm">
               <div className="flex justify-between">
                 <span>{String(t.agentId)} · {String(t.tool || "—")}</span>
                 <StatusPill value={String(t.outcome)} />
@@ -1001,7 +1001,7 @@ export function SystemJobsClient({ user }: { user: SafeUser }) {
         </Link>
         <div className="space-y-2">
           {(data?.jobs ?? []).slice(0, 40).map((j) => (
-            <div key={String(j.jobId)} className="rounded-xl border border-white/[0.08] p-3 text-sm">
+            <div key={String(j.jobId)} className="rounded-xl border border-border p-3 text-sm">
               {String(j.jobId)} · {String(j.type)} · <StatusPill value={String(j.status)} />
             </div>
           ))}
@@ -1029,7 +1029,7 @@ export function DeadLetterClient({ user }: { user: SafeUser }) {
       <Panel title="Dead-letter jobs" subtitle="Retry failed jobs that exhausted attempts.">
         <div className="space-y-2">
           {(data?.jobs ?? []).map((j) => (
-            <div key={String(j.jobId)} className="flex items-center justify-between rounded-xl border border-white/[0.08] p-3">
+            <div key={String(j.jobId)} className="flex items-center justify-between rounded-xl border border-border p-3">
               <div className="text-sm">
                 <p>{String(j.jobId)} · {String(j.type)}</p>
                 <p className="text-xs text-muted">{String(j.error || "—")}</p>
@@ -1052,7 +1052,7 @@ export function ServicesCatalogClient({ user }: { user: SafeUser }) {
       <Panel title="Service catalog" subtitle="Platform service health snapshot.">
         <div className="space-y-2">
           {(data?.services ?? []).map((s) => (
-            <div key={String(s.name)} className="flex justify-between rounded-xl border border-white/[0.08] p-3">
+            <div key={String(s.name)} className="flex justify-between rounded-xl border border-border p-3">
               <span>
                 {String(s.name)} <span className="text-xs text-muted">v{String(s.version)}</span>
               </span>
@@ -1091,13 +1091,13 @@ export function PostmortemsClient({ user }: { user: SafeUser }) {
             value={platformIncidentId}
             onChange={(e) => setPlatformIncidentId(e.target.value)}
             placeholder="Platform incident id"
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <input
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Summary"
-            className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm"
+            className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm"
           />
           <button type="button" onClick={create} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">
             Create
@@ -1105,7 +1105,7 @@ export function PostmortemsClient({ user }: { user: SafeUser }) {
         </div>
         <div className="space-y-2">
           {(data?.postmortems ?? []).map((p) => (
-            <div key={String(p.postmortemId)} className="rounded-xl border border-white/[0.08] p-3">
+            <div key={String(p.postmortemId)} className="rounded-xl border border-border p-3">
               <p className="font-medium">{String(p.postmortemId)}</p>
               <p className="text-xs text-muted">Incident {String(p.platformIncidentId)}</p>
               <p className="mt-1 text-sm text-muted">{String(p.summary || "—")}</p>

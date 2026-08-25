@@ -95,7 +95,7 @@ export function InquiriesPageClient({ user }: { user: SafeUser }) {
         <button
           type="button"
           onClick={load}
-          className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs text-muted hover:text-white"
+          className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs text-muted hover:text-foreground"
         >
           <RefreshCw className="h-3.5 w-3.5" /> Refresh
         </button>
@@ -108,13 +108,13 @@ export function InquiriesPageClient({ user }: { user: SafeUser }) {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search name, email, organization..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/40"
+            className="w-full rounded-xl border border-border bg-glass py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/40"
           />
         </div>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm"
+          className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm"
         >
           {STATUSES.map((s) => (
             <option key={s} value={s} className="bg-surface">
@@ -134,7 +134,7 @@ export function InquiriesPageClient({ user }: { user: SafeUser }) {
         <div className="space-y-2 lg:col-span-2">
           {loading ? (
             Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-20 animate-pulse rounded-xl bg-white/[0.04]" />
+              <div key={i} className="h-20 animate-pulse rounded-xl bg-glass" />
             ))
           ) : items.length === 0 ? (
             <EmptyState
@@ -153,8 +153,8 @@ export function InquiriesPageClient({ user }: { user: SafeUser }) {
                   selected?.id === item.id
                     ? "border-accent/30 bg-accent/5"
                     : item.status === "NEW"
-                      ? "border-accent/20 bg-white/[0.03] hover:bg-white/[0.05]"
-                      : "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]"
+                      ? "border-accent/20 bg-glass hover:bg-glass"
+                      : "border-border bg-glass hover:bg-glass"
                 )}
               >
                 <div className="flex items-start justify-between gap-2">
@@ -180,7 +180,7 @@ export function InquiriesPageClient({ user }: { user: SafeUser }) {
           )}
         </div>
 
-        <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6 lg:col-span-3">
+        <div className="rounded-2xl border border-border bg-surface/50 p-6 lg:col-span-3">
           {!selected ? (
             <div className="flex h-full min-h-[240px] flex-col items-center justify-center text-center text-muted">
               <Inbox className="h-10 w-10 opacity-40" />
@@ -197,7 +197,7 @@ export function InquiriesPageClient({ user }: { user: SafeUser }) {
                   value={selected.status}
                   disabled={updating}
                   onChange={(e) => updateStatus(selected.id, e.target.value)}
-                  className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs"
+                  className="rounded-lg border border-border bg-glass px-3 py-1.5 text-xs"
                 >
                   {["NEW", "REVIEWED", "CONTACTED", "CLOSED"].map((s) => (
                     <option key={s} value={s} className="bg-surface">
@@ -240,7 +240,7 @@ export function InquiriesPageClient({ user }: { user: SafeUser }) {
 
               <div className="mt-6">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">Requirements</h3>
-                <p className="mt-2 whitespace-pre-wrap rounded-xl border border-white/[0.06] bg-black/20 p-4 text-sm leading-relaxed">
+                <p className="mt-2 whitespace-pre-wrap rounded-xl border border-border bg-black/20 p-4 text-sm leading-relaxed">
                   {selected.requirements}
                 </p>
               </div>

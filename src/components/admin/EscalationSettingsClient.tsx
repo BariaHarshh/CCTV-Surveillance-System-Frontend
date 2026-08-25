@@ -42,7 +42,7 @@ export function EscalationSettingsClient({ user }: { user: SafeUser }) {
 
       <div className="mt-8 space-y-4">
         {rules.map((r) => (
-          <div key={String(r.id)} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+          <div key={String(r.id)} className="rounded-2xl border border-border bg-surface/50 p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 className="font-semibold">{String(r.name)}</h3>
@@ -54,7 +54,7 @@ export function EscalationSettingsClient({ user }: { user: SafeUser }) {
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {((r.levels as Array<{ level: string; roleLabel: string; timeoutMinutes: number }>) ?? []).map((l) => (
-                <span key={l.level} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs">
+                <span key={l.level} className="rounded-lg border border-border px-3 py-1.5 text-xs">
                   {l.level.replace(/_/g, " ")} → {l.roleLabel} ({l.timeoutMinutes}m)
                 </span>
               ))}
@@ -67,7 +67,7 @@ export function EscalationSettingsClient({ user }: { user: SafeUser }) {
                 max={240}
                 defaultValue={Number(r.timeoutMinutes)}
                 onBlur={(e) => updateTimeout(String(r.id), parseInt(e.target.value, 10) || 10)}
-                className="ml-2 w-20 rounded border border-white/10 bg-black/20 px-2 py-1 text-xs"
+                className="ml-2 w-20 rounded border border-border bg-black/20 px-2 py-1 text-xs"
               />
             </div>
           </div>

@@ -50,7 +50,7 @@ export function IncidentsClient({ user, portal = "admin" }: { user: SafeUser; po
           <h1 className="text-2xl font-bold">Incident Center</h1>
           <p className="mt-1 text-muted">Correlated security incidents across your campus.</p>
         </div>
-        <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted"><RefreshCw className="h-4 w-4" /></button>
+        <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted"><RefreshCw className="h-4 w-4" /></button>
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-4">
@@ -59,16 +59,16 @@ export function IncidentsClient({ user, portal = "admin" }: { user: SafeUser; po
           { label: "Critical", value: stats.critical },
           { label: "Total", value: incidents.length },
         ].map((s) => (
-          <div key={s.label} className="rounded-xl border border-white/[0.08] bg-surface/50 p-4">
+          <div key={s.label} className="rounded-xl border border-border bg-surface/50 p-4">
             <p className="text-xs text-muted">{s.label}</p>
             <p className="mt-1 text-2xl font-bold">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.08]">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full min-w-[800px] text-left text-sm">
-          <thead className="border-b border-white/[0.06] bg-white/[0.02] text-xs uppercase tracking-wider text-muted">
+          <thead className="border-b border-border bg-glass text-xs uppercase tracking-wider text-muted">
             <tr>
               <th className="px-4 py-3">Incident</th>
               <th className="px-4 py-3">Location</th>
@@ -85,7 +85,7 @@ export function IncidentsClient({ user, portal = "admin" }: { user: SafeUser; po
             ) : incidents.length === 0 ? (
               <tr><td colSpan={7} className="px-4 py-8 text-center text-muted">No incidents yet.</td></tr>
             ) : incidents.map((inc) => (
-              <tr key={inc.id} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+              <tr key={inc.id} className="border-b border-white/[0.04] hover:bg-glass">
                 <td className="px-4 py-3">
                   <Link href={`${base}/incidents/${inc.id}`} className="font-medium hover:text-accent">{inc.title}</Link>
                   <p className="font-mono text-[10px] text-muted">{inc.incidentId}</p>

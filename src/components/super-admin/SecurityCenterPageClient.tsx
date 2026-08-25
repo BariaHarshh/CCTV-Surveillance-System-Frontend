@@ -44,7 +44,7 @@ export function SecurityCenterPageClient({ user }: { user: SafeUser }) {
           <h2 className="mt-10 text-lg font-semibold">Security Activity</h2>
           <div className="mt-4 space-y-2">
             {activity.map((a) => (
-              <div key={a.id} className="rounded-xl border border-white/[0.06] bg-surface/40 px-4 py-3 text-sm">
+              <div key={a.id} className="rounded-xl border border-border bg-surface/40 px-4 py-3 text-sm">
                 {a.description}
                 <span className="ml-2 text-xs text-muted">
                   {formatRelativeTime(new Date(a.createdAt))}

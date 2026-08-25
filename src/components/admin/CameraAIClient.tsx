@@ -49,7 +49,7 @@ export function CameraAIClient({ user, cameraId }: { user: SafeUser; cameraId: s
 
       <div className="mt-6 space-y-3">
         {MODULE_KEYS.map((key) => (
-          <div key={key} className="flex items-center justify-between rounded-xl border border-white/[0.08] px-4 py-3">
+          <div key={key} className="flex items-center justify-between rounded-xl border border-border px-4 py-3">
             <div>
               <p className="font-medium">{AI_MODULE_LABELS[key]}</p>
               <p className="text-xs text-muted">{modules[key]?.enabled ? "Enabled" : "Disabled"}</p>

@@ -25,7 +25,7 @@ export function DonutChart({ title, data }: DonutChartProps) {
 
   return (
     <div className="gradient-border rounded-2xl bg-surface/60 p-6">
-      <h3 className="text-sm font-semibold tracking-wide text-white/90">{title}</h3>
+      <h3 className="text-sm font-semibold tracking-wide text-foreground/90">{title}</h3>
       {isEmpty ? (
         <div className="flex h-48 items-center justify-center text-sm text-muted">No data yet</div>
       ) : (

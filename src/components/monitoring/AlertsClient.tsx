@@ -83,7 +83,7 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
         </div>
         <div className="flex items-center gap-3">
           <RealtimeIndicator status={realtimeStatus} />
-          <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted hover:text-white">
+          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
             <RefreshCw className="h-4 w-4" />
           </button>
         </div>
@@ -109,13 +109,13 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
             value={q}
             onChange={(e) => { setQ(e.target.value); setPage(1); }}
             placeholder="Search alerts..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/50"
+            className="w-full rounded-xl border border-border bg-glass py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/50"
           />
         </div>
         <select
           value={severity}
           onChange={(e) => { setSeverity(e.target.value); setPage(1); }}
-          className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm"
+          className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm"
         >
           <option value="ALL">All severities</option>
           {["CRITICAL", "HIGH", "MEDIUM", "LOW"].map((s) => (
@@ -124,9 +124,9 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
         </select>
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.08]">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full min-w-[800px] text-left text-sm">
-          <thead className="border-b border-white/[0.06] bg-white/[0.02] text-xs uppercase tracking-wider text-muted">
+          <thead className="border-b border-border bg-glass text-xs uppercase tracking-wider text-muted">
             <tr>
               <th className="px-4 py-3">Alert</th>
               <th className="px-4 py-3">Location</th>
@@ -140,13 +140,13 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
           <tbody>
             {loading ? (
               Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i}><td colSpan={7} className="px-4 py-4"><div className="h-8 animate-pulse rounded bg-white/[0.04]" /></td></tr>
+                <tr key={i}><td colSpan={7} className="px-4 py-4"><div className="h-8 animate-pulse rounded bg-glass" /></td></tr>
               ))
             ) : alerts.length === 0 ? (
               <tr><td colSpan={7} className="px-4 py-12 text-center text-muted">No alerts found.</td></tr>
             ) : (
               alerts.map((a) => (
-                <tr key={a.id} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                <tr key={a.id} className="border-b border-white/[0.04] hover:bg-glass">
                   <td className="px-4 py-3">
                     <p className="font-medium">{a.title}</p>
                     <p className="font-mono text-[10px] text-muted">{a.alertId}{a.source === "TEST" ? " · SIMULATED" : ""}</p>
@@ -169,8 +169,8 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
       </div>
 
       <div className="mt-4 flex justify-end gap-2">
-        <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs disabled:opacity-40">Prev</button>
-        <button type="button" onClick={() => setPage((p) => p + 1)} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs">Next</button>
+        <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-border px-3 py-1.5 text-xs disabled:opacity-40">Prev</button>
+        <button type="button" onClick={() => setPage((p) => p + 1)} className="rounded-lg border border-border px-3 py-1.5 text-xs">Next</button>
       </div>
     </MonitoringPortal>
   );

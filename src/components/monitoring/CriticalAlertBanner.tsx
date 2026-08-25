@@ -32,7 +32,7 @@ export function CriticalAlertBanner({
             </Link>
           )}
         </div>
-        <button type="button" onClick={onDismiss} className="text-red-300 hover:text-white" aria-label="Dismiss">
+        <button type="button" onClick={onDismiss} className="text-red-300 hover:text-foreground" aria-label="Dismiss">
           <X className="h-4 w-4" />
         </button>
       </div>

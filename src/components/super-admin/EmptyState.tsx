@@ -19,7 +19,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   const Icon = icon === "building" ? Building2 : Inbox;
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-surface/30 px-6 py-16 text-center">
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-surface/30 px-6 py-16 text-center">
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10">
         <Icon className="h-7 w-7 text-accent/70" strokeWidth={1.25} />
       </div>

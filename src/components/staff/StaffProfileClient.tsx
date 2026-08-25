@@ -43,7 +43,7 @@ export function StaffProfileClient({ user }: { user: SafeUser }) {
     setSaving(false);
   };
 
-  if (loading) return <StaffShell user={user}><div className="h-64 animate-pulse rounded-2xl bg-white/[0.04]" /></StaffShell>;
+  if (loading) return <StaffShell user={user}><div className="h-64 animate-pulse rounded-2xl bg-glass" /></StaffShell>;
 
   const u = meta.user as Record<string, unknown>;
   const prof = u?.professional as Record<string, string>;
@@ -53,7 +53,7 @@ export function StaffProfileClient({ user }: { user: SafeUser }) {
     <StaffShell user={user}>
       <h1 className="text-2xl font-bold">My Profile</h1>
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Account</h2>
           <dl className="mt-4 space-y-2 text-sm">
             <div><dt className="text-muted">Name</dt><dd className="font-medium">{String(u.name)}</dd></div>
@@ -66,7 +66,7 @@ export function StaffProfileClient({ user }: { user: SafeUser }) {
             <div><dt className="text-muted">Last Active</dt><dd>{u?.lastActive ? formatRelativeTime(new Date(u.lastActive as string)) : "—"}</dd></div>
           </dl>
         </section>
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Editable Contact Info</h2>
           <div className="mt-4 space-y-3">
             {(["phone", "address", "emergencyContactName", "emergencyContactPhone"] as const).map((field) => (

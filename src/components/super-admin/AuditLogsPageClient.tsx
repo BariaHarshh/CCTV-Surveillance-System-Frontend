@@ -31,9 +31,9 @@ export function AuditLogsPageClient({ user }: { user: SafeUser }) {
           <EmptyState title="No audit logs yet" description="Audit events will be recorded as platform activity occurs." />
         </div>
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.06]">
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="border-b border-white/[0.06] bg-surface/60 text-xs text-muted uppercase">
+            <thead className="border-b border-border bg-surface/60 text-xs text-muted uppercase">
               <tr>
                 <th className="px-4 py-3">Event</th>
                 <th className="px-4 py-3">Actor</th>

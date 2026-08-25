@@ -94,7 +94,7 @@ export default function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
-                  className="mt-2 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
+                  className="mt-2 w-full rounded-xl border border-border bg-glass px-4 py-3 text-sm outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
                   placeholder="you@institution.edu"
                 />
               </div>
@@ -117,7 +117,7 @@ export default function ForgotPasswordPage() {
 
             <Link
               href="/login"
-              className="mt-6 inline-flex items-center gap-2 text-sm text-muted hover:text-white"
+              className="mt-6 inline-flex items-center gap-2 text-sm text-muted hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Login

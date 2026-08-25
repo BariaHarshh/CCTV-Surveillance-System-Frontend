@@ -37,17 +37,35 @@ export const metadata: Metadata = {
   },
 };
 
+const themeBootScript = `
+(function(){
+  try {
+    var key = "acg-theme";
+    var t = localStorage.getItem(key);
+    if (t !== "day" && t !== "night") {
+      t = window.matchMedia("(prefers-color-scheme: light)").matches ? "day" : "night";
+    }
+    document.documentElement.setAttribute("data-theme", t);
+    document.documentElement.classList.toggle("dark", t === "night");
+    document.documentElement.classList.toggle("light", t === "day");
+  } catch (e) {
+    document.documentElement.setAttribute("data-theme", "night");
+    document.documentElement.classList.add("dark");
+  }
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ backgroundColor: "#030508", color: "#f4f6fa" }}
-      >
+    <html lang="en" data-theme="night" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased theme-transition`}>
         <Providers>{children}</Providers>
       </body>
     </html>

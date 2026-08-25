@@ -34,15 +34,15 @@ export function LoginHistoryClient({ user }: { user: SafeUser }) {
     <AdminShell user={user}>
       <h1 className="text-2xl font-bold">Login History</h1>
       <p className="mt-1 text-sm text-muted">Organization authentication activity — admin/security access only.</p>
-      {loading && <div className="mt-8 h-24 animate-pulse rounded-xl bg-white/[0.04]" />}
+      {loading && <div className="mt-8 h-24 animate-pulse rounded-xl bg-glass" />}
       {error && <p className="mt-6 text-sm text-rose-300">{error}</p>}
       {!loading && !error && rows.length === 0 && (
         <p className="mt-8 text-sm text-muted">No login activity recorded yet.</p>
       )}
       {rows.length > 0 && (
-        <div className="mt-6 overflow-x-auto rounded-xl border border-white/10">
+        <div className="mt-6 overflow-x-auto rounded-xl border border-border">
           <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-white/10 text-xs uppercase text-muted">
+            <thead className="border-b border-border text-xs uppercase text-muted">
               <tr>
                 <th className="px-3 py-2">User</th>
                 <th className="px-3 py-2">Timestamp</th>

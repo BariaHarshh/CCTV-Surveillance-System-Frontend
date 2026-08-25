@@ -30,9 +30,9 @@ export function MapAnalyticsClient({ user }: { user: SafeUser }) {
           Risk map
         </Link>
       </div>
-      <div className="overflow-auto rounded-xl border border-white/10">
+      <div className="overflow-auto rounded-xl border border-border">
         <table className="w-full text-left text-xs">
-          <thead className="border-b border-white/10 bg-white/5 text-muted">
+          <thead className="border-b border-border bg-white/5 text-muted">
             <tr>
               <th className="px-3 py-2">Area</th>
               <th className="px-3 py-2">Risk</th>
@@ -55,7 +55,7 @@ export function MapAnalyticsClient({ user }: { user: SafeUser }) {
         </table>
       </div>
       {!!((data?.campusComparison as unknown[]) || []).length && (
-        <section className="mt-6 rounded-xl border border-white/10 p-4 text-xs">
+        <section className="mt-6 rounded-xl border border-border p-4 text-xs">
           <h2 className="mb-2 font-semibold">Campus comparison (this organization)</h2>
           <pre className="overflow-auto text-[11px] text-muted">
             {JSON.stringify(data?.campusComparison, null, 2)}

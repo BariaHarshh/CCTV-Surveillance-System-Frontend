@@ -28,7 +28,7 @@ export function FloorOverviewClient({ user }: { user: SafeUser }) {
           Campus map
         </Link>
       </div>
-      <div className="min-h-[400px] rounded-xl border border-white/10 bg-[#0b1220]">
+      <div className="min-h-[400px] rounded-xl border border-border bg-[#0b1220]">
         {published?.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={String(published.imageUrl)} alt="Floor plan" className="max-h-[70vh] w-full object-contain" />

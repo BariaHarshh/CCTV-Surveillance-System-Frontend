@@ -109,11 +109,11 @@ export function PermissionsClient({ user }: { user: SafeUser }) {
 
       <div className="mt-8 space-y-8">
         {PERMISSION_GROUPS.map((group) => (
-          <section key={group.title} className="overflow-hidden rounded-2xl border border-white/10">
-            <h2 className="border-b border-white/10 bg-surface/50 px-4 py-3 text-sm font-semibold">{group.title}</h2>
+          <section key={group.title} className="overflow-hidden rounded-2xl border border-border">
+            <h2 className="border-b border-border bg-surface/50 px-4 py-3 text-sm font-semibold">{group.title}</h2>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[480px] text-left text-sm">
-                <thead className="border-b border-white/[0.06] text-xs uppercase text-muted">
+                <thead className="border-b border-border text-xs uppercase text-muted">
                   <tr>
                     <th className="px-4 py-3">Permission</th>
                     {ROLES.map((r) => (

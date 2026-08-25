@@ -108,7 +108,7 @@ export function InterestForm() {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-10 space-y-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 sm:p-8"
+            className="mt-10 space-y-4 rounded-2xl border border-border bg-glass p-6 sm:p-8"
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Your name *" value={form.name} onChange={(v) => update("name", v)} required />
@@ -125,7 +125,7 @@ export function InterestForm() {
                 <select
                   value={form.campusType}
                   onChange={(e) => update("campusType", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm outline-none focus:border-accent/40"
+                  className="w-full rounded-xl border border-border bg-glass px-4 py-2.5 text-sm outline-none focus:border-accent/40"
                 >
                   {CAMPUS_TYPES.map((t) => (
                     <option key={t || "blank"} value={t} className="bg-surface">
@@ -150,7 +150,7 @@ export function InterestForm() {
                 value={form.requirements}
                 onChange={(e) => update("requirements", e.target.value)}
                 placeholder="Describe what you need — buildings, cameras, AI detections, timeline, budget range, etc."
-                className="w-full resize-y rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none focus:border-accent/40"
+                className="w-full resize-y rounded-xl border border-border bg-glass px-4 py-3 text-sm outline-none focus:border-accent/40"
               />
             </div>
 
@@ -199,7 +199,7 @@ function Field({
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm outline-none focus:border-accent/40"
+        className="w-full rounded-xl border border-border bg-glass px-4 py-2.5 text-sm outline-none focus:border-accent/40"
       />
     </div>
   );

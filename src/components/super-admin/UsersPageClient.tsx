@@ -105,13 +105,13 @@ export function UsersPageClient({ currentUser }: { currentUser: SafeUser }) {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search by name, user ID, or email..."
-              className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/40"
+              className="w-full rounded-xl border border-border bg-glass py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/40"
             />
           </div>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="rounded-xl border border-white/[0.08] bg-surface px-3 py-2 text-sm"
+            className="rounded-xl border border-border bg-surface px-3 py-2 text-sm"
           >
             <option value="ALL">All Roles</option>
             <option value="SUPER_ADMIN">Super Admin</option>
@@ -121,7 +121,7 @@ export function UsersPageClient({ currentUser }: { currentUser: SafeUser }) {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="rounded-xl border border-white/[0.08] bg-surface px-3 py-2 text-sm"
+            className="rounded-xl border border-border bg-surface px-3 py-2 text-sm"
           >
             <option value="ALL">All Status</option>
             <option value="ACTIVE">Active</option>
@@ -132,7 +132,7 @@ export function UsersPageClient({ currentUser }: { currentUser: SafeUser }) {
           <select
             value={online}
             onChange={(e) => setOnline(e.target.value)}
-            className="rounded-xl border border-white/[0.08] bg-surface px-3 py-2 text-sm"
+            className="rounded-xl border border-border bg-surface px-3 py-2 text-sm"
           >
             <option value="all">All</option>
             <option value="online">Online</option>
@@ -156,9 +156,9 @@ export function UsersPageClient({ currentUser }: { currentUser: SafeUser }) {
             <EmptyState title="No users found" description="Try adjusting your search or filters." />
           </div>
         ) : (
-          <div className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.06]">
+          <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
             <table className="w-full min-w-[800px] text-left text-sm">
-              <thead className="border-b border-white/[0.06] bg-surface/60 text-xs text-muted uppercase">
+              <thead className="border-b border-border bg-surface/60 text-xs text-muted uppercase">
                 <tr>
                   <th className="px-4 py-3">Name</th>
                   <th className="px-4 py-3">User ID</th>
@@ -171,7 +171,7 @@ export function UsersPageClient({ currentUser }: { currentUser: SafeUser }) {
               </thead>
               <tbody>
                 {users.map((u) => (
-                  <tr key={u.id} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                  <tr key={u.id} className="border-b border-white/[0.04] hover:bg-glass">
                     <td className="px-4 py-3 font-medium">{u.name}</td>
                     <td className="px-4 py-3 font-mono text-xs">{u.userId}</td>
                     <td className="px-4 py-3">{u.role.replace("_", " ")}</td>
@@ -197,7 +197,7 @@ export function UsersPageClient({ currentUser }: { currentUser: SafeUser }) {
             <motion.div
               initial={{ x: 400 }}
               animate={{ x: 0 }}
-              className="h-full w-full max-w-md overflow-y-auto border-l border-white/[0.08] bg-surface p-6"
+              className="h-full w-full max-w-md overflow-y-auto border-l border-border bg-surface p-6"
             >
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">User Details</h2>
@@ -240,7 +240,7 @@ export function UsersPageClient({ currentUser }: { currentUser: SafeUser }) {
                           name: selected.user.name as string,
                         })
                       }
-                      className="rounded-lg border border-white/[0.08] px-3 py-1.5 text-xs capitalize hover:bg-white/[0.04]"
+                      className="rounded-lg border border-border px-3 py-1.5 text-xs capitalize hover:bg-glass"
                     >
                       {action}
                     </button>
@@ -270,7 +270,7 @@ export function UsersPageClient({ currentUser }: { currentUser: SafeUser }) {
                 <button
                   type="button"
                   onClick={() => setConfirmAction(null)}
-                  className="flex-1 rounded-full border border-white/[0.08] py-2 text-sm"
+                  className="flex-1 rounded-full border border-border py-2 text-sm"
                 >
                   Cancel
                 </button>

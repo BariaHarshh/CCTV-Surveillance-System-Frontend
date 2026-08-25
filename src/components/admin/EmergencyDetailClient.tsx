@@ -97,7 +97,7 @@ export function EmergencyDetailClient({ user, emergencyId }: { user: SafeUser; e
   if (loading) {
     return (
       <AdminShell user={user}>
-        <div className="h-64 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="h-64 animate-pulse rounded-2xl bg-glass" />
       </AdminShell>
     );
   }
@@ -126,8 +126,8 @@ export function EmergencyDetailClient({ user, emergencyId }: { user: SafeUser; e
           <p className="mt-1 text-sm text-muted">{String(emergency.reason)}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href={`/admin/emergencies/${emergencyId}/report`} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs">Report</Link>
-          <Link href={`/admin/emergencies/${emergencyId}/communications`} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs">Communications</Link>
+          <Link href={`/admin/emergencies/${emergencyId}/report`} className="rounded-lg border border-border px-3 py-1.5 text-xs">Report</Link>
+          <Link href={`/admin/emergencies/${emergencyId}/communications`} className="rounded-lg border border-border px-3 py-1.5 text-xs">Communications</Link>
           {emergency.status === "ACTIVE" && (
             <button type="button" onClick={() => setStatus("CONTAINED")} className="rounded-lg bg-amber-500/15 px-3 py-1.5 text-xs text-amber-300">Mark Contained</button>
           )}
@@ -147,7 +147,7 @@ export function EmergencyDetailClient({ user, emergencyId }: { user: SafeUser; e
           { label: "Severity", value: String(emergency.severity) },
           { label: "Location", value: String((emergency.location as { label?: string })?.label ?? "—") },
         ].map((s) => (
-          <div key={s.label} className="rounded-xl border border-white/[0.08] p-4">
+          <div key={s.label} className="rounded-xl border border-border p-4">
             <p className="text-[10px] uppercase text-muted">{s.label}</p>
             <p className="mt-1 font-semibold">{s.value}</p>
           </div>
@@ -157,7 +157,7 @@ export function EmergencyDetailClient({ user, emergencyId }: { user: SafeUser; e
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           {playbook && (
-            <section className="rounded-2xl border border-white/[0.08] p-5">
+            <section className="rounded-2xl border border-border p-5">
               <h2 className="text-sm font-semibold">Recommended Response Plan</h2>
               <p className="mt-1 text-xs text-muted">{String(playbook.name)} — organization-approved playbook</p>
               <ol className="mt-4 space-y-2">
@@ -171,15 +171,15 @@ export function EmergencyDetailClient({ user, emergencyId }: { user: SafeUser; e
             </section>
           )}
 
-          <section className="rounded-2xl border border-white/[0.08] p-5">
+          <section className="rounded-2xl border border-border p-5">
             <h2 className="text-sm font-semibold">Tasks</h2>
             <div className="mt-3 flex gap-2">
-              <input value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder="New task…" className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs" />
+              <input value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder="New task…" className="flex-1 rounded-lg border border-border bg-black/20 px-3 py-2 text-xs" />
               <button type="button" onClick={addTask} className="rounded-lg bg-accent/20 px-3 py-2 text-xs text-accent">Add</button>
             </div>
             <ul className="mt-3 space-y-2">
               {tasks.map((t) => (
-                <li key={String(t.id)} className="flex items-center justify-between rounded-lg border border-white/[0.06] px-3 py-2 text-sm">
+                <li key={String(t.id)} className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm">
                   <div>
                     <p>{String(t.title)}</p>
                     <p className="text-[10px] text-muted">{String(t.status)}</p>
@@ -195,7 +195,7 @@ export function EmergencyDetailClient({ user, emergencyId }: { user: SafeUser; e
             </ul>
           </section>
 
-          <section className="rounded-2xl border border-white/[0.08] p-5">
+          <section className="rounded-2xl border border-border p-5">
             <h2 className="text-sm font-semibold">Communications</h2>
             <ul className="mt-3 max-h-48 space-y-2 overflow-y-auto">
               {messages.map((m) => (
@@ -207,18 +207,18 @@ export function EmergencyDetailClient({ user, emergencyId }: { user: SafeUser; e
               ))}
             </ul>
             <div className="mt-3 flex gap-2">
-              <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Internal response message…" className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs" />
+              <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Internal response message…" className="flex-1 rounded-lg border border-border bg-black/20 px-3 py-2 text-xs" />
               <button type="button" onClick={sendMsg} className="rounded-lg bg-accent/20 px-3 py-2 text-xs text-accent">Send</button>
             </div>
           </section>
         </div>
 
         <div className="space-y-6">
-          <section className="rounded-2xl border border-white/[0.08] p-5">
+          <section className="rounded-2xl border border-border p-5">
             <h2 className="text-sm font-semibold">Timeline</h2>
             <ul className="mt-3 space-y-3">
               {timeline.map((t, i) => (
-                <li key={i} className="border-l border-white/10 pl-3 text-xs">
+                <li key={i} className="border-l border-border pl-3 text-xs">
                   <p className="text-muted">{new Date(t.timestamp).toLocaleString()}</p>
                   <p className="font-medium">{t.action.replace(/_/g, " ")}</p>
                   <p className="text-muted">{t.description}</p>
@@ -228,7 +228,7 @@ export function EmergencyDetailClient({ user, emergencyId }: { user: SafeUser; e
             </ul>
           </section>
 
-          <section className="rounded-2xl border border-white/[0.08] p-5">
+          <section className="rounded-2xl border border-border p-5">
             <h2 className="text-sm font-semibold">Escalation</h2>
             {escalations.length === 0 ? (
               <p className="mt-2 text-xs text-muted">No active escalation</p>

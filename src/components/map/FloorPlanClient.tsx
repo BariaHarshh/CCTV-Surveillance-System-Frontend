@@ -95,7 +95,7 @@ export function FloorPlanClient({ user }: { user: SafeUser }) {
       {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
 
       <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
-        <div className="min-h-[480px] overflow-hidden rounded-xl border border-white/10 bg-[#0b1220]">
+        <div className="min-h-[480px] overflow-hidden rounded-xl border border-border bg-[#0b1220]">
           {published?.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -111,7 +111,7 @@ export function FloorPlanClient({ user }: { user: SafeUser }) {
         </div>
 
         <aside className="space-y-4">
-          <div className="rounded-xl border border-white/10 p-3 text-xs">
+          <div className="rounded-xl border border-border p-3 text-xs">
             <p className="font-semibold">Building</p>
             <p className="mt-1 text-muted">{String(building?.address || "—")}</p>
             <p className="mt-2">Rooms: {String(data?.rooms ?? "—")}</p>
@@ -125,11 +125,11 @@ export function FloorPlanClient({ user }: { user: SafeUser }) {
             </p>
           </div>
 
-          <div className="rounded-xl border border-white/10 p-3 text-xs">
+          <div className="rounded-xl border border-border p-3 text-xs">
             <p className="mb-2 font-semibold">Versions</p>
             <ul className="space-y-2">
               {plans.map((p) => (
-                <li key={String(p.floorPlanId)} className="rounded border border-white/10 p-2">
+                <li key={String(p.floorPlanId)} className="rounded border border-border p-2">
                   v{String(p.version)} · {String(p.status)}
                   {p.status !== "PUBLISHED" && (
                     <button
@@ -146,7 +146,7 @@ export function FloorPlanClient({ user }: { user: SafeUser }) {
             </ul>
           </div>
 
-          <div className="rounded-xl border border-white/10 p-3 text-xs">
+          <div className="rounded-xl border border-border p-3 text-xs">
             <p className="mb-2 font-semibold">Upload (admin)</p>
             <p className="mb-2 text-muted">PNG, JPG, SVG, PDF — stored privately.</p>
             <input

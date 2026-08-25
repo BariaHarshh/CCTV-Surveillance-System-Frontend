@@ -14,7 +14,7 @@ export default function Page() {
         <h1 className="mt-4 text-3xl font-bold">Changelog</h1>
         <ul className="mt-8 space-y-6">
           {entries.map((e) => (
-            <li key={e.version} className="rounded-2xl border border-white/10 bg-surface/40 p-5">
+            <li key={e.version} className="rounded-2xl border border-border bg-surface/40 p-5">
               <div className="flex items-baseline justify-between gap-3">
                 <h2 className="font-semibold">v{e.version}</h2>
                 <span className="text-xs text-muted">{e.date}</span>

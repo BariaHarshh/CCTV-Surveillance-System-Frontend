@@ -28,7 +28,7 @@ export function SettingsHubClient({ user }: { user: SafeUser }) {
       <p className="mt-1 text-sm text-muted">Organization configuration — only sections you can access are listed.</p>
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {sections.map(([label, href]) => (
-          <Link key={href} href={href} className="rounded-xl border border-white/[0.08] bg-surface/40 p-4 hover:border-accent/30">
+          <Link key={href} href={href} className="rounded-xl border border-border bg-surface/40 p-4 hover:border-accent/30">
             <p className="font-medium">{label}</p>
           </Link>
         ))}
@@ -80,10 +80,10 @@ export function BillingClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">Billing</h1>
       <p className="mt-1 text-sm text-muted">Plans, usage metering, and invoices. Pricing is not hardcoded into feature logic.</p>
       {!data ? (
-        <div className="mt-8 h-32 animate-pulse rounded-xl bg-white/[0.04]" />
+        <div className="mt-8 h-32 animate-pulse rounded-xl bg-glass" />
       ) : (
         <>
-          <section className="mt-6 rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+          <section className="mt-6 rounded-2xl border border-border bg-surface/40 p-5">
             <h2 className="text-sm font-semibold">Current Plan</h2>
             <p className="mt-2 text-2xl font-bold">{String(sub?.planId)} <span className="text-sm text-muted">({String(sub?.status)})</span></p>
             {sub?.trialEndsAt && <p className="mt-1 text-xs text-muted">Trial ends {new Date(sub.trialEndsAt).toLocaleString()}</p>}
@@ -91,17 +91,17 @@ export function BillingClient({ user }: { user: SafeUser }) {
           </section>
           <section className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {Object.entries(usage).map(([k, v]) => (
-              <div key={k} className="rounded-xl border border-white/[0.08] p-4">
+              <div key={k} className="rounded-xl border border-border p-4">
                 <p className="text-[10px] uppercase text-muted">{k}</p>
                 <p className="mt-1 text-lg font-bold">{v.used} / {v.max}</p>
               </div>
             ))}
           </section>
-          <section className="mt-6 rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+          <section className="mt-6 rounded-2xl border border-border bg-surface/40 p-5">
             <h2 className="text-sm font-semibold">Available Plans</h2>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               {plans.map((p) => (
-                <div key={String(p.planId)} className="rounded-xl border border-white/10 p-4">
+                <div key={String(p.planId)} className="rounded-xl border border-border p-4">
                   <p className="font-semibold">{String(p.name)}</p>
                   <p className="text-xs text-muted">{String(p.description)}</p>
                   <p className="mt-2 text-lg">{String(p.price)} {String(p.currency)}/{String(p.billingInterval)}</p>
@@ -204,13 +204,13 @@ export function OrganizationSettingsClient({ user }: { user: SafeUser }) {
             <input
               value={v}
               onChange={(e) => setForm({ ...form, [k]: e.target.value })}
-              className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm"
             />
           </label>
         ))}
         <div className="flex gap-2">
           <button type="submit" className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-black">Save</button>
-          <button type="button" onClick={() => window.location.reload()} className="rounded-lg border border-white/10 px-4 py-2 text-sm">Cancel</button>
+          <button type="button" onClick={() => window.location.reload()} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>
         </div>
         {msg && <p className="text-xs text-muted">{msg}</p>}
       </form>
@@ -273,12 +273,12 @@ export function MfaClient({ user }: { user: SafeUser }) {
         <div className="mt-4 space-y-3">
           <button type="button" onClick={begin} className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-black">Enable MFA</button>
           {secret && (
-            <div className="rounded-xl border border-white/10 p-4 text-xs">
+            <div className="rounded-xl border border-border p-4 text-xs">
               <p>Scan with authenticator app (otpauth):</p>
               <p className="mt-2 break-all font-mono text-[10px]">{otpauth}</p>
               <p className="mt-2">Secret: <span className="font-mono">{secret}</span></p>
-              <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter 6-digit code" className="mt-3 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2" />
-              <button type="button" onClick={verify} className="mt-2 rounded-lg border border-white/10 px-3 py-1.5">Verify</button>
+              <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter 6-digit code" className="mt-3 w-full rounded-lg border border-border bg-black/30 px-3 py-2" />
+              <button type="button" onClick={verify} className="mt-2 rounded-lg border border-border px-3 py-1.5">Verify</button>
             </div>
           )}
         </div>
@@ -292,7 +292,7 @@ export function MfaClient({ user }: { user: SafeUser }) {
       {status?.enabled && (
         <button
           type="button"
-          className="mt-4 rounded-lg border border-white/10 px-3 py-1.5 text-xs"
+          className="mt-4 rounded-lg border border-border px-3 py-1.5 text-xs"
           onClick={async () => {
             await fetch("/api/settings/mfa", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "disable" }) });
             load();
@@ -319,7 +319,7 @@ export function OnboardingClient({ user }: { user: SafeUser }) {
     <AdminShell user={user}>
       <h1 className="text-2xl font-bold">Onboarding</h1>
       {!data ? (
-        <div className="mt-8 h-24 animate-pulse rounded-xl bg-white/[0.04]" />
+        <div className="mt-8 h-24 animate-pulse rounded-xl bg-glass" />
       ) : (
         <>
           <p className="mt-2 text-sm text-muted">{data.completed} / {data.total} completed</p>
@@ -369,18 +369,18 @@ export function CommandPalette() {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/70 p-4 pt-[15vh]" onClick={() => setOpen(false)}>
-      <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-surface p-3" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-lg rounded-2xl border border-border bg-surface p-3" onClick={(e) => e.stopPropagation()}>
         <input
           autoFocus
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Type a command…"
-          className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm"
         />
         <ul className="mt-2 max-h-64 overflow-y-auto text-sm">
           {filtered.map((c) => (
             <li key={c.href}>
-              <Link href={c.href} onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2 hover:bg-white/[0.04]">
+              <Link href={c.href} onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2 hover:bg-glass">
                 {c.label}
               </Link>
             </li>

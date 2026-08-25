@@ -37,7 +37,7 @@ export function FinalCTA() {
             </a>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-8 py-4 text-base font-medium text-white transition hover:bg-white/[0.04]"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-8 py-4 text-base font-medium text-white transition hover:bg-glass"
             >
               Enter platform
             </Link>

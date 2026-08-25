@@ -35,9 +35,9 @@ export function OrgAuditClient({ user }: { user: SafeUser }) {
           No organization audit events yet. Sensitive settings changes are recorded automatically.
         </p>
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10">
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full min-w-[560px] text-left text-sm">
-            <thead className="border-b border-white/10 text-xs uppercase text-muted">
+            <thead className="border-b border-border text-xs uppercase text-muted">
               <tr>
                 <th className="px-4 py-3">Event</th>
                 <th className="px-4 py-3">Actor</th>

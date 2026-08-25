@@ -101,7 +101,7 @@ export function EmergencyMapClient({ user }: { user: SafeUser }) {
           )}
         </section>
 
-        <section className="rounded-xl border border-white/10 p-4 text-xs">
+        <section className="rounded-xl border border-border p-4 text-xs">
           <h2 className="mb-2 text-sm font-semibold">Exits</h2>
           <ul className="space-y-1">
             {((data?.exits as Array<Record<string, unknown>>) || []).map((e) => (

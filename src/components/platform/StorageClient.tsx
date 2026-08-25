@@ -49,7 +49,7 @@ export function StorageClient({ user }: { user: SafeUser }) {
         <p className="mt-8 text-sm text-red-400">{error}</p>
       ) : (
         <>
-          <section className="mt-8 rounded-2xl border border-white/10 bg-surface/50 p-6">
+          <section className="mt-8 rounded-2xl border border-border bg-surface/50 p-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="font-semibold">Storage usage</h2>
               <span className="text-xs text-muted">Plan: {plan}</span>
@@ -73,7 +73,7 @@ export function StorageClient({ user }: { user: SafeUser }) {
             {Object.entries(usage)
               .filter(([k]) => k !== "storageMb")
               .map(([k, v]) => (
-                <div key={k} className="rounded-xl border border-white/10 p-4">
+                <div key={k} className="rounded-xl border border-border p-4">
                   <p className="text-[10px] uppercase text-muted">{k}</p>
                   <p className="mt-1 text-lg font-bold">
                     {v.used} / {v.max}

@@ -37,12 +37,12 @@ export function IncidentTasksClient({ user, incidentId }: { user: SafeUser; inci
       </Link>
       <h1 className="mt-4 text-2xl font-bold">Incident Tasks</h1>
       <div className="mt-6 flex gap-2">
-        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Task title" className="flex-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm" />
+        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Task title" className="flex-1 rounded-lg border border-border bg-black/20 px-3 py-2 text-sm" />
         <button type="button" onClick={create} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">Add</button>
       </div>
       <ul className="mt-4 space-y-2">
         {tasks.map((t) => (
-          <li key={String(t.id)} className="rounded-xl border border-white/[0.06] px-4 py-3 text-sm">
+          <li key={String(t.id)} className="rounded-xl border border-border px-4 py-3 text-sm">
             <p className="font-medium">{String(t.title)}</p>
             <p className="text-xs text-muted">{String(t.status)} · {String(t.taskId)}</p>
           </li>

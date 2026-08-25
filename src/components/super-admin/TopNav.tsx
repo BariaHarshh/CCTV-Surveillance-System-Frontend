@@ -6,6 +6,7 @@ import { Bell, ChevronDown, LogOut, Menu, Search, Shield, User } from "lucide-re
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 interface TopNavProps {
@@ -38,13 +39,13 @@ export function TopNav({
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between gap-4 px-4 lg:px-6">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={onMenuClick}
-            className="rounded-lg p-2 text-muted hover:bg-white/[0.04] hover:text-white lg:hidden"
+            className="rounded-lg p-2 text-muted hover:bg-glass hover:text-foreground lg:hidden"
             aria-label="Open menu"
           >
             <Menu className="h-5 w-5" />
@@ -54,7 +55,7 @@ export function TopNav({
             <input
               type="search"
               placeholder="Search platform..."
-              className="w-64 rounded-xl border border-white/[0.08] bg-white/[0.03] py-2 pl-10 pr-4 text-sm outline-none placeholder:text-muted/50 focus:border-accent/40 lg:w-80"
+              className="w-64 rounded-xl border border-border bg-glass py-2 pl-10 pr-4 text-sm outline-none placeholder:text-muted/50 focus:border-accent/40 lg:w-80"
               onFocus={() => router.push("/super-admin/users")}
               readOnly
             />
@@ -62,6 +63,7 @@ export function TopNav({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
+          <ThemeToggle size="sm" />
           <button
             type="button"
             onClick={onStatusClick}
@@ -85,7 +87,7 @@ export function TopNav({
             <button
               type="button"
               onClick={() => setNotifOpen(!notifOpen)}
-              className="relative rounded-lg p-2 text-muted hover:bg-white/[0.04] hover:text-white"
+              className="relative rounded-lg p-2 text-muted hover:bg-glass hover:text-foreground"
               aria-label="Notifications"
             >
               <Bell className="h-5 w-5" />
@@ -99,7 +101,7 @@ export function TopNav({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
-                  className="absolute right-0 mt-2 w-80 rounded-xl border border-white/[0.08] bg-surface-elevated p-2 shadow-xl"
+                  className="absolute right-0 mt-2 w-80 rounded-xl border border-border bg-surface-elevated p-2 shadow-xl"
                 >
                   <p className="px-3 py-2 text-xs font-semibold tracking-wider text-muted uppercase">
                     Notifications
@@ -110,9 +112,9 @@ export function TopNav({
                     notifications.slice(0, 5).map((n) => (
                       <div
                         key={n.id}
-                        className="rounded-lg px-3 py-2 text-sm hover:bg-white/[0.04]"
+                        className="rounded-lg px-3 py-2 text-sm hover:bg-glass"
                       >
-                        <p className="text-white/90">{n.description}</p>
+                        <p className="text-foreground/90">{n.description}</p>
                         <p className="mt-1 text-xs text-muted">{n.time}</p>
                       </div>
                     ))
@@ -126,7 +128,7 @@ export function TopNav({
             <button
               type="button"
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-sm hover:bg-white/[0.06]"
+              className="flex items-center gap-2 rounded-xl border border-border bg-glass px-3 py-1.5 text-sm hover:bg-glass-hover"
             >
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10">
                 <User className="h-4 w-4 text-accent" />
@@ -140,30 +142,30 @@ export function TopNav({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
-                  className="absolute right-0 mt-2 w-52 rounded-xl border border-white/[0.08] bg-surface-elevated py-2 shadow-xl"
+                  className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-surface-elevated py-2 shadow-xl"
                 >
                   <Link
                     href="/super-admin/profile"
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-muted hover:bg-white/[0.04] hover:text-white"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-muted hover:bg-glass hover:text-foreground"
                     onClick={() => setProfileOpen(false)}
                   >
                     <User className="h-4 w-4" /> My Profile
                   </Link>
                   <Link
                     href="/super-admin/security"
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-muted hover:bg-white/[0.04] hover:text-white"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-muted hover:bg-glass hover:text-foreground"
                     onClick={() => setProfileOpen(false)}
                   >
                     <Shield className="h-4 w-4" /> Security
                   </Link>
                   <Link
                     href="/super-admin/settings"
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-muted hover:bg-white/[0.04] hover:text-white"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-muted hover:bg-glass hover:text-foreground"
                     onClick={() => setProfileOpen(false)}
                   >
                     Settings
                   </Link>
-                  <hr className="my-2 border-white/[0.06]" />
+                  <hr className="my-2 border-border" />
                   <button
                     type="button"
                     onClick={() => logout()}

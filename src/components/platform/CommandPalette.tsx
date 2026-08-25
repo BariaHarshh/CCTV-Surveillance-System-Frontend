@@ -122,10 +122,10 @@ export function CommandPalette() {
       onClick={() => setOpen(false)}
     >
       <div
-        className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-background shadow-2xl"
+        className="w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-background shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-2 border-b border-white/10 px-4">
+        <div className="flex items-center gap-2 border-b border-border px-4">
           <Search className="h-4 w-4 text-muted" />
           <input
             autoFocus

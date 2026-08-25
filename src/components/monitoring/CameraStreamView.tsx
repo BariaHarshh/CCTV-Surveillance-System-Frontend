@@ -75,7 +75,7 @@ export function CameraStreamView({
   const offline = status !== "ONLINE";
 
   return (
-    <div ref={containerRef} className={cn("relative overflow-hidden rounded-xl border border-white/[0.08] bg-black/60", className)}>
+    <div ref={containerRef} className={cn("relative overflow-hidden rounded-xl border border-border bg-black/60", className)}>
       {offline ? (
         <div className="flex aspect-video flex-col items-center justify-center gap-2 text-center">
           <VideoOff className="h-10 w-10 text-slate-500" />

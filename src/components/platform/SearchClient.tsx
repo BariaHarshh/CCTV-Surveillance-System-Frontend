@@ -36,7 +36,7 @@ export function SearchClient({ user, initialQ = "" }: { user: SafeUser; initialQ
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
         <input
           autoFocus
-          className="w-full rounded-2xl border border-white/10 bg-surface/50 py-3 pl-10 pr-4"
+          className="w-full rounded-2xl border border-border bg-surface/50 py-3 pl-10 pr-4"
           placeholder="Search…"
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -48,7 +48,7 @@ export function SearchClient({ user, initialQ = "" }: { user: SafeUser; initialQ
           <li key={`${r.type}-${r.id}`}>
             <Link
               href={r.href}
-              className="flex items-center justify-between rounded-xl border border-white/10 bg-surface/40 px-4 py-3 hover:border-accent/40"
+              className="flex items-center justify-between rounded-xl border border-border bg-surface/40 px-4 py-3 hover:border-accent/40"
             >
               <span>{r.title}</span>
               <span className="text-xs uppercase text-muted">{r.type}</span>

@@ -55,13 +55,13 @@ export function StaffCamerasClient({ user }: { user: SafeUser }) {
       )}
 
       {loading ? (
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-48 animate-pulse rounded-2xl bg-white/[0.04]" />)}</div>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-48 animate-pulse rounded-2xl bg-glass" />)}</div>
       ) : cameras.length === 0 ? (
         <div className="mt-8"><EmptyState title="No cameras configured" description="Your administrator has not assigned any cameras yet." icon="inbox" /></div>
       ) : (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {cameras.map((c) => (
-            <article key={c.id} className="overflow-hidden rounded-2xl border border-white/[0.08] bg-surface/50">
+            <article key={c.id} className="overflow-hidden rounded-2xl border border-border bg-surface/50">
               <div className="flex aspect-video items-center justify-center bg-black/40 text-center text-sm text-muted">
                 {c.status === "ONLINE" ? (
                   <span>NO LIVE STREAM AVAILABLE</span>

@@ -44,7 +44,7 @@ export function SessionsPageClient({ user }: { user: SafeUser }) {
           {sessions.map((s) => (
             <div
               key={s.id}
-              className="flex flex-col gap-2 rounded-xl border border-white/[0.06] bg-surface/40 p-4 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-2 rounded-xl border border-border bg-surface/40 p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
                 <p className="font-medium">{s.userName}</p>

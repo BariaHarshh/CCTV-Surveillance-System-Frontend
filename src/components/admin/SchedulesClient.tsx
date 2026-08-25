@@ -57,17 +57,17 @@ export function SchedulesClient({ user }: { user: SafeUser }) {
           <button type="button" onClick={createDefault} className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-background">
             <Plus className="h-3.5 w-3.5" /> Add Business Hours
           </button>
-          <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted"><RefreshCw className="h-4 w-4" /></button>
+          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted"><RefreshCw className="h-4 w-4" /></button>
         </div>
       </div>
 
       <div className="mt-6 space-y-4">
         {loading ? (
-          <div className="h-24 animate-pulse rounded-xl bg-white/[0.04]" />
+          <div className="h-24 animate-pulse rounded-xl bg-glass" />
         ) : schedules.length === 0 ? (
-          <p className="rounded-xl border border-white/[0.06] p-8 text-center text-muted">No schedules yet.</p>
+          <p className="rounded-xl border border-border p-8 text-center text-muted">No schedules yet.</p>
         ) : schedules.map((s) => (
-          <div key={s.id} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+          <div key={s.id} className="rounded-2xl border border-border bg-surface/50 p-5">
             <div className="flex items-start justify-between">
               <div>
                 <p className="font-mono text-xs text-muted">{s.scheduleId}</p>
@@ -77,7 +77,7 @@ export function SchedulesClient({ user }: { user: SafeUser }) {
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {s.windows.map((w, i) => (
-                <span key={i} className="rounded-lg bg-white/[0.04] px-2 py-1 text-[10px] text-muted">
+                <span key={i} className="rounded-lg bg-glass px-2 py-1 text-[10px] text-muted">
                   {DAYS[w.dayOfWeek]} {w.startTime}–{w.endTime}
                 </span>
               ))}

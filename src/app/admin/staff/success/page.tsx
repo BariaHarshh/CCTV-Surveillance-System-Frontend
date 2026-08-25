@@ -17,7 +17,7 @@ export default async function StaffSuccessPage() {
     <Suspense
       fallback={
         <div className="flex min-h-[40vh] items-center justify-center p-8">
-          <div className="h-32 w-full max-w-lg animate-pulse rounded-2xl bg-white/[0.04]" />
+          <div className="h-32 w-full max-w-lg animate-pulse rounded-2xl bg-glass" />
         </div>
       }
     >

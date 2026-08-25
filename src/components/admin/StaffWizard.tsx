@@ -135,7 +135,7 @@ export function StaffWizard({ user }: { user: SafeUser }) {
         <div className="mb-8 flex items-center justify-between gap-1">
           {STEPS.map((label, i) => (
             <div key={label} className="flex flex-1 flex-col items-center">
-              <div className={cn("flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold", i <= step ? "bg-accent text-background" : "bg-white/[0.06] text-muted")}>
+              <div className={cn("flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold", i <= step ? "bg-accent text-background" : "bg-glass text-muted")}>
                 {String(i + 1).padStart(2, "0")}
               </div>
               <span className={cn("mt-2 hidden text-[10px] sm:block", i <= step ? "text-accent" : "text-muted")}>{label}</span>
@@ -188,10 +188,10 @@ export function StaffWizard({ user }: { user: SafeUser }) {
             {step === 2 && (
               <>
                 <h2 className="text-lg font-semibold">Account</h2>
-                <div className="mt-6 rounded-xl border border-white/[0.06] p-4">
+                <div className="mt-6 rounded-xl border border-border p-4">
                   <div className="flex items-center justify-between">
                     <div><p className="text-sm font-medium">Staff ID</p><p className="font-mono text-accent">{data.account.userId || "Generating..."}</p></div>
-                    <button type="button" disabled={credLoading} onClick={generateCredentials} className="inline-flex items-center gap-1 rounded-lg border border-white/[0.08] px-3 py-1.5 text-xs"><RefreshCw className={cn("h-3 w-3", credLoading && "animate-spin")} /> Regenerate</button>
+                    <button type="button" disabled={credLoading} onClick={generateCredentials} className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs"><RefreshCw className={cn("h-3 w-3", credLoading && "animate-spin")} /> Regenerate</button>
                   </div>
                   <div className="mt-4">
                     <div className="flex items-center justify-between"><p className="text-sm font-medium">Generate Secure Password</p><button type="button" onClick={generateCredentials} className="text-xs text-accent">Regenerate</button></div>
@@ -210,7 +210,7 @@ export function StaffWizard({ user }: { user: SafeUser }) {
                 <h2 className="text-lg font-semibold">Permissions</h2>
                 <div className="mt-6 grid gap-2 sm:grid-cols-2">
                   {ALL_STAFF_PERMISSIONS.map((perm) => (
-                    <label key={perm} className={cn("flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm", data.permissions.includes(perm) ? "border-accent/40 bg-accent/10" : "border-white/[0.08]")}>
+                    <label key={perm} className={cn("flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm", data.permissions.includes(perm) ? "border-accent/40 bg-accent/10" : "border-border")}>
                       <input type="checkbox" checked={data.permissions.includes(perm)} onChange={() => togglePermission(perm)} />
                       {STAFF_PERMISSION_LABELS[perm] ?? perm}
                     </label>
@@ -223,17 +223,17 @@ export function StaffWizard({ user }: { user: SafeUser }) {
               <>
                 <h2 className="text-lg font-semibold">Review</h2>
                 <div className="mt-6 space-y-3 text-sm">
-                  <div className="rounded-xl border border-white/[0.06] p-4"><p className="text-muted">Personal</p><p className="mt-1 font-medium">{data.personal.name} · {data.personal.email} · {data.personal.phone}</p></div>
-                  <div className="rounded-xl border border-white/[0.06] p-4"><p className="text-muted">Professional</p><p className="mt-1 font-medium">{data.professional.employeeId} · {data.professional.department} · {data.professional.jobTitle}</p></div>
-                  <div className="rounded-xl border border-white/[0.06] p-4"><p className="text-muted">Organization</p><p className="mt-1 font-medium">{orgInfo.name} ({orgInfo.organizationId})</p></div>
-                  <div className="rounded-xl border border-white/[0.06] p-4"><p className="text-muted">Access</p><p className="mt-1 font-medium">STAFF · {data.permissions.length} permissions</p></div>
-                  <div className="rounded-xl border border-white/[0.06] p-4"><p className="text-muted">Credentials</p><p className="mt-1 font-mono font-medium">{data.account.userId}</p><p className="mt-1 font-mono text-xs text-muted">Temporary password shown once after creation</p></div>
+                  <div className="rounded-xl border border-border p-4"><p className="text-muted">Personal</p><p className="mt-1 font-medium">{data.personal.name} · {data.personal.email} · {data.personal.phone}</p></div>
+                  <div className="rounded-xl border border-border p-4"><p className="text-muted">Professional</p><p className="mt-1 font-medium">{data.professional.employeeId} · {data.professional.department} · {data.professional.jobTitle}</p></div>
+                  <div className="rounded-xl border border-border p-4"><p className="text-muted">Organization</p><p className="mt-1 font-medium">{orgInfo.name} ({orgInfo.organizationId})</p></div>
+                  <div className="rounded-xl border border-border p-4"><p className="text-muted">Access</p><p className="mt-1 font-medium">STAFF · {data.permissions.length} permissions</p></div>
+                  <div className="rounded-xl border border-border p-4"><p className="text-muted">Credentials</p><p className="mt-1 font-mono font-medium">{data.account.userId}</p><p className="mt-1 font-mono text-xs text-muted">Temporary password shown once after creation</p></div>
                 </div>
               </>
             )}
 
             <div className="mt-8 flex justify-between">
-              <button type="button" disabled={step === 0 || loading} onClick={() => setStep((s) => s - 1)} className="rounded-full border border-white/[0.08] px-6 py-2.5 text-sm disabled:opacity-40">Back</button>
+              <button type="button" disabled={step === 0 || loading} onClick={() => setStep((s) => s - 1)} className="rounded-full border border-border px-6 py-2.5 text-sm disabled:opacity-40">Back</button>
               {step < 4 ? (
                 <button type="button" onClick={() => setStep((s) => s + 1)} className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-background">Continue</button>
               ) : (

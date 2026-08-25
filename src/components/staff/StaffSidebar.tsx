@@ -76,9 +76,9 @@ export function StaffSidebar({ user, open, collapsed, onClose, onToggleCollapse 
 
   const content = (
     <div className="flex h-full flex-col">
-      <div className="flex h-16 items-center justify-between border-b border-white/[0.06] px-4">
+      <div className="flex h-16 items-center justify-between border-b border-border px-4">
         {!collapsed && <Link href="/staff/dashboard" className="text-xs font-semibold tracking-[0.15em] text-accent">STAFF PORTAL</Link>}
-        <button type="button" onClick={onToggleCollapse} className="hidden rounded-lg p-2 text-muted hover:text-white lg:flex" aria-label="Collapse">
+        <button type="button" onClick={onToggleCollapse} className="hidden rounded-lg p-2 text-muted hover:text-foreground lg:flex" aria-label="Collapse">
           <ChevronLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
         </button>
         <button type="button" onClick={onClose} className="rounded-lg p-2 text-muted lg:hidden"><X className="h-5 w-5" /></button>
@@ -93,7 +93,7 @@ export function StaffSidebar({ user, open, collapsed, onClose, onToggleCollapse 
                 const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                 return (
                   <li key={item.href}>
-                    <Link href={item.href} onClick={onClose} className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all", active ? "bg-accent/10 text-accent" : "text-muted hover:bg-white/[0.04] hover:text-white", collapsed && "justify-center px-2")}>
+                    <Link href={item.href} onClick={onClose} className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all", active ? "bg-accent/10 text-accent" : "text-muted hover:bg-glass hover:text-foreground", collapsed && "justify-center px-2")}>
                       <Icon className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                       {!collapsed && <span>{item.label}</span>}
                     </Link>
@@ -109,12 +109,12 @@ export function StaffSidebar({ user, open, collapsed, onClose, onToggleCollapse 
 
   return (
     <>
-      <aside className={cn("fixed inset-y-0 left-0 z-40 hidden border-r border-white/[0.06] bg-surface/95 backdrop-blur-xl lg:block", collapsed ? "w-[72px]" : "w-64")}>{content}</aside>
+      <aside className={cn("fixed inset-y-0 left-0 z-40 hidden border-r border-border bg-surface/95 backdrop-blur-xl lg:block", collapsed ? "w-[72px]" : "w-64")}>{content}</aside>
       <AnimatePresence>
         {open && (
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={onClose} />
-            <motion.aside initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }} className="fixed inset-y-0 left-0 z-50 w-64 border-r border-white/[0.06] bg-surface lg:hidden">{content}</motion.aside>
+            <motion.aside initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }} className="fixed inset-y-0 left-0 z-50 w-64 border-r border-border bg-surface lg:hidden">{content}</motion.aside>
           </>
         )}
       </AnimatePresence>

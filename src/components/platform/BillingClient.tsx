@@ -94,7 +94,7 @@ export function BillingClient({ user, invoicesOnly }: { user: SafeUser; invoices
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Object.entries(overview.usage).map(([key, val]) => (
-          <div key={key} className="rounded-2xl border border-white/10 bg-surface/50 p-4">
+          <div key={key} className="rounded-2xl border border-border bg-surface/50 p-4">
             <div className="text-xs uppercase text-muted">{key}</div>
             <div className="mt-2 text-2xl font-semibold">
               {val.used}
@@ -107,7 +107,7 @@ export function BillingClient({ user, invoicesOnly }: { user: SafeUser; invoices
       <h2 className="mt-10 text-lg font-semibold">Plans</h2>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {plans.map((p) => (
-          <div key={p.planId} className="rounded-2xl border border-white/10 bg-surface/50 p-5">
+          <div key={p.planId} className="rounded-2xl border border-border bg-surface/50 p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="font-semibold">{p.name}</h3>
@@ -124,7 +124,7 @@ export function BillingClient({ user, invoicesOnly }: { user: SafeUser; invoices
               type="button"
               disabled={busy === p.planId || overview.subscription.planId === p.planId}
               onClick={() => upgrade(p.planId)}
-              className="mt-4 rounded-xl border border-white/10 px-3 py-1.5 text-sm hover:border-accent/40 disabled:opacity-40"
+              className="mt-4 rounded-xl border border-border px-3 py-1.5 text-sm hover:border-accent/40 disabled:opacity-40"
             >
               {overview.subscription.planId === p.planId
                 ? "Current plan"
@@ -155,9 +155,9 @@ function InvoiceTable({
   invoices: Overview["invoices"];
 }) {
   return (
-    <div className="mt-3 overflow-x-auto rounded-2xl border border-white/10">
+    <div className="mt-3 overflow-x-auto rounded-2xl border border-border">
       <table className="w-full min-w-[520px] text-left text-sm">
-        <thead className="border-b border-white/10 text-xs uppercase text-muted">
+        <thead className="border-b border-border text-xs uppercase text-muted">
           <tr>
             <th className="px-4 py-3">Invoice</th>
             <th className="px-4 py-3">Amount</th>

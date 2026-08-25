@@ -181,7 +181,7 @@ export function AdminSidebar({ open, collapsed, onClose, onToggleCollapse }: Adm
 
   const content = (
     <div className="flex h-full flex-col">
-      <div className="flex h-16 items-center justify-between border-b border-white/[0.06] px-4">
+      <div className="flex h-16 items-center justify-between border-b border-border px-4">
         {!collapsed && (
           <Link href="/admin/dashboard" className="text-xs font-semibold tracking-[0.15em] text-accent">
             AI CAMPUS GUARDIAN
@@ -190,12 +190,12 @@ export function AdminSidebar({ open, collapsed, onClose, onToggleCollapse }: Adm
         <button
           type="button"
           onClick={onToggleCollapse}
-          className="hidden rounded-lg p-2 text-muted hover:bg-white/[0.04] hover:text-white lg:flex"
+          className="hidden rounded-lg p-2 text-muted hover:bg-glass hover:text-foreground lg:flex"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           <ChevronLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
         </button>
-        <button type="button" onClick={onClose} className="rounded-lg p-2 text-muted hover:text-white lg:hidden" aria-label="Close menu">
+        <button type="button" onClick={onClose} className="rounded-lg p-2 text-muted hover:text-foreground lg:hidden" aria-label="Close menu">
           <X className="h-5 w-5" />
         </button>
       </div>
@@ -216,7 +216,7 @@ export function AdminSidebar({ open, collapsed, onClose, onToggleCollapse }: Adm
                       onClick={onClose}
                       className={cn(
                         "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all",
-                        active ? "bg-accent/10 text-accent" : "text-muted hover:bg-white/[0.04] hover:text-white",
+                        active ? "bg-accent/10 text-accent" : "text-muted hover:bg-glass hover:text-foreground",
                         collapsed && "justify-center px-2"
                       )}
                       title={collapsed ? item.label : undefined}
@@ -236,14 +236,14 @@ export function AdminSidebar({ open, collapsed, onClose, onToggleCollapse }: Adm
 
   return (
     <>
-      <aside className={cn("fixed inset-y-0 left-0 z-40 hidden border-r border-white/[0.06] bg-surface/95 backdrop-blur-xl transition-all lg:block", collapsed ? "w-[72px]" : "w-64")}>
+      <aside className={cn("fixed inset-y-0 left-0 z-40 hidden border-r border-border bg-surface/95 backdrop-blur-xl transition-all lg:block", collapsed ? "w-[72px]" : "w-64")}>
         {content}
       </aside>
       <AnimatePresence>
         {open && (
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-black/60 lg:hidden" onClick={onClose} />
-            <motion.aside initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }} transition={{ type: "spring", stiffness: 300, damping: 30 }} className="fixed inset-y-0 left-0 z-50 w-64 border-r border-white/[0.06] bg-surface lg:hidden">
+            <motion.aside initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }} transition={{ type: "spring", stiffness: 300, damping: 30 }} className="fixed inset-y-0 left-0 z-50 w-64 border-r border-border bg-surface lg:hidden">
               {content}
             </motion.aside>
           </>

@@ -255,7 +255,7 @@ export function DigitalCampusMapClient({
       )}
     >
       {/* Header */}
-      <header className="flex flex-wrap items-center gap-3 rounded-xl border border-white/10 bg-[#0b1220] px-4 py-3">
+      <header className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-[#0b1220] px-4 py-3">
         <div className="flex items-center gap-2">
           <MapIcon className="h-5 w-5 text-sky-400" />
           <div>
@@ -267,7 +267,7 @@ export function DigitalCampusMapClient({
         </div>
 
         <select
-          className="rounded-lg border border-white/10 bg-black/40 px-2 py-1.5 text-xs"
+          className="rounded-lg border border-border bg-black/40 px-2 py-1.5 text-xs"
           value={(bootstrap?.campus as { campusId?: string } | undefined)?.campusId ?? ""}
           onChange={() => undefined}
           aria-label="Campus selector"
@@ -279,7 +279,7 @@ export function DigitalCampusMapClient({
           ))}
         </select>
 
-        <div className="flex min-w-[180px] flex-1 items-center gap-2 rounded-lg border border-white/10 bg-black/30 px-2">
+        <div className="flex min-w-[180px] flex-1 items-center gap-2 rounded-lg border border-border bg-black/30 px-2">
           <Search className="h-3.5 w-3.5 text-muted" />
           <input
             value={search}
@@ -292,7 +292,7 @@ export function DigitalCampusMapClient({
         </div>
 
         <select
-          className="rounded-lg border border-white/10 bg-black/40 px-2 py-1.5 text-xs"
+          className="rounded-lg border border-border bg-black/40 px-2 py-1.5 text-xs"
           value={mode}
           onChange={(e) => updateUrl({ mode: e.target.value })}
           aria-label="Map mode"
@@ -305,7 +305,7 @@ export function DigitalCampusMapClient({
         </select>
 
         <select
-          className="rounded-lg border border-white/10 bg-black/40 px-2 py-1.5 text-xs"
+          className="rounded-lg border border-border bg-black/40 px-2 py-1.5 text-xs"
           value={timeRange}
           onChange={(e) => updateUrl({ range: e.target.value })}
           aria-label="Time range"
@@ -319,7 +319,7 @@ export function DigitalCampusMapClient({
         <Link href="/ai-copilot" className="rounded-lg border border-accent/30 px-2 py-1.5 text-xs text-accent">
           AI Assistant
         </Link>
-        <Link href="/admin/notifications" className="rounded-lg border border-white/10 px-2 py-1.5 text-xs">
+        <Link href="/admin/notifications" className="rounded-lg border border-border px-2 py-1.5 text-xs">
           Notifications
         </Link>
 
@@ -338,7 +338,7 @@ export function DigitalCampusMapClient({
 
         <button
           type="button"
-          className="rounded-lg border border-white/10 px-2 py-1.5 text-xs"
+          className="rounded-lg border border-border px-2 py-1.5 text-xs"
           onClick={() => setListMode((v) => !v)}
         >
           {listMode ? "Map view" : "List view"}
@@ -365,7 +365,7 @@ export function DigitalCampusMapClient({
 
       <div className="grid flex-1 gap-3 lg:grid-cols-[240px_minmax(0,1fr)_300px]">
         {/* Sidebar layers */}
-        <aside className="rounded-xl border border-white/10 bg-[#0b1220] p-3" aria-label="Map layers">
+        <aside className="rounded-xl border border-border bg-[#0b1220] p-3" aria-label="Map layers">
           <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted">
             <Layers className="h-3.5 w-3.5" /> Layers
           </p>
@@ -384,7 +384,7 @@ export function DigitalCampusMapClient({
             ))}
           </ul>
 
-          <div className="mt-4 border-t border-white/10 pt-3">
+          <div className="mt-4 border-t border-border pt-3">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Legend</p>
             <ul className="space-y-1.5">
               {LEGEND_ITEMS.map((item) => (
@@ -411,7 +411,7 @@ export function DigitalCampusMapClient({
         </aside>
 
         {/* Map / list */}
-        <section className="relative min-h-[520px] overflow-hidden rounded-xl border border-white/10 bg-[#060a12]">
+        <section className="relative min-h-[520px] overflow-hidden rounded-xl border border-border bg-[#060a12]">
           {loading && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 text-sm">
               Loading map…
@@ -428,7 +428,7 @@ export function DigitalCampusMapClient({
                   (item) => (
                     <li
                       key={`${item.kind}-${item.id}`}
-                      className="rounded-lg border border-white/10 px-3 py-2 text-xs"
+                      className="rounded-lg border border-border px-3 py-2 text-xs"
                     >
                       <span className="font-semibold uppercase text-muted">{item.kind}</span> — {item.title}
                       <span className="ml-2 text-muted">{item.meta}</span>
@@ -493,7 +493,7 @@ export function DigitalCampusMapClient({
 
         {/* Detail + AI + timeline */}
         <aside className="flex flex-col gap-3">
-          <div className="rounded-xl border border-white/10 bg-[#0b1220] p-3">
+          <div className="rounded-xl border border-border bg-[#0b1220] p-3">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Detail</p>
             {!detail ? (
               <p className="text-xs text-muted">Select a marker for details.</p>
@@ -511,7 +511,7 @@ export function DigitalCampusMapClient({
               onChange={(e) => setAiQ(e.target.value)}
               rows={2}
               placeholder='e.g. "Which areas are becoming higher risk?"'
-              className="w-full rounded-lg border border-white/10 bg-black/30 p-2 text-xs outline-none"
+              className="w-full rounded-lg border border-border bg-black/30 p-2 text-xs outline-none"
             />
             <button
               type="button"
@@ -520,14 +520,14 @@ export function DigitalCampusMapClient({
             >
               Ask
             </button>
-            {aiAnswer && <p className="mt-2 text-xs leading-relaxed text-white/80">{aiAnswer}</p>}
+            {aiAnswer && <p className="mt-2 text-xs leading-relaxed text-foreground/80">{aiAnswer}</p>}
           </div>
 
-          <div className="max-h-64 overflow-auto rounded-xl border border-white/10 bg-[#0b1220] p-3">
+          <div className="max-h-64 overflow-auto rounded-xl border border-border bg-[#0b1220] p-3">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Map Activity</p>
             <ul className="space-y-2">
               {activity.map((e, i) => (
-                <li key={`${e.at}-${i}`} className="border-l-2 border-white/10 pl-2 text-[11px]">
+                <li key={`${e.at}-${i}`} className="border-l-2 border-border pl-2 text-[11px]">
                   <span className="text-muted">
                     {e.at ? new Date(String(e.at)).toLocaleTimeString() : ""}
                   </span>

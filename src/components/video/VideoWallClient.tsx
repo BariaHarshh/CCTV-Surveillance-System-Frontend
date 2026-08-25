@@ -44,7 +44,7 @@ export function VideoWallClient({ user }: { user: SafeUser }) {
           <Link
             key={String(c.id)}
             href={`/video/cameras/${encodeURIComponent(String(c.cameraId))}`}
-            className="aspect-video rounded-lg border border-white/10 bg-black/60 p-3 hover:border-sky-500/40"
+            className="aspect-video rounded-lg border border-border bg-black/60 p-3 hover:border-sky-500/40"
           >
             <p className="text-xs font-medium">{String(c.name)}</p>
             <p className="mt-1 text-[10px] text-muted">{String(c.status)} — not shown as live unless stream is live</p>

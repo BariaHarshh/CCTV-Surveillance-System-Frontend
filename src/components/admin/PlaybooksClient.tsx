@@ -63,9 +63,9 @@ export function PlaybooksClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">Emergency Playbooks</h1>
       <p className="mt-1 text-muted">Organization-approved emergency response workflows.</p>
 
-      <div className="mt-6 flex flex-wrap gap-2 rounded-xl border border-white/[0.08] p-4">
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Playbook name" className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm" />
-        <select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm">
+      <div className="mt-6 flex flex-wrap gap-2 rounded-xl border border-border p-4">
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Playbook name" className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm" />
+        <select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-lg border border-border bg-black/20 px-3 py-2 text-sm">
           {PLAYBOOK_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
         <button type="button" onClick={create} className="rounded-lg bg-accent/20 px-4 py-2 text-sm text-accent">Create</button>
@@ -73,7 +73,7 @@ export function PlaybooksClient({ user }: { user: SafeUser }) {
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {playbooks.map((p) => (
-          <div key={String(p.id)} className="rounded-2xl border border-white/[0.08] bg-surface/50 p-5">
+          <div key={String(p.id)} className="rounded-2xl border border-border bg-surface/50 p-5">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <h3 className="font-semibold">{String(p.name)}</h3>

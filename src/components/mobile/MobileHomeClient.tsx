@@ -74,9 +74,9 @@ export function MobileHomeClient({ user }: { user: SafeUser }) {
           { label: "Alerts", value: s.alerts ?? "—" },
           { label: "Incidents", value: s.assignedIncidents ?? "—" },
         ].map((c) => (
-          <div key={c.label} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-center">
+          <div key={c.label} className="rounded-2xl border border-border bg-glass p-3 text-center">
             <p className="text-xl font-semibold">{String(c.value)}</p>
-            <p className="text-[10px] uppercase tracking-wide text-white/50">{c.label}</p>
+            <p className="text-[10px] uppercase tracking-wide text-muted">{c.label}</p>
           </div>
         ))}
       </div>
@@ -88,7 +88,7 @@ export function MobileHomeClient({ user }: { user: SafeUser }) {
       )}
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-white/50">My status</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">My status</h2>
         <div className="mt-2 flex flex-wrap gap-2">
           {FIELD_STAFF_STATUSES.map((st) => (
             <button
@@ -98,7 +98,7 @@ export function MobileHomeClient({ user }: { user: SafeUser }) {
               className={`min-h-11 rounded-xl border px-3 text-xs ${
                 data?.myStatus === st
                   ? "border-sky-400/50 bg-sky-500/20 text-sky-100"
-                  : "border-white/10 text-white/70"
+                  : "border-border text-foreground/70"
               }`}
             >
               {st.replace(/_/g, " ")}
@@ -108,13 +108,13 @@ export function MobileHomeClient({ user }: { user: SafeUser }) {
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-white/50">Quick actions</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Quick actions</h2>
         <div className="mt-2 grid grid-cols-2 gap-2">
           {(data?.quickActions || []).map((a) => (
             <Link
               key={a.href}
               href={a.href}
-              className="flex min-h-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-sm font-medium"
+              className="flex min-h-12 items-center justify-center rounded-xl border border-border bg-glass text-sm font-medium"
             >
               {a.label}
             </Link>
@@ -123,15 +123,15 @@ export function MobileHomeClient({ user }: { user: SafeUser }) {
       </section>
 
       <section className="mt-6 space-y-2">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-white/50">Assigned work</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Assigned work</h2>
         {(data?.tasks || []).slice(0, 5).map((t) => (
           <Link
             key={String(t.id)}
             href={String(t.href)}
-            className="block rounded-xl border border-white/10 p-3 text-sm"
+            className="block rounded-xl border border-border p-3 text-sm"
           >
             <p className="font-medium">{String(t.title)}</p>
-            <p className="text-xs text-white/50">
+            <p className="text-xs text-muted">
               {String(t.status)} · {String(t.priority)}
               {t.overdue ? " · Overdue" : ""}
               {t.demo ? " · DEMO DATA" : ""}
@@ -202,12 +202,12 @@ export function MobileReportClient({ user }: { user: SafeUser }) {
     <MobileShell user={user} title="Report Incident">
       <p className="text-sm text-white/60">Quick field report — minimal fields during emergencies.</p>
       <div className="mt-4 space-y-3">
-        <label className="block text-xs text-white/50">
+        <label className="block text-xs text-muted">
           Type
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="mt-1 w-full min-h-11 rounded-xl border border-white/10 bg-black/40 px-3 text-sm"
+            className="mt-1 w-full min-h-11 rounded-xl border border-border bg-black/40 px-3 text-sm"
           >
             {["OTHER", "SECURITY", "MEDICAL", "FIRE", "FACILITIES"].map((t) => (
               <option key={t} value={t}>
@@ -216,12 +216,12 @@ export function MobileReportClient({ user }: { user: SafeUser }) {
             ))}
           </select>
         </label>
-        <label className="block text-xs text-white/50">
+        <label className="block text-xs text-muted">
           Severity
           <select
             value={severity}
             onChange={(e) => setSeverity(e.target.value)}
-            className="mt-1 w-full min-h-11 rounded-xl border border-white/10 bg-black/40 px-3 text-sm"
+            className="mt-1 w-full min-h-11 rounded-xl border border-border bg-black/40 px-3 text-sm"
           >
             {["LOW", "MEDIUM", "HIGH", "CRITICAL"].map((t) => (
               <option key={t} value={t}>
@@ -230,30 +230,30 @@ export function MobileReportClient({ user }: { user: SafeUser }) {
             ))}
           </select>
         </label>
-        <label className="block text-xs text-white/50">
+        <label className="block text-xs text-muted">
           Location
           <input
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="mt-1 w-full min-h-11 rounded-xl border border-white/10 bg-black/40 px-3 text-sm"
+            className="mt-1 w-full min-h-11 rounded-xl border border-border bg-black/40 px-3 text-sm"
             placeholder="Building / area"
           />
         </label>
-        <label className="block text-xs text-white/50">
+        <label className="block text-xs text-muted">
           Title
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 w-full min-h-11 rounded-xl border border-white/10 bg-black/40 px-3 text-sm"
+            className="mt-1 w-full min-h-11 rounded-xl border border-border bg-black/40 px-3 text-sm"
           />
         </label>
-        <label className="block text-xs text-white/50">
+        <label className="block text-xs text-muted">
           Description
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={4}
-            className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-xl border border-border bg-black/40 px-3 py-2 text-sm"
           />
         </label>
         <div className="flex gap-2">

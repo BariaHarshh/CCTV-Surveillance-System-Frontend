@@ -55,7 +55,7 @@ export function StaffCampusClient({ user }: { user: SafeUser }) {
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">{String(campus?.name ?? "Campus")}</h2>
           <p className="mt-1 text-sm text-muted">{String(campus?.type ?? "")}</p>
           <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
@@ -65,7 +65,7 @@ export function StaffCampusClient({ user }: { user: SafeUser }) {
             <div><dt className="text-muted">AI Occupancy</dt><dd className="text-amber-300/90">Coming Soon</dd></div>
           </dl>
         </section>
-        <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+        <section className="rounded-2xl border border-border bg-surface/50 p-6">
           <h2 className="font-semibold">Campus Structure</h2>
           <div className="mt-4 max-h-80 overflow-y-auto">
             {hierarchy ? <CampusHierarchyTree node={hierarchy} /> : !loading && <p className="text-sm text-muted">No structure available.</p>}

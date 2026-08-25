@@ -134,29 +134,29 @@ export function StaffListClient({ user }: { user: SafeUser }) {
       <div className="mt-6 flex flex-col gap-3 lg:flex-row">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name, ID, email, department..." className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/40" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name, ID, email, department..." className="w-full rounded-xl border border-border bg-glass py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/40" />
         </div>
-        <select value={status} onChange={(e) => setStatus(e.target.value)} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm">
+        <select value={status} onChange={(e) => setStatus(e.target.value)} className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm">
           <option value="ALL">All Status</option>
           <option value="ACTIVE">Active</option>
           <option value="INACTIVE">Inactive</option>
           <option value="SUSPENDED">Suspended</option>
           <option value="PENDING">Pending</option>
         </select>
-        <select value={department} onChange={(e) => setDepartment(e.target.value)} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm">
+        <select value={department} onChange={(e) => setDepartment(e.target.value)} className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm">
           <option value="ALL">All Departments</option>
           {departments.map((d) => <option key={d} value={d}>{d}</option>)}
         </select>
-        <select value={online} onChange={(e) => setOnline(e.target.value)} className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm">
+        <select value={online} onChange={(e) => setOnline(e.target.value)} className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm">
           <option value="ALL">All</option>
           <option value="online">Online</option>
           <option value="offline">Offline</option>
         </select>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-white/[0.08] bg-surface/30">
+      <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-surface/30">
         {loading ? (
-          <div className="space-y-2 p-4">{Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-14 animate-pulse rounded-xl bg-white/[0.04]" />)}</div>
+          <div className="space-y-2 p-4">{Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-14 animate-pulse rounded-xl bg-glass" />)}</div>
         ) : staff.length === 0 ? (
           <>
             <EmptyState title="No staff members" description="Create your first staff account to get started." icon="inbox" />
@@ -168,7 +168,7 @@ export function StaffListClient({ user }: { user: SafeUser }) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px] text-left text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-xs text-muted">
+                <tr className="border-b border-border text-xs text-muted">
                   <th className="px-4 py-3 font-medium">Staff</th>
                   <th className="px-4 py-3 font-medium">Staff ID</th>
                   <th className="px-4 py-3 font-medium">Department</th>
@@ -180,7 +180,7 @@ export function StaffListClient({ user }: { user: SafeUser }) {
               </thead>
               <tbody>
                 {staff.map((s) => (
-                  <tr key={s.id} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                  <tr key={s.id} className="border-b border-white/[0.04] hover:bg-glass">
                     <td className="px-4 py-3">
                       <div className="font-medium">{s.name}</div>
                       <div className="text-xs text-muted">{s.email}</div>
@@ -194,15 +194,15 @@ export function StaffListClient({ user }: { user: SafeUser }) {
                     </td>
                     <td className="px-4 py-3 text-muted">{s.lastLogin ? formatRelativeTime(new Date(s.lastLogin)) : "Never"}</td>
                     <td className="relative px-4 py-3">
-                      <button type="button" onClick={() => setMenuOpen(menuOpen === s.id ? null : s.id)} className="rounded-lg p-2 hover:bg-white/[0.06]">
+                      <button type="button" onClick={() => setMenuOpen(menuOpen === s.id ? null : s.id)} className="rounded-lg p-2 hover:bg-glass-hover">
                         {actionLoading === s.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <MoreHorizontal className="h-4 w-4" />}
                       </button>
                       {menuOpen === s.id && (
-                        <div className="absolute right-4 z-10 mt-1 w-44 rounded-xl border border-white/[0.08] bg-surface py-1 shadow-xl">
-                          <Link href={`/admin/staff/${s.id}`} className="flex items-center gap-2 px-3 py-2 hover:bg-white/[0.04]"><Eye className="h-3.5 w-3.5" /> View</Link>
-                          {s.status !== "ACTIVE" && <button type="button" onClick={() => handleStatus(s.id, "activate", "ACTIVE")} className="w-full px-3 py-2 text-left hover:bg-white/[0.04]">Activate</button>}
-                          {s.status === "ACTIVE" && <button type="button" onClick={() => handleStatus(s.id, "suspend", "SUSPENDED")} className="w-full px-3 py-2 text-left hover:bg-white/[0.04]">Suspend</button>}
-                          <button type="button" onClick={() => handleResetPassword(s.id)} className="w-full px-3 py-2 text-left hover:bg-white/[0.04]">Reset Password</button>
+                        <div className="absolute right-4 z-10 mt-1 w-44 rounded-xl border border-border bg-surface py-1 shadow-xl">
+                          <Link href={`/admin/staff/${s.id}`} className="flex items-center gap-2 px-3 py-2 hover:bg-glass"><Eye className="h-3.5 w-3.5" /> View</Link>
+                          {s.status !== "ACTIVE" && <button type="button" onClick={() => handleStatus(s.id, "activate", "ACTIVE")} className="w-full px-3 py-2 text-left hover:bg-glass">Activate</button>}
+                          {s.status === "ACTIVE" && <button type="button" onClick={() => handleStatus(s.id, "suspend", "SUSPENDED")} className="w-full px-3 py-2 text-left hover:bg-glass">Suspend</button>}
+                          <button type="button" onClick={() => handleResetPassword(s.id)} className="w-full px-3 py-2 text-left hover:bg-glass">Reset Password</button>
                         </div>
                       )}
                     </td>

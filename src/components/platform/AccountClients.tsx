@@ -10,7 +10,7 @@ export function ProfileClient({ user }: { user: SafeUser }) {
     <AdminShell user={user}>
       <h1 className="text-2xl font-bold">My profile</h1>
       <p className="mt-1 text-muted">Account details for {user.name}</p>
-      <dl className="mt-8 grid gap-4 rounded-2xl border border-white/10 bg-surface/50 p-6 sm:grid-cols-2">
+      <dl className="mt-8 grid gap-4 rounded-2xl border border-border bg-surface/50 p-6 sm:grid-cols-2">
         <div>
           <dt className="text-xs text-muted">Name</dt>
           <dd className="font-medium">{user.name}</dd>
@@ -88,7 +88,7 @@ export function SessionsClient({ user }: { user: SafeUser }) {
       <button
         type="button"
         onClick={logoutOthers}
-        className="mt-6 rounded-xl border border-white/10 px-4 py-2 text-sm hover:border-accent/40"
+        className="mt-6 rounded-xl border border-border px-4 py-2 text-sm hover:border-accent/40"
       >
         Sign out other sessions
       </button>
@@ -98,7 +98,7 @@ export function SessionsClient({ user }: { user: SafeUser }) {
       ) : (
         <ul className="mt-6 space-y-2">
           {sessions.map((s) => (
-            <li key={s.id} className="rounded-2xl border border-white/10 bg-surface/40 px-4 py-3">
+            <li key={s.id} className="rounded-2xl border border-border bg-surface/40 px-4 py-3">
               <div className="font-medium">
                 {s.device}
                 {s.isCurrent && <span className="ml-2 text-xs text-accent">Current</span>}
@@ -152,7 +152,7 @@ export function NotificationPrefsClient({ user }: { user: SafeUser }) {
       {loading ? (
         <Loader2 className="mt-8 h-8 w-8 animate-spin text-accent" />
       ) : (
-        <section className="mt-8 space-y-3 rounded-2xl border border-white/10 bg-surface/50 p-6">
+        <section className="mt-8 space-y-3 rounded-2xl border border-border bg-surface/50 p-6">
           {(Object.keys(channels) as Array<keyof typeof channels>).map((key) => (
             <label key={key} className="flex items-center gap-3 text-sm">
               <input

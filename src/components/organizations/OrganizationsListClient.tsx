@@ -171,11 +171,11 @@ export function OrganizationsListClient({ user }: { user: SafeUser }) {
             value={q}
             onChange={(e) => { setQ(e.target.value); setPage(1); }}
             placeholder="Search by name, ID, or city..."
-            className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/40"
+            className="w-full rounded-xl border border-border bg-glass py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/40"
           />
         </div>
         <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}
-          className="rounded-xl border border-white/[0.08] bg-surface px-3 py-2 text-sm">
+          className="rounded-xl border border-border bg-surface px-3 py-2 text-sm">
           <option value="ALL">All Status</option>
           <option value="ACTIVE">Active</option>
           <option value="PENDING">Pending</option>
@@ -183,16 +183,16 @@ export function OrganizationsListClient({ user }: { user: SafeUser }) {
           <option value="INACTIVE">Inactive</option>
         </select>
         <select value={type} onChange={(e) => { setType(e.target.value); setPage(1); }}
-          className="rounded-xl border border-white/[0.08] bg-surface px-3 py-2 text-sm">
+          className="rounded-xl border border-border bg-surface px-3 py-2 text-sm">
           <option value="ALL">All Types</option>
           {ORGANIZATION_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
-        <button type="button" onClick={fetchData} className="rounded-xl border border-white/[0.08] px-3 py-2 text-sm">
+        <button type="button" onClick={fetchData} className="rounded-xl border border-border px-3 py-2 text-sm">
           <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
         </button>
       </div>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 overflow-hidden rounded-2xl border border-white/[0.06]">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 overflow-hidden rounded-2xl border border-border">
         {loading && orgs.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-6 w-6 animate-spin text-accent" />
@@ -209,7 +209,7 @@ export function OrganizationsListClient({ user }: { user: SafeUser }) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left text-sm">
               <thead>
-                <tr className="border-b border-white/[0.06] text-xs uppercase tracking-wider text-muted">
+                <tr className="border-b border-border text-xs uppercase tracking-wider text-muted">
                   <th className="px-4 py-3 font-medium">Organization</th>
                   <th className="px-4 py-3 font-medium">Type</th>
                   <th className="px-4 py-3 font-medium">Location</th>
@@ -223,7 +223,7 @@ export function OrganizationsListClient({ user }: { user: SafeUser }) {
               </thead>
               <tbody>
                 {orgs.map((org) => (
-                  <tr key={org.id} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                  <tr key={org.id} className="border-b border-white/[0.04] hover:bg-glass">
                     <td className="px-4 py-3">
                       <Link href={`/super-admin/organizations/${org.id}`} className="font-medium hover:text-accent">
                         {org.name}
@@ -239,27 +239,27 @@ export function OrganizationsListClient({ user }: { user: SafeUser }) {
                     <td className="px-4 py-3 text-muted">{formatRelativeTime(new Date(org.lastActivity))}</td>
                     <td className="relative px-4 py-3">
                       <button type="button" onClick={() => setActionMenu(actionMenu === org.id ? null : org.id)}
-                        className="rounded-lg p-1.5 hover:bg-white/[0.06]">
+                        className="rounded-lg p-1.5 hover:bg-glass-hover">
                         <MoreHorizontal className="h-4 w-4" />
                       </button>
                       {actionMenu === org.id && (
-                        <div className="absolute right-4 z-10 mt-1 w-44 rounded-xl border border-white/[0.08] bg-surface py-1 shadow-xl">
-                          <Link href={`/super-admin/organizations/${org.id}`} className="block px-3 py-2 text-sm hover:bg-white/[0.04]">View</Link>
-                          <Link href={`/super-admin/organizations/${org.id}?tab=settings`} className="block px-3 py-2 text-sm hover:bg-white/[0.04]">Edit</Link>
+                        <div className="absolute right-4 z-10 mt-1 w-44 rounded-xl border border-border bg-surface py-1 shadow-xl">
+                          <Link href={`/super-admin/organizations/${org.id}`} className="block px-3 py-2 text-sm hover:bg-glass">View</Link>
+                          <Link href={`/super-admin/organizations/${org.id}?tab=settings`} className="block px-3 py-2 text-sm hover:bg-glass">Edit</Link>
                           {org.status !== "ACTIVE" && (
-                            <button type="button" className="block w-full px-3 py-2 text-left text-sm hover:bg-white/[0.04]"
+                            <button type="button" className="block w-full px-3 py-2 text-left text-sm hover:bg-glass"
                               onClick={() => { setConfirm({ kind: "status", id: org.id, name: org.name, status: "ACTIVE" }); setActionMenu(null); }}>
                               Activate
                             </button>
                           )}
                           {org.status === "ACTIVE" && (
-                            <button type="button" className="block w-full px-3 py-2 text-left text-sm text-amber-400 hover:bg-white/[0.04]"
+                            <button type="button" className="block w-full px-3 py-2 text-left text-sm text-amber-400 hover:bg-glass"
                               onClick={() => { setConfirm({ kind: "status", id: org.id, name: org.name, status: "SUSPENDED" }); setActionMenu(null); }}>
                               Suspend
                             </button>
                           )}
-                          <Link href={`/super-admin/organizations/${org.id}/admins/new`} className="block px-3 py-2 text-sm hover:bg-white/[0.04]">Create Admin</Link>
-                          <button type="button" className="block w-full px-3 py-2 text-left text-sm text-red-400 hover:bg-white/[0.04]"
+                          <Link href={`/super-admin/organizations/${org.id}/admins/new`} className="block px-3 py-2 text-sm hover:bg-glass">Create Admin</Link>
+                          <button type="button" className="block w-full px-3 py-2 text-left text-sm text-red-400 hover:bg-glass"
                             onClick={() => { setConfirm({ kind: "delete", id: org.id, name: org.name }); setActionMenu(null); }}>
                             Delete
                           </button>
@@ -277,16 +277,16 @@ export function OrganizationsListClient({ user }: { user: SafeUser }) {
       {totalPages > 1 && (
         <div className="mt-4 flex justify-center gap-2">
           <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}
-            className="rounded-lg border border-white/[0.08] px-3 py-1 text-sm disabled:opacity-40">Previous</button>
+            className="rounded-lg border border-border px-3 py-1 text-sm disabled:opacity-40">Previous</button>
           <span className="px-3 py-1 text-sm text-muted">Page {page} of {totalPages}</span>
           <button type="button" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}
-            className="rounded-lg border border-white/[0.08] px-3 py-1 text-sm disabled:opacity-40">Next</button>
+            className="rounded-lg border border-border px-3 py-1 text-sm disabled:opacity-40">Next</button>
         </div>
       )}
 
       {confirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-surface p-6">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-6">
             <h3 className="text-lg font-semibold">
               {confirm.kind === "delete" ? "Delete Organization?" : confirm.status === "SUSPENDED" ? "Suspend Organization?" : "Activate Organization?"}
             </h3>
@@ -298,11 +298,11 @@ export function OrganizationsListClient({ user }: { user: SafeUser }) {
             {confirm.kind === "delete" && (
               <input value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)}
                 placeholder={confirm.name}
-                className="mt-4 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm" />
+                className="mt-4 w-full rounded-xl border border-border bg-glass px-4 py-2.5 text-sm" />
             )}
             <div className="mt-6 flex justify-end gap-3">
               <button type="button" onClick={() => { setConfirm(null); setConfirmInput(""); }}
-                className="rounded-full border border-white/[0.08] px-4 py-2 text-sm">Cancel</button>
+                className="rounded-full border border-border px-4 py-2 text-sm">Cancel</button>
               <button type="button" disabled={actionLoading || (confirm.kind === "delete" && confirmInput !== confirm.name)}
                 onClick={performConfirm}
                 className="rounded-full bg-red-500/90 px-4 py-2 text-sm font-semibold text-white disabled:opacity-40">

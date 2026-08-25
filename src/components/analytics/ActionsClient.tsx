@@ -68,23 +68,23 @@ export function ActionsClient({ user }: { user: SafeUser }) {
         <KpiCard label="Completion Rate" value={stats.completionRate != null ? `${stats.completionRate}%` : "—"} />
       </div>
 
-      <form onSubmit={createAction} className="mt-6 space-y-3 rounded-2xl border border-white/[0.08] bg-surface/40 p-5">
+      <form onSubmit={createAction} className="mt-6 space-y-3 rounded-2xl border border-border bg-surface/40 p-5">
         <h2 className="text-sm font-semibold">Create Corrective Action</h2>
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Investigate lighting / Review camera placement"
-          className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm"
         />
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description"
           rows={2}
-          className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm"
         />
         <div className="flex flex-wrap gap-2">
-          <select value={priority} onChange={(e) => setPriority(e.target.value)} className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm">
+          <select value={priority} onChange={(e) => setPriority(e.target.value)} className="rounded-lg border border-border bg-black/30 px-3 py-2 text-sm">
             {ACTION_PRIORITIES.map((p) => (
               <option key={p} value={p}>{p}</option>
             ))}
@@ -97,7 +97,7 @@ export function ActionsClient({ user }: { user: SafeUser }) {
 
       <div className="mt-6 space-y-2">
         {actions.map((a) => (
-          <div key={a.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.08] bg-surface/40 px-4 py-3">
+          <div key={a.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface/40 px-4 py-3">
             <div>
               <p className="text-sm font-medium">{a.title}</p>
               <p className="text-[10px] text-muted">{a.actionId} · {a.priority} · {a.status}{a.dueAt ? ` · due ${new Date(a.dueAt).toLocaleDateString()}` : ""}</p>
@@ -105,7 +105,7 @@ export function ActionsClient({ user }: { user: SafeUser }) {
             {a.status !== "COMPLETED" && a.status !== "CANCELLED" && (
               <button
                 type="button"
-                className="rounded-lg border border-white/10 px-3 py-1 text-xs hover:text-accent"
+                className="rounded-lg border border-border px-3 py-1 text-xs hover:text-accent"
                 onClick={async () => {
                   await fetch(`/api/actions/${a.id}/complete`, { method: "POST", credentials: "include" });
                   load();
@@ -117,7 +117,7 @@ export function ActionsClient({ user }: { user: SafeUser }) {
           </div>
         ))}
         {actions.length === 0 && (
-          <p className="rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-muted">No corrective actions yet.</p>
+          <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted">No corrective actions yet.</p>
         )}
       </div>
     </AdminShell>

@@ -59,7 +59,7 @@ export function EventsClient({ user, portal }: { user: SafeUser; portal: "admin"
         </div>
         <div className="flex items-center gap-3">
           <RealtimeIndicator status={realtimeStatus} />
-          <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted hover:text-white">
+          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
             <RefreshCw className="h-4 w-4" />
           </button>
         </div>
@@ -72,10 +72,10 @@ export function EventsClient({ user, portal }: { user: SafeUser; portal: "admin"
             value={q}
             onChange={(e) => { setQ(e.target.value); setPage(1); }}
             placeholder="Search events..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/50"
+            className="w-full rounded-xl border border-border bg-glass py-2.5 pl-10 pr-4 text-sm outline-none focus:border-accent/50"
           />
         </div>
-        <select value={severity} onChange={(e) => { setSeverity(e.target.value); setPage(1); }} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm">
+        <select value={severity} onChange={(e) => { setSeverity(e.target.value); setPage(1); }} className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm">
           <option value="ALL">All severities</option>
           {["CRITICAL", "HIGH", "MEDIUM", "LOW"].map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
@@ -83,18 +83,18 @@ export function EventsClient({ user, portal }: { user: SafeUser; portal: "admin"
           value={eventType}
           onChange={(e) => { setEventType(e.target.value); setPage(1); }}
           placeholder="Event type filter"
-          className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm"
+          className="rounded-xl border border-border bg-glass px-4 py-2.5 text-sm"
         />
       </div>
 
       <div className="mt-6 space-y-2">
         {loading ? (
-          Array.from({ length: 8 }).map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-white/[0.04]" />)
+          Array.from({ length: 8 }).map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-glass" />)
         ) : events.length === 0 ? (
-          <p className="rounded-xl border border-white/[0.06] p-8 text-center text-muted">No events found.</p>
+          <p className="rounded-xl border border-border p-8 text-center text-muted">No events found.</p>
         ) : (
           events.map((e) => (
-            <Link key={e.id} href={`${base}/events/${e.id}`} className="flex items-center justify-between rounded-xl border border-white/[0.06] px-4 py-4 hover:bg-white/[0.02]">
+            <Link key={e.id} href={`${base}/events/${e.id}`} className="flex items-center justify-between rounded-xl border border-border px-4 py-4 hover:bg-glass">
               <div>
                 <p className="text-xs text-muted">{formatDateTime(e.detectedAt)}</p>
                 <p className="font-medium">{formatEventType(e.eventType)}{e.source === "TEST" ? " (SIMULATED)" : ""}</p>
@@ -107,8 +107,8 @@ export function EventsClient({ user, portal }: { user: SafeUser; portal: "admin"
       </div>
 
       <div className="mt-4 flex justify-end gap-2">
-        <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs disabled:opacity-40">Prev</button>
-        <button type="button" onClick={() => setPage((p) => p + 1)} className="rounded-lg border border-white/10 px-3 py-1.5 text-xs">Next</button>
+        <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-border px-3 py-1.5 text-xs disabled:opacity-40">Prev</button>
+        <button type="button" onClick={() => setPage((p) => p + 1)} className="rounded-lg border border-border px-3 py-1.5 text-xs">Next</button>
       </div>
     </MonitoringPortal>
   );

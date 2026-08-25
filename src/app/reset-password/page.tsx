@@ -103,12 +103,12 @@ function ResetPasswordForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
-              className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 pr-12 text-sm outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
+              className="w-full rounded-xl border border-border bg-glass px-4 py-3 pr-12 text-sm outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -128,7 +128,7 @@ function ResetPasswordForm() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={loading}
-            className="mt-2 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
+            className="mt-2 w-full rounded-xl border border-border bg-glass px-4 py-3 text-sm outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
           />
         </div>
 
@@ -150,7 +150,7 @@ function ResetPasswordForm() {
 
       <Link
         href="/login"
-        className="mt-6 inline-flex items-center gap-2 text-sm text-muted hover:text-white"
+        className="mt-6 inline-flex items-center gap-2 text-sm text-muted hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to Login

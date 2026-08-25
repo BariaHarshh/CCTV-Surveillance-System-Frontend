@@ -136,9 +136,9 @@ export function SuperAdminDashboard({ user }: { user: SafeUser }) {
               />
             </div>
           ) : (
-            <div className="mt-4 overflow-x-auto rounded-2xl border border-white/[0.06]">
+            <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
               <table className="w-full min-w-[640px] text-left text-sm">
-                <thead className="border-b border-white/[0.06] bg-surface/60 text-xs tracking-wider text-muted uppercase">
+                <thead className="border-b border-border bg-surface/60 text-xs tracking-wider text-muted uppercase">
                   <tr>
                     <th className="px-4 py-3">Organization</th>
                     <th className="px-4 py-3">Admins</th>
@@ -150,7 +150,7 @@ export function SuperAdminDashboard({ user }: { user: SafeUser }) {
                 </thead>
                 <tbody>
                   {data?.organizations.slice(0, 5).map((org) => (
-                    <tr key={org.id} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                    <tr key={org.id} className="border-b border-white/[0.04] hover:bg-glass">
                       <td className="px-4 py-3 font-medium">{org.name}</td>
                       <td className="px-4 py-3">{org.admins}</td>
                       <td className="px-4 py-3">{org.staff}</td>
@@ -186,9 +186,9 @@ export function SuperAdminDashboard({ user }: { user: SafeUser }) {
               />
               </div>
             ) : (
-              <div className="mt-4 overflow-x-auto rounded-2xl border border-white/[0.06]">
+              <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-white/[0.06] bg-surface/60 text-xs text-muted uppercase">
+                  <thead className="border-b border-border bg-surface/60 text-xs text-muted uppercase">
                     <tr>
                       <th className="px-4 py-3">Admin</th>
                       <th className="px-4 py-3">Organization</th>
@@ -226,7 +226,7 @@ export function SuperAdminDashboard({ user }: { user: SafeUser }) {
                 data?.activity.slice(0, 8).map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-surface/40 px-4 py-3"
+                    className="flex items-start gap-3 rounded-xl border border-border bg-surface/40 px-4 py-3"
                   >
                     <div className="flex-1">
                       <p className="text-sm font-medium">{item.description}</p>
@@ -248,7 +248,7 @@ export function SuperAdminDashboard({ user }: { user: SafeUser }) {
           <section className="gradient-border rounded-2xl bg-surface/60 p-6">
             <h2 className="text-lg font-semibold">Security Center</h2>
             {loading ? (
-              <div className="mt-4 h-24 animate-pulse rounded-xl bg-white/[0.04]" />
+              <div className="mt-4 h-24 animate-pulse rounded-xl bg-glass" />
             ) : (
               <div className="mt-4 grid grid-cols-2 gap-4">
                 <div>
@@ -280,7 +280,7 @@ export function SuperAdminDashboard({ user }: { user: SafeUser }) {
           <section id="system-health" className="gradient-border rounded-2xl bg-surface/60 p-6">
             <h2 className="text-lg font-semibold">Platform Health</h2>
             {loading ? (
-              <div className="mt-4 h-24 animate-pulse rounded-xl bg-white/[0.04]" />
+              <div className="mt-4 h-24 animate-pulse rounded-xl bg-glass" />
             ) : (
               <div className="mt-4 space-y-3">
                 {[

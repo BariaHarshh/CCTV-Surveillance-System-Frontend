@@ -49,10 +49,10 @@ export function EmergencyReportClient({ user, emergencyId }: { user: SafeUser; e
       <h1 className="mt-4 text-2xl font-bold">Post-Incident Report</h1>
 
       {!em ? (
-        <div className="mt-8 h-40 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="mt-8 h-40 animate-pulse rounded-2xl bg-glass" />
       ) : (
         <div className="mt-6 space-y-6">
-          <section className="rounded-2xl border border-white/[0.08] p-5">
+          <section className="rounded-2xl border border-border p-5">
             <h2 className="text-sm font-semibold">Emergency Summary</h2>
             <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
               <div><dt className="text-muted">ID</dt><dd className="font-mono">{String(em.emergencyId)}</dd></div>
@@ -64,7 +64,7 @@ export function EmergencyReportClient({ user, emergencyId }: { user: SafeUser; e
             </dl>
           </section>
 
-          <section className="rounded-2xl border border-white/[0.08] p-5">
+          <section className="rounded-2xl border border-border p-5">
             <h2 className="text-sm font-semibold">Response Metrics</h2>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               <div className="rounded-lg bg-black/20 p-3"><p className="text-[10px] text-muted">Total Duration</p><p className="text-lg font-bold">{formatDuration(metrics?.totalDurationMs ?? null)}</p></div>
@@ -74,7 +74,7 @@ export function EmergencyReportClient({ user, emergencyId }: { user: SafeUser; e
             <p className="mt-2 text-[10px] text-muted">Metrics use stored server timestamps only.</p>
           </section>
 
-          <section className="rounded-2xl border border-white/[0.08] p-5">
+          <section className="rounded-2xl border border-border p-5">
             <h2 className="text-sm font-semibold">Timeline</h2>
             <ul className="mt-3 space-y-2">
               {((em.timeline as Array<Record<string, string>>) ?? []).map((t, i) => (
@@ -85,9 +85,9 @@ export function EmergencyReportClient({ user, emergencyId }: { user: SafeUser; e
             </ul>
           </section>
 
-          <section className="rounded-2xl border border-white/[0.08] p-5">
+          <section className="rounded-2xl border border-border p-5">
             <h2 className="text-sm font-semibold">Lessons / Notes</h2>
-            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={4} className="mt-3 w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm" />
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={4} className="mt-3 w-full rounded-lg border border-border bg-black/20 px-3 py-2 text-sm" />
             <button type="button" onClick={saveNotes} className="mt-2 rounded-lg bg-accent/20 px-4 py-2 text-xs text-accent">Save Notes</button>
           </section>
         </div>

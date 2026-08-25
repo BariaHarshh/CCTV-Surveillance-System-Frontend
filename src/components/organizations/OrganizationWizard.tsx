@@ -282,7 +282,7 @@ export function OrganizationWizard({ user }: { user: SafeUser }) {
                     ["Purpose", data.purpose.useCases.join(", ") || "—", () => setStep(2)],
                     ["Contact", data.primaryContact.name, () => setStep(3)],
                   ].map(([title, value, edit]) => (
-                    <div key={title as string} className="flex items-start justify-between rounded-xl border border-white/[0.06] p-4">
+                    <div key={title as string} className="flex items-start justify-between rounded-xl border border-border p-4">
                       <div>
                         <p className="text-muted">{title as string}</p>
                         <p className="mt-1 font-medium">{value as string}</p>
@@ -296,7 +296,7 @@ export function OrganizationWizard({ user }: { user: SafeUser }) {
             <div className="mt-8 flex justify-between gap-4">
               <button type="button" disabled={step === 0 || loading}
                 onClick={() => setStep((s) => s - 1)}
-                className="rounded-full border border-white/[0.08] px-6 py-2.5 text-sm disabled:opacity-40">
+                className="rounded-full border border-border px-6 py-2.5 text-sm disabled:opacity-40">
                 Back
               </button>
               {step < 4 ? (

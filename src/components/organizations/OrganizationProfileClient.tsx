@@ -130,11 +130,11 @@ export function OrganizationProfileClient({ user, orgId }: { user: SafeUser; org
         </Link>
       </div>
 
-      <div className="mt-8 flex gap-1 overflow-x-auto border-b border-white/[0.06] pb-px">
+      <div className="mt-8 flex gap-1 overflow-x-auto border-b border-border pb-px">
         {TABS.map((t) => (
           <button key={t} type="button" onClick={() => setTab(t)}
             className={cn("whitespace-nowrap px-4 py-2.5 text-sm transition-colors",
-              tab === t ? "border-b-2 border-accent text-accent" : "text-muted hover:text-white")}>
+              tab === t ? "border-b-2 border-accent text-accent" : "text-muted hover:text-foreground")}>
             {t}
           </button>
         ))}
@@ -149,12 +149,12 @@ export function OrganizationProfileClient({ user, orgId }: { user: SafeUser; org
               ["Cameras", org.cameras],
               ["Buildings", org.campus.buildings],
             ].map(([label, value]) => (
-              <div key={label as string} className="rounded-2xl border border-white/[0.06] bg-surface/60 p-5">
+              <div key={label as string} className="rounded-2xl border border-border bg-surface/60 p-5">
                 <p className="text-xs uppercase tracking-wider text-muted">{label as string}</p>
                 <p className="mt-2 font-mono text-2xl font-semibold">{value as number}</p>
               </div>
             ))}
-            <div className="sm:col-span-2 rounded-2xl border border-white/[0.06] bg-surface/60 p-5">
+            <div className="sm:col-span-2 rounded-2xl border border-border bg-surface/60 p-5">
               <p className="text-xs uppercase tracking-wider text-muted">Primary Contact</p>
               <p className="mt-2 font-medium">{org.primaryContact.name}</p>
               <p className="text-sm text-muted">{org.primaryContact.email}</p>
@@ -189,7 +189,7 @@ export function OrganizationProfileClient({ user, orgId }: { user: SafeUser; org
         {tab === "Purpose & Safety" && (
           <div className="space-y-6">
             <Section title="Use Cases" items={org.purpose.useCases} />
-            <div className="rounded-2xl border border-white/[0.06] p-5">
+            <div className="rounded-2xl border border-border p-5">
               <p className="text-xs uppercase tracking-wider text-muted">Primary Use Case</p>
               <p className="mt-2 text-sm">{org.purpose.description || "—"}</p>
             </div>
@@ -202,7 +202,7 @@ export function OrganizationProfileClient({ user, orgId }: { user: SafeUser; org
             <div className="relative mb-4 max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
               <input value={adminQ} onChange={(e) => setAdminQ(e.target.value)} placeholder="Search admins..."
-                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm" />
+                className="w-full rounded-xl border border-border bg-glass py-2.5 pl-10 pr-4 text-sm" />
             </div>
             {admins.length === 0 ? (
               <EmptyState icon="inbox" title="No administrators yet"
@@ -210,10 +210,10 @@ export function OrganizationProfileClient({ user, orgId }: { user: SafeUser; org
                 actionLabel="Create Admin"
                 onAction={() => window.location.assign(`/super-admin/organizations/${orgId}/admins/new`)} />
             ) : (
-              <div className="overflow-x-auto rounded-2xl border border-white/[0.06]">
+              <div className="overflow-x-auto rounded-2xl border border-border">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-white/[0.06] text-xs uppercase text-muted">
+                    <tr className="border-b border-border text-xs uppercase text-muted">
                       <th className="px-4 py-3">Admin Name</th>
                       <th className="px-4 py-3">Admin ID</th>
                       <th className="px-4 py-3">Position</th>
@@ -257,7 +257,7 @@ function InfoGrid({ items }: { items: [string, string][] }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       {items.map(([label, value]) => (
-        <div key={label} className="rounded-xl border border-white/[0.06] p-4">
+        <div key={label} className="rounded-xl border border-border p-4">
           <p className="text-xs uppercase tracking-wider text-muted">{label}</p>
           <p className="mt-1 text-sm">{value || "—"}</p>
         </div>
@@ -268,7 +268,7 @@ function InfoGrid({ items }: { items: [string, string][] }) {
 
 function Section({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-2xl border border-white/[0.06] p-5">
+    <div className="rounded-2xl border border-border p-5">
       <p className="text-xs uppercase tracking-wider text-muted">{title}</p>
       <div className="mt-3 flex flex-wrap gap-2">
         {items.length ? items.map((i) => (
@@ -281,7 +281,7 @@ function Section({ title, items }: { title: string; items: string[] }) {
 
 function PlaceholderTab({ title, description }: { title: string; description: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-white/[0.08] p-12 text-center">
+    <div className="rounded-2xl border border-dashed border-border p-12 text-center">
       <p className="font-medium">{title}</p>
       <p className="mt-2 text-sm text-muted">{description}</p>
     </div>

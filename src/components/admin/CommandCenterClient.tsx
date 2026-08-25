@@ -87,7 +87,7 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
           <Link href="/admin/emergency" className="rounded-full bg-red-500/15 px-4 py-2 text-xs font-semibold text-red-400 hover:bg-red-500/25">
             Activate Emergency
           </Link>
-          <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted hover:text-white">
+          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
             <RefreshCw className="h-4 w-4" />
           </button>
         </div>
@@ -107,10 +107,10 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
           </Link>
         </div>
         <div className="mt-3 flex flex-wrap gap-2">
-          <Link href="/ai/daily-briefing" className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-muted hover:text-white">Daily Briefing</Link>
-          <Link href="/ai/predictive-risk" className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-muted hover:text-white">Predictive Risk</Link>
-          <Link href="/ai/recommendations" className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-muted hover:text-white">Recommendations</Link>
-          <Link href="/ai/executive-summary" className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-muted hover:text-white">Executive Summary</Link>
+          <Link href="/ai/daily-briefing" className="rounded-lg border border-border px-3 py-1.5 text-[11px] text-muted hover:text-foreground">Daily Briefing</Link>
+          <Link href="/ai/predictive-risk" className="rounded-lg border border-border px-3 py-1.5 text-[11px] text-muted hover:text-foreground">Predictive Risk</Link>
+          <Link href="/ai/recommendations" className="rounded-lg border border-border px-3 py-1.5 text-[11px] text-muted hover:text-foreground">Recommendations</Link>
+          <Link href="/ai/executive-summary" className="rounded-lg border border-border px-3 py-1.5 text-[11px] text-muted hover:text-foreground">Executive Summary</Link>
           <button
             type="button"
             onClick={async () => {
@@ -140,7 +140,7 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
           { label: "Response Teams", value: overview?.stats.teamsAvailable ?? "—", icon: Users },
           { label: "System Health", value: overview?.systemHealth.overall ?? "—", icon: Activity },
         ].map((s) => (
-          <div key={s.label} className="rounded-xl border border-white/[0.08] bg-surface/60 p-3">
+          <div key={s.label} className="rounded-xl border border-border bg-surface/60 p-3">
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-muted">
               <s.icon className="h-3 w-3" /> {s.label}
             </div>
@@ -151,33 +151,33 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
 
       {/* Filters */}
       <div className="mt-4 flex flex-wrap gap-2">
-        <select value={filters.severity} onChange={(e) => setFilters((f) => ({ ...f, severity: e.target.value }))} className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5 text-xs">
+        <select value={filters.severity} onChange={(e) => setFilters((f) => ({ ...f, severity: e.target.value }))} className="rounded-lg border border-border bg-black/30 px-3 py-1.5 text-xs">
           <option value="">All Severities</option>
           {["CRITICAL", "HIGH", "MEDIUM", "LOW"].map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
-        <select value={filters.emergencyType} onChange={(e) => setFilters((f) => ({ ...f, emergencyType: e.target.value }))} className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5 text-xs">
+        <select value={filters.emergencyType} onChange={(e) => setFilters((f) => ({ ...f, emergencyType: e.target.value }))} className="rounded-lg border border-border bg-black/30 px-3 py-1.5 text-xs">
           <option value="">All Types</option>
           {["FIRE", "SECURITY", "MEDICAL", "INTRUSION", "CAMPUS_THREAT"].map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
-        <select value={filters.incidentStatus} onChange={(e) => setFilters((f) => ({ ...f, incidentStatus: e.target.value }))} className="rounded-lg border border-white/10 bg-black/30 px-3 py-1.5 text-xs">
+        <select value={filters.incidentStatus} onChange={(e) => setFilters((f) => ({ ...f, incidentStatus: e.target.value }))} className="rounded-lg border border-border bg-black/30 px-3 py-1.5 text-xs">
           <option value="">Incident Status</option>
           {["OPEN", "INVESTIGATING", "CONTAINED"].map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
       </div>
 
       {loading && !overview ? (
-        <div className="mt-8 h-96 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="mt-8 h-96 animate-pulse rounded-2xl bg-glass" />
       ) : (
         <div className="mt-6 grid gap-4 lg:grid-cols-12">
           {/* Active Incidents */}
-          <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4 lg:col-span-3">
+          <section className="rounded-2xl border border-border bg-surface/50 p-4 lg:col-span-3">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Active Incidents</h2>
             <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
               {(overview?.activeIncidents ?? []).length === 0 ? (
                 <li className="text-xs text-muted">No active incidents</li>
               ) : overview!.activeIncidents.map((inc) => (
                 <li key={String(inc.id)}>
-                  <Link href={`/admin/incidents/${inc.id}`} className="block rounded-lg border border-white/[0.06] p-3 hover:bg-white/[0.03]">
+                  <Link href={`/admin/incidents/${inc.id}`} className="block rounded-lg border border-border p-3 hover:bg-glass">
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-sm font-medium leading-snug">{String(inc.title)}</p>
                       <SeverityBadge severity={String(inc.severity)} />
@@ -190,7 +190,7 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
           </section>
 
           {/* Live Monitoring / Campus Map */}
-          <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4 lg:col-span-6">
+          <section className="rounded-2xl border border-border bg-surface/50 p-4 lg:col-span-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
                 Unified Command Map
@@ -218,7 +218,7 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
                 <Link
                   key={b.id}
                   href={`/map?building=${encodeURIComponent(b.buildingId)}`}
-                  className="flex items-center gap-3 rounded-xl border border-white/[0.06] px-3 py-2.5 hover:bg-white/[0.03]"
+                  className="flex items-center gap-3 rounded-xl border border-border px-3 py-2.5 hover:bg-glass"
                 >
                   <span className={cn("h-2.5 w-2.5 rounded-full", BUILDING_DOT[b.opsStatus] ?? "bg-slate-400")} />
                   <div>
@@ -237,7 +237,7 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
           </section>
 
           {/* Alerts / Emergencies */}
-          <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4 lg:col-span-3">
+          <section className="rounded-2xl border border-border bg-surface/50 p-4 lg:col-span-3">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Active Emergencies</h2>
             <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
               {(overview?.activeEmergencies ?? []).length === 0 ? (
@@ -256,12 +256,12 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
           </section>
 
           {/* Timeline / Tasks */}
-          <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4 lg:col-span-7">
+          <section className="rounded-2xl border border-border bg-surface/50 p-4 lg:col-span-7">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Open Tasks & Escalations</h2>
             <div className="mt-3 grid gap-4 md:grid-cols-2">
               <ul className="space-y-2">
                 {(overview?.openTasks ?? []).slice(0, 8).map((t) => (
-                  <li key={String(t.id)} className="rounded-lg border border-white/[0.06] px-3 py-2 text-xs">
+                  <li key={String(t.id)} className="rounded-lg border border-border px-3 py-2 text-xs">
                     <p className="font-medium">{String(t.title)}</p>
                     <p className="text-muted">{String(t.status)} · {String(t.priority)} · {String(t.assignedToName || "Unassigned")}</p>
                   </li>
@@ -288,14 +288,14 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
           </section>
 
           {/* Response Teams */}
-          <section className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4 lg:col-span-5">
+          <section className="rounded-2xl border border-border bg-surface/50 p-4 lg:col-span-5">
             <div className="flex items-center justify-between">
               <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Response Teams</h2>
               <Link href="/admin/response-teams" className="text-[10px] text-accent hover:underline">Manage →</Link>
             </div>
             <ul className="mt-3 space-y-2">
               {(overview?.responseTeams ?? []).map((t) => (
-                <li key={String(t.id)} className="flex items-center justify-between rounded-lg border border-white/[0.06] px-3 py-2 text-sm">
+                <li key={String(t.id)} className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm">
                   <div>
                     <p className="font-medium">{String(t.name)}</p>
                     <p className="text-[10px] text-muted">{String(t.type)} · {String(t.memberCount)} members</p>

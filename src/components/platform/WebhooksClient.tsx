@@ -75,11 +75,11 @@ export function WebhooksClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">Webhooks</h1>
       <p className="mt-1 text-muted">Outbound event endpoints and delivery history</p>
 
-      <section className="mt-8 rounded-2xl border border-white/10 bg-surface/50 p-6">
+      <section className="mt-8 rounded-2xl border border-border bg-surface/50 p-6">
         <label className="block text-sm">
           <span className="text-muted">Endpoint URL</span>
           <input
-            className="mt-1 w-full rounded-xl border border-white/10 bg-background px-3 py-2"
+            className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
             placeholder="https://example.com/hooks/acg"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
@@ -94,7 +94,7 @@ export function WebhooksClient({ user }: { user: SafeUser }) {
               className={`rounded-lg border px-2.5 py-1 text-xs ${
                 events.includes(ev)
                   ? "border-accent/50 bg-accent/10 text-accent"
-                  : "border-white/10 text-muted"
+                  : "border-border text-muted"
               }`}
             >
               {ev}
@@ -123,7 +123,7 @@ export function WebhooksClient({ user }: { user: SafeUser }) {
         <>
           <div className="mt-6 space-y-3">
             {webhooks.map((w) => (
-              <div key={w.id} className="rounded-2xl border border-white/10 bg-surface/40 p-4">
+              <div key={w.id} className="rounded-2xl border border-border bg-surface/40 p-4">
                 <div className="font-mono text-xs text-muted">{w.webhookId}</div>
                 <div className="mt-1 break-all text-sm">{w.url}</div>
                 <div className="mt-2 text-xs text-muted">{w.events.join(", ")}</div>
@@ -133,9 +133,9 @@ export function WebhooksClient({ user }: { user: SafeUser }) {
           </div>
 
           <h2 className="mt-10 text-lg font-semibold">Recent deliveries</h2>
-          <div className="mt-3 overflow-x-auto rounded-2xl border border-white/10">
+          <div className="mt-3 overflow-x-auto rounded-2xl border border-border">
             <table className="w-full min-w-[520px] text-left text-sm">
-              <thead className="border-b border-white/10 text-xs uppercase text-muted">
+              <thead className="border-b border-border text-xs uppercase text-muted">
                 <tr>
                   <th className="px-4 py-3">Event</th>
                   <th className="px-4 py-3">Status</th>

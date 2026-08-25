@@ -55,21 +55,21 @@ export function RestrictedZonesClient({ user }: { user: SafeUser }) {
           <button type="button" onClick={() => setShowForm(!showForm)} className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-background">
             <Plus className="h-3.5 w-3.5" /> Create Zone
           </button>
-          <button type="button" onClick={load} className="rounded-full border border-white/10 p-2 text-muted"><RefreshCw className="h-4 w-4" /></button>
+          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted"><RefreshCw className="h-4 w-4" /></button>
         </div>
       </div>
 
       {showForm && (
-        <form onSubmit={createZone} className="mt-6 grid gap-3 rounded-xl border border-white/[0.08] p-4 sm:grid-cols-3">
-          <input required placeholder="Zone name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm" />
-          <input required placeholder="Camera DB ID" value={form.cameraId} onChange={(e) => setForm({ ...form, cameraId: e.target.value })} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm" />
+        <form onSubmit={createZone} className="mt-6 grid gap-3 rounded-xl border border-border p-4 sm:grid-cols-3">
+          <input required placeholder="Zone name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-lg border border-border bg-glass px-3 py-2 text-sm" />
+          <input required placeholder="Camera DB ID" value={form.cameraId} onChange={(e) => setForm({ ...form, cameraId: e.target.value })} className="rounded-lg border border-border bg-glass px-3 py-2 text-sm" />
           <button type="submit" className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-background">Save</button>
         </form>
       )}
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-white/[0.08]">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
         <table className="w-full min-w-[700px] text-left text-sm">
-          <thead className="border-b border-white/[0.06] bg-white/[0.02] text-xs uppercase tracking-wider text-muted">
+          <thead className="border-b border-border bg-glass text-xs uppercase tracking-wider text-muted">
             <tr>
               <th className="px-4 py-3">Zone</th>
               <th className="px-4 py-3">Camera</th>

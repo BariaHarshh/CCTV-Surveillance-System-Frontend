@@ -79,7 +79,7 @@ export function MonitoringCameraDetailClient({
       </Link>
 
       {loading ? (
-        <div className="mt-8 h-96 animate-pulse rounded-2xl bg-white/[0.04]" />
+        <div className="mt-8 h-96 animate-pulse rounded-2xl bg-glass" />
       ) : !camera ? (
         <p className="mt-8 text-red-400">Camera not found.</p>
       ) : (
@@ -107,11 +107,11 @@ export function MonitoringCameraDetailClient({
             <div className="mt-8">
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">Current Events</h2>
               {activeEvents.length === 0 ? (
-                <p className="rounded-xl border border-white/[0.06] p-4 text-sm text-muted">No active events for this camera.</p>
+                <p className="rounded-xl border border-border p-4 text-sm text-muted">No active events for this camera.</p>
               ) : (
                 <ul className="space-y-2">
                   {activeEvents.map((e) => (
-                    <li key={e.id} className="flex items-center justify-between rounded-xl border border-white/[0.06] px-4 py-3">
+                    <li key={e.id} className="flex items-center justify-between rounded-xl border border-border px-4 py-3">
                       <div>
                         <p className="text-sm font-medium">{formatEventType(e.eventType)}</p>
                         <p className="text-xs text-muted">{formatDateTime(e.detectedAt)} · {e.source === "TEST" ? "SIMULATED" : e.source}</p>
@@ -126,12 +126,12 @@ export function MonitoringCameraDetailClient({
             <div className="mt-8">
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">Event Timeline</h2>
               {events.length === 0 ? (
-                <p className="rounded-xl border border-white/[0.06] p-4 text-sm text-muted">No recent events.</p>
+                <p className="rounded-xl border border-border p-4 text-sm text-muted">No recent events.</p>
               ) : (
                 <ul className="space-y-2">
                   {events.map((e) => (
                     <li key={e.id}>
-                      <Link href={`${base}/events/${e.id}`} className="flex items-center justify-between rounded-xl border border-white/[0.06] px-4 py-3 hover:bg-white/[0.02]">
+                      <Link href={`${base}/events/${e.id}`} className="flex items-center justify-between rounded-xl border border-border px-4 py-3 hover:bg-glass">
                         <div>
                           <p className="text-sm">{formatEventType(e.eventType)}</p>
                           <p className="text-xs text-muted">{formatDateTime(e.detectedAt)}</p>
@@ -145,7 +145,7 @@ export function MonitoringCameraDetailClient({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
+          <div className="rounded-2xl border border-border bg-surface/50 p-6">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted">Camera Information</h2>
             <dl className="mt-4 space-y-3 text-sm">
               <div><dt className="text-muted">Camera ID</dt><dd className="font-mono">{camera.cameraId}</dd></div>

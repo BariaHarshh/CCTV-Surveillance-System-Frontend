@@ -30,7 +30,7 @@ const timelineEvents = [
 
 export function DashboardPreview() {
   return (
-    <section className="relative border-t border-white/[0.06] py-24 lg:py-32">
+    <section className="relative border-t border-border py-24 lg:py-32">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(56,189,248,0.05),transparent)]" />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
@@ -61,7 +61,7 @@ export function DashboardPreview() {
           className="gradient-border mt-16 overflow-hidden rounded-3xl bg-surface/80 backdrop-blur-sm"
         >
           {/* Dashboard header bar */}
-          <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
+          <div className="flex items-center justify-between border-b border-border px-6 py-4">
             <div className="flex items-center gap-3">
               <Activity className="h-4 w-4 text-accent" />
               <span className="text-sm font-medium">Campus Overview</span>
@@ -84,7 +84,7 @@ export function DashboardPreview() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="rounded-xl border border-white/[0.06] bg-surface-elevated/60 p-4"
+                    className="rounded-xl border border-border bg-surface-elevated/60 p-4"
                   >
                     <div className="flex items-center gap-2">
                       <Icon className="h-4 w-4 text-accent/70" strokeWidth={1.5} />
@@ -98,7 +98,7 @@ export function DashboardPreview() {
             </div>
 
             {/* Live camera panel */}
-            <div className="rounded-xl border border-white/[0.06] bg-surface-elevated/60 p-4 lg:row-span-2">
+            <div className="rounded-xl border border-border bg-surface-elevated/60 p-4 lg:row-span-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Video className="h-4 w-4 text-accent" />
@@ -121,14 +121,14 @@ export function DashboardPreview() {
                   animate={{ top: ["0%", "100%", "0%"] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                 />
-                <div className="absolute bottom-2 left-2 rounded bg-black/60 px-2 py-1 font-mono text-[10px] text-white/70">
+                <div className="absolute bottom-2 left-2 rounded bg-black/60 px-2 py-1 font-mono text-[10px] text-foreground/70">
                   CAM-042 · Building A
                 </div>
               </div>
             </div>
 
             {/* Event timeline */}
-            <div className="rounded-xl border border-white/[0.06] bg-surface-elevated/60 p-4 lg:col-span-2">
+            <div className="rounded-xl border border-border bg-surface-elevated/60 p-4 lg:col-span-2">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-accent/70" />
                 <span className="text-xs font-semibold tracking-wider text-muted uppercase">
@@ -155,7 +155,7 @@ export function DashboardPreview() {
                             : "bg-accent/60"
                       }`}
                     />
-                    <span className="text-sm text-white/80">{item.event}</span>
+                    <span className="text-sm text-foreground/80">{item.event}</span>
                   </motion.div>
                 ))}
               </div>

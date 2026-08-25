@@ -47,7 +47,7 @@ export function FirstLoginPasswordForm() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-      className="mx-auto w-full max-w-md rounded-2xl border border-white/[0.08] bg-surface/80 p-8">
+      className="mx-auto w-full max-w-md rounded-2xl border border-border bg-surface/80 p-8">
       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
         <Lock className="h-6 w-6 text-accent" />
       </div>
@@ -64,19 +64,19 @@ export function FirstLoginPasswordForm() {
         <div>
           <label className="block text-sm font-medium">Temporary Password</label>
           <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)}
-            className="mt-2 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm outline-none focus:border-accent/40" required />
+            className="mt-2 w-full rounded-xl border border-border bg-glass px-4 py-3 text-sm outline-none focus:border-accent/40" required />
         </div>
         <div>
           <label className="block text-sm font-medium">New Password</label>
           <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)}
-            className="mt-2 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-sm outline-none focus:border-accent/40" required />
+            className="mt-2 w-full rounded-xl border border-border bg-glass px-4 py-3 text-sm outline-none focus:border-accent/40" required />
           <PasswordStrengthIndicator password={newPassword} strength={getPasswordStrength(newPassword)} />
         </div>
         <div>
           <label className="block text-sm font-medium">Confirm New Password</label>
           <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
-            className={cn("mt-2 w-full rounded-xl border bg-white/[0.03] px-4 py-3 text-sm outline-none focus:border-accent/40",
-              confirmPassword && confirmPassword !== newPassword ? "border-red-500/50" : "border-white/[0.08]")} required />
+            className={cn("mt-2 w-full rounded-xl border bg-glass px-4 py-3 text-sm outline-none focus:border-accent/40",
+              confirmPassword && confirmPassword !== newPassword ? "border-red-500/50" : "border-border")} required />
         </div>
         <button type="submit" disabled={loading}
           className="flex w-full items-center justify-center gap-2 rounded-full bg-accent py-3 text-sm font-semibold text-background disabled:opacity-70">

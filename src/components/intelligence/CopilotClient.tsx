@@ -80,7 +80,7 @@ function renderBlocks(blocks: unknown[] | undefined) {
           return (
             <div key={i} className="grid grid-cols-2 gap-2">
               {block.items.map((it) => (
-                <div key={it.label} className="rounded-lg border border-white/[0.06] bg-black/20 px-3 py-2">
+                <div key={it.label} className="rounded-lg border border-border bg-black/20 px-3 py-2">
                   <p className="text-[10px] uppercase tracking-wider text-muted">{it.label}</p>
                   <p className="text-sm font-semibold">{String(it.value)}</p>
                 </div>
@@ -93,7 +93,7 @@ function renderBlocks(blocks: unknown[] | undefined) {
             <ul key={i} className="space-y-1.5">
               {block.title && <p className="text-[10px] uppercase text-muted">{block.title}</p>}
               {block.items.map((it, j) => (
-                <li key={j} className="rounded-lg border border-white/[0.06] px-3 py-2 text-xs">
+                <li key={j} className="rounded-lg border border-border px-3 py-2 text-xs">
                   <span className="font-medium text-accent">{it.label}</span>
                   <span className="text-muted"> — {String(it.value)}</span>
                 </li>
@@ -105,7 +105,7 @@ function renderBlocks(blocks: unknown[] | undefined) {
           return (
             <div key={i} className="flex flex-wrap gap-2">
               {block.links.map((l) => (
-                <Link key={l.href} href={l.href} className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-accent hover:bg-white/[0.04]">
+                <Link key={l.href} href={l.href} className="rounded-full border border-border px-3 py-1 text-[11px] text-accent hover:bg-glass">
                   {l.label}
                 </Link>
               ))}
@@ -115,9 +115,9 @@ function renderBlocks(blocks: unknown[] | undefined) {
         if (block.type === "table" && block.rows?.length) {
           const cols = block.columns ?? Object.keys(block.rows[0]);
           return (
-            <div key={i} className="overflow-x-auto rounded-lg border border-white/[0.06]">
+            <div key={i} className="overflow-x-auto rounded-lg border border-border">
               <table className="w-full text-left text-[11px]">
-                <thead className="bg-white/[0.03] text-muted">
+                <thead className="bg-glass text-muted">
                   <tr>{cols.map((c) => <th key={c} className="px-2 py-1.5 font-medium">{c}</th>)}</tr>
                 </thead>
                 <tbody>
@@ -304,7 +304,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
   return (
     <Shell user={user}>
       <div className="flex h-[calc(100vh-8rem)] min-h-[520px] flex-col">
-        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/[0.06] pb-4">
+        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-4">
           <div>
             <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
               <Brain className="h-6 w-6 text-accent" /> AI Copilot
@@ -315,16 +315,16 @@ export function CopilotClient({ user }: { user: SafeUser }) {
             <span className={cn("rounded-full border px-2.5 py-1", providerNone ? "border-amber-500/30 text-amber-300" : "border-emerald-500/30 text-emerald-300")}>
               {providerNone ? "Tools-only (no LLM)" : `LLM · ${status?.status.provider}`}
             </span>
-            <span className="rounded-full border border-white/10 px-2.5 py-1 text-muted">
+            <span className="rounded-full border border-border px-2.5 py-1 text-muted">
               Model: {status?.status.model ?? "—"}
             </span>
-            <span className="rounded-full border border-white/10 px-2.5 py-1 text-muted">
+            <span className="rounded-full border border-border px-2.5 py-1 text-muted">
               Org: {status?.organization.name ?? "—"}
             </span>
-            <span className="rounded-full border border-white/10 px-2.5 py-1 text-muted">
+            <span className="rounded-full border border-border px-2.5 py-1 text-muted">
               Role: {status?.user.role ?? user.role}
             </span>
-            <span className="rounded-full border border-white/10 px-2.5 py-1 text-muted">Mode: {effectiveMode}</span>
+            <span className="rounded-full border border-border px-2.5 py-1 text-muted">Mode: {effectiveMode}</span>
           </div>
         </div>
 
@@ -342,7 +342,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
               onClick={() => setMobilePane(p)}
               className={cn(
                 "rounded-lg px-3 py-1.5 text-xs capitalize",
-                mobilePane === p ? "bg-accent/15 text-accent" : "text-muted border border-white/10"
+                mobilePane === p ? "bg-accent/15 text-accent" : "text-muted border border-border"
               )}
             >
               {p}
@@ -354,11 +354,11 @@ export function CopilotClient({ user }: { user: SafeUser }) {
           {/* History */}
           <aside
             className={cn(
-              "flex min-h-0 flex-col rounded-2xl border border-white/[0.08] bg-surface/50 lg:col-span-3",
+              "flex min-h-0 flex-col rounded-2xl border border-border bg-surface/50 lg:col-span-3",
               mobilePane !== "history" && "hidden lg:flex"
             )}
           >
-            <div className="flex items-center justify-between border-b border-white/[0.06] px-3 py-2.5">
+            <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">History</p>
               <button
                 type="button"
@@ -367,7 +367,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
                   setMessages([]);
                   setMobilePane("chat");
                 }}
-                className="rounded-lg p-1.5 text-muted hover:bg-white/[0.04] hover:text-white"
+                className="rounded-lg p-1.5 text-muted hover:bg-glass hover:text-foreground"
                 title="New chat"
               >
                 <MessageSquarePlus className="h-4 w-4" />
@@ -380,7 +380,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
                   <div
                     className={cn(
                       "group flex items-start gap-1 rounded-xl px-2 py-2",
-                      activeId === c.conversationId ? "bg-accent/10" : "hover:bg-white/[0.03]"
+                      activeId === c.conversationId ? "bg-accent/10" : "hover:bg-glass"
                     )}
                   >
                     <button
@@ -394,7 +394,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
                       <p className="truncate text-sm font-medium">{c.title}</p>
                       <p className="text-[10px] text-muted">{new Date(c.updatedAt).toLocaleString()}</p>
                     </button>
-                    <button type="button" className="opacity-0 group-hover:opacity-100 p-1 text-muted hover:text-white" onClick={() => archiveConversation(c.conversationId)} title="Archive">
+                    <button type="button" className="opacity-0 group-hover:opacity-100 p-1 text-muted hover:text-foreground" onClick={() => archiveConversation(c.conversationId)} title="Archive">
                       <Archive className="h-3.5 w-3.5" />
                     </button>
                     <button type="button" className="opacity-0 group-hover:opacity-100 p-1 text-muted hover:text-red-300" onClick={() => deleteConversation(c.conversationId)} title="Delete">
@@ -409,7 +409,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
           {/* Chat */}
           <section
             className={cn(
-              "flex min-h-0 flex-col rounded-2xl border border-white/[0.08] bg-surface/40 lg:col-span-6",
+              "flex min-h-0 flex-col rounded-2xl border border-border bg-surface/40 lg:col-span-6",
               mobilePane !== "chat" && "hidden lg:flex"
             )}
           >
@@ -428,16 +428,16 @@ export function CopilotClient({ user }: { user: SafeUser }) {
                   className={cn(
                     "max-w-[92%] rounded-2xl px-4 py-3 text-sm",
                     m.role === "user" && "ml-auto bg-accent/15 text-white",
-                    m.role === "assistant" && "mr-auto border border-white/[0.08] bg-black/25",
+                    m.role === "assistant" && "mr-auto border border-border bg-black/25",
                     m.role === "action_confirm" && "mr-auto border border-amber-500/30 bg-amber-500/10",
                     m.role === "warning" && "mr-auto border border-red-500/30 bg-red-500/10 text-red-100",
-                    m.role === "system" && "mx-auto border border-white/10 bg-white/[0.03] text-xs text-muted"
+                    m.role === "system" && "mx-auto border border-border bg-glass text-xs text-muted"
                   )}
                 >
                   <p className="whitespace-pre-wrap leading-relaxed">{m.content}</p>
                   {renderBlocks(m.blocks)}
                   {(m.role === "assistant" || m.role === "action_confirm") && !m.messageId.startsWith("local_") && (
-                    <div className="mt-2 flex items-center gap-2 border-t border-white/[0.06] pt-2">
+                    <div className="mt-2 flex items-center gap-2 border-t border-border pt-2">
                       {m.confidence && <span className="text-[10px] text-muted">Confidence: {m.confidence}</span>}
                       <button type="button" onClick={() => sendFeedback(m.messageId, "helpful")} className={cn("p-1 text-muted hover:text-emerald-400", m.feedback === "helpful" && "text-emerald-400")}>
                         <ThumbsUp className="h-3.5 w-3.5" />
@@ -450,7 +450,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
                 </div>
               ))}
               {sending && (
-                <div className="mr-auto flex items-center gap-2 rounded-2xl border border-white/[0.08] bg-black/25 px-4 py-3 text-xs text-muted">
+                <div className="mr-auto flex items-center gap-2 rounded-2xl border border-border bg-black/25 px-4 py-3 text-xs text-muted">
                   <Loader2 className="h-3.5 w-3.5 animate-spin" /> Thinking…
                 </div>
               )}
@@ -460,7 +460,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
             {error && <p className="px-4 pb-2 text-xs text-red-400">{error}</p>}
 
             <form
-              className="flex gap-2 border-t border-white/[0.06] p-3"
+              className="flex gap-2 border-t border-border p-3"
               onSubmit={(e) => {
                 e.preventDefault();
                 sendMessage();
@@ -470,7 +470,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask the campus copilot…"
-                className="flex-1 rounded-xl border border-white/10 bg-black/30 px-4 py-2.5 text-sm outline-none focus:border-accent/40"
+                className="flex-1 rounded-xl border border-border bg-black/30 px-4 py-2.5 text-sm outline-none focus:border-accent/40"
                 disabled={sending || status?.privacy.copilotEnabled === false}
               />
               <button
@@ -490,7 +490,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
               mobilePane !== "context" && "hidden lg:flex"
             )}
           >
-            <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4">
+            <div className="rounded-2xl border border-border bg-surface/50 p-4">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">Pending action</p>
               {pending ? (
                 <div className="mt-3 space-y-3">
@@ -518,12 +518,12 @@ export function CopilotClient({ user }: { user: SafeUser }) {
               )}
             </div>
 
-            <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4">
+            <div className="rounded-2xl border border-border bg-surface/50 p-4">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">Sources</p>
               <ul className="mt-3 space-y-2">
                 {sources.length === 0 && <li className="text-xs text-muted">Sources appear after an assistant reply.</li>}
                 {sources.map((s, i) => (
-                  <li key={`${s.id}-${i}`} className="rounded-lg border border-white/[0.06] px-3 py-2 text-xs">
+                  <li key={`${s.id}-${i}`} className="rounded-lg border border-border px-3 py-2 text-xs">
                     {s.href ? (
                       <Link href={s.href} className="font-medium text-accent hover:underline">{s.title}</Link>
                     ) : (
@@ -535,7 +535,7 @@ export function CopilotClient({ user }: { user: SafeUser }) {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-4">
+            <div className="rounded-2xl border border-border bg-surface/50 p-4">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-muted">Shortcuts</p>
               <div className="mt-3 flex flex-col gap-1.5 text-xs">
                 <Link href="/ai/daily-briefing" className="text-accent hover:underline">Daily Briefing</Link>

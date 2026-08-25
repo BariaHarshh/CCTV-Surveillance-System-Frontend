@@ -84,7 +84,7 @@ export function NotificationPrefsClient({ user }: { user: SafeUser }) {
       <h1 className="text-2xl font-bold">Notification Preferences</h1>
       <p className="mt-1 text-sm text-muted">Choose how you receive alerts and updates</p>
 
-      <section className="mt-8 rounded-2xl border border-white/10 bg-surface/50 p-6">
+      <section className="mt-8 rounded-2xl border border-border bg-surface/50 p-6">
         <h2 className="font-semibold">Global channels</h2>
         <div className="mt-4 flex flex-wrap gap-4">
           {(Object.keys(DEFAULT_CHANNELS) as Array<keyof typeof DEFAULT_CHANNELS>).map((ch) => (
@@ -100,13 +100,13 @@ export function NotificationPrefsClient({ user }: { user: SafeUser }) {
         </div>
       </section>
 
-      <section className="mt-6 rounded-2xl border border-white/10 bg-surface/50 p-6">
+      <section className="mt-6 rounded-2xl border border-border bg-surface/50 p-6">
         <h2 className="font-semibold">By category</h2>
         <div className="mt-4 space-y-4">
           {CATEGORIES.map((cat) => {
             const c = prefs.categories[cat] ?? DEFAULT_CHANNELS;
             return (
-              <div key={cat} className="rounded-xl border border-white/[0.06] p-4">
+              <div key={cat} className="rounded-xl border border-border p-4">
                 <p className="font-medium capitalize">{cat}</p>
                 <div className="mt-2 flex flex-wrap gap-4">
                   {(Object.keys(DEFAULT_CHANNELS) as Array<keyof typeof DEFAULT_CHANNELS>).map((ch) => (

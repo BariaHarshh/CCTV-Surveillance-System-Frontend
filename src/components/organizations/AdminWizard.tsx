@@ -161,7 +161,7 @@ export function AdminWizard({
           {STEPS.map((label, i) => (
             <div key={label} className="flex flex-1 flex-col items-center">
               <div className={cn("flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold",
-                i <= step ? "bg-accent text-background" : "bg-white/[0.06] text-muted")}>
+                i <= step ? "bg-accent text-background" : "bg-glass text-muted")}>
                 {String(i + 1).padStart(2, "0")}
               </div>
               <span className={cn("mt-2 hidden text-[10px] sm:block", i <= step ? "text-accent" : "text-muted")}>{label}</span>
@@ -258,14 +258,14 @@ export function AdminWizard({
               <>
                 <h2 className="text-lg font-semibold">Admin Access / Permissions</h2>
                 <div className="mt-6 space-y-6">
-                  <div className="rounded-xl border border-white/[0.06] p-4">
+                  <div className="rounded-xl border border-border p-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium">Admin ID</p>
                         <p className="font-mono text-accent">{data.account.userId || "Generating..."}</p>
                       </div>
                       <button type="button" disabled={credLoading} onClick={generateCredentials}
-                        className="inline-flex items-center gap-1 rounded-lg border border-white/[0.08] px-3 py-1.5 text-xs">
+                        className="inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs">
                         <RefreshCw className={cn("h-3 w-3", credLoading && "animate-spin")} /> Regenerate
                       </button>
                     </div>
@@ -292,7 +292,7 @@ export function AdminWizard({
                       <div className="grid gap-2 sm:grid-cols-2">
                         {perms.map((perm) => (
                           <label key={perm} className={cn("flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm",
-                            data.permissions.includes(perm) ? "border-accent/40 bg-accent/10" : "border-white/[0.08]")}>
+                            data.permissions.includes(perm) ? "border-accent/40 bg-accent/10" : "border-border")}>
                             <input type="checkbox" checked={data.permissions.includes(perm)}
                               onChange={() => togglePermission(perm)} className="rounded" />
                             {PERMISSION_LABELS[perm] ?? perm}
@@ -316,7 +316,7 @@ export function AdminWizard({
                     ["Access", `ADMIN · ${data.permissions.length} permissions`, () => setStep(2)],
                     ["Credentials", data.account.userId, () => setStep(2)],
                   ].map(([title, value, edit]) => (
-                    <div key={title as string} className="flex justify-between rounded-xl border border-white/[0.06] p-4">
+                    <div key={title as string} className="flex justify-between rounded-xl border border-border p-4">
                       <div>
                         <p className="text-muted">{title as string}</p>
                         <p className="mt-1 font-medium">{value as string}</p>
@@ -333,7 +333,7 @@ export function AdminWizard({
 
             <div className="mt-8 flex justify-between">
               <button type="button" disabled={step === 0 || loading} onClick={() => setStep((s) => s - 1)}
-                className="rounded-full border border-white/[0.08] px-6 py-2.5 text-sm disabled:opacity-40">Back</button>
+                className="rounded-full border border-border px-6 py-2.5 text-sm disabled:opacity-40">Back</button>
               {step < 3 ? (
                 <button type="button" onClick={() => setStep((s) => s + 1)}
                   className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-background">Continue</button>
