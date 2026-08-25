@@ -29,6 +29,8 @@ const protectedPaths = [
   "/assets",
   "/emergency",
   "/analytics",
+  "/video",
+  "/command",
 ];
 
 function addSecurityHeaders(response: NextResponse, requestId: string): NextResponse {

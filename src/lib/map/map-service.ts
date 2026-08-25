@@ -241,6 +241,7 @@ export async function getViewportObjects(
             rawStatus: c.status,
             floor: c.floor,
             buildingId: c.buildingId?.toString() ?? null,
+            href: `/video/cameras/${encodeURIComponent(c.cameraId)}`,
             coverage: {
               radiusM: c.mapLocation?.coverageRadiusM ?? null,
               angleDeg: c.mapLocation?.coverageAngleDeg ?? null,
@@ -286,6 +287,7 @@ export async function getViewportObjects(
           rawStatus: c.status,
           floor: c.floor,
           buildingId: c.buildingId?.toString() ?? null,
+          href: `/video/cameras/${encodeURIComponent(c.cameraId)}`,
           positionSource: "BUILDING_FALLBACK",
           coverage: {
             radiusM: null,
@@ -821,6 +823,7 @@ export async function getEmergencyMapData(organizationId: string, emergencyId: s
             status: mapCameraHealthStatus(c.status),
             lat: c.mapLocation.lat,
             lng: c.mapLocation.lng,
+            href: `/video/cameras/${encodeURIComponent(c.cameraId)}`,
           }))
       : [],
     routingNote:

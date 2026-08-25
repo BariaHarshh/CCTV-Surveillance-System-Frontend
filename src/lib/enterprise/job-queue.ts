@@ -95,6 +95,33 @@ async function handleJob(
     // Handlers reserved — no-op success unless specialized modules invoke failures
     return;
   }
+  if (type === "VIDEO_AI_PROCESS") {
+    const { processVideoDetection } = await import("@/lib/video/pipeline");
+    if (!meta.organizationId) throw new Error("organizationId required");
+    const result = await processVideoDetection({
+      organizationId: meta.organizationId,
+      cameraId: String(payload.cameraId ?? ""),
+      eventType: String(payload.eventType ?? "MOTION_EVENT"),
+      confidence: Number(payload.confidence ?? 0),
+      demo: Boolean(payload.demo),
+      modelId: payload.modelId ? String(payload.modelId) : undefined,
+      modelVersion: payload.modelVersion ? String(payload.modelVersion) : undefined,
+    });
+    if (!result.ok && !("deduplicated" in result && result.deduplicated)) {
+      throw new Error(result.reason || "VIDEO_AI_PROCESS failed");
+    }
+    return;
+  }
+  if (type === "VIDEO_EVIDENCE_PROCESS" || type === "VIDEO_CLIP_GENERATE" || type === "VIDEO_THUMBNAIL") {
+    // Placeholder — evidence jobs complete when recording store is unavailable (honest no-op)
+    return;
+  }
+  if (type === "VIDEO_HEALTH_CHECK" || type === "CAMERA_OFFLINE_CHECK") {
+    const { testCameraConnection } = await import("@/lib/video/video-service");
+    if (!meta.organizationId || !payload.cameraId) return;
+    await testCameraConnection(meta.organizationId, String(payload.cameraId));
+    return;
+  }
   // Unknown types complete without side effects (safe default)
 }
 

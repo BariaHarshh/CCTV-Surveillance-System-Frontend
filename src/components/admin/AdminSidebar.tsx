@@ -35,6 +35,7 @@ import {
   Activity,
   Download,
   Map,
+  Video,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -57,6 +58,11 @@ const navSections = [
       { href: "/admin/campus/buildings", label: "Buildings", icon: Building2 },
       { href: "/admin/campus/rooms", label: "Rooms", icon: DoorOpen },
       { href: "/admin/cameras", label: "Cameras", icon: Camera },
+      { href: "/video", label: "Video Intelligence", icon: Video },
+      { href: "/admin/video/ai", label: "Video AI", icon: Video },
+      { href: "/admin/video/inventory", label: "Camera Inventory", icon: Camera },
+      { href: "/admin/video/privacy", label: "Video Privacy", icon: Shield },
+      { href: "/analytics/video", label: "Video Analytics", icon: LineChart },
       { href: "/assets/map", label: "Asset Map", icon: HardDrive },
       { href: "/analytics/map", label: "Map Analytics", icon: LineChart },
     ],
@@ -73,6 +79,7 @@ const navSections = [
     title: "Command",
     items: [
       { href: "/admin/command-center", label: "Command Center", icon: Monitor },
+      { href: "/command/video-wall", label: "Video Wall", icon: Video },
       { href: "/map?mode=EMERGENCY", label: "Emergency Map", icon: AlertTriangle },
       { href: "/admin/emergency", label: "Emergency", icon: AlertTriangle },
       { href: "/admin/response-teams", label: "Response Teams", icon: Users },

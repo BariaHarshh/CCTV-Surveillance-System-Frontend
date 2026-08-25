@@ -52,6 +52,10 @@ export function toolAllowed(ctx: ToolExecutionContext, tool: AIToolName): boolea
     getPredictiveRisk: () => userCan(ctx, "analytics.view") || ctx.role === "ADMIN",
     getMapRisk: () => userCan(ctx, "campus.view") || ctx.role === "ADMIN",
     getMapSummary: () => userCan(ctx, "campus.view") || ctx.role === "ADMIN",
+    getVideoDetections: () => userCan(ctx, "camera.view") || ctx.role === "ADMIN",
+    summarizeCameraEvents: () => userCan(ctx, "camera.view") || ctx.role === "ADMIN",
+    getVideoEvidence: () => userCan(ctx, "camera.view") || ctx.role === "ADMIN",
+    searchVideoEvents: () => userCan(ctx, "camera.view") || ctx.role === "ADMIN",
   };
   return map[tool]();
 }
@@ -337,6 +341,56 @@ export async function executeTool(
         },
       };
     }
+    case "getVideoDetections":
+    case "summarizeCameraEvents":
+    case "searchVideoEvents": {
+      const { VideoEvent } = await import("@/models/Video");
+      const since = args.since ? new Date(String(args.since)) : new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const q: Record<string, unknown> = { timestamp: { $gte: since } };
+      if (args.severity) q.severity = String(args.severity).toUpperCase();
+      if (args.eventType) q.eventType = String(args.eventType).toUpperCase();
+      if (args.cameraId && mongoose.Types.ObjectId.isValid(String(args.cameraId))) {
+        q.cameraId = new mongoose.Types.ObjectId(String(args.cameraId));
+      }
+      const events = await VideoEvent.find(orgFilter(organizationId, q)).sort({ timestamp: -1 }).limit(50).lean();
+      const byType: Record<string, number> = {};
+      for (const e of events) {
+        byType[e.eventType] = (byType[e.eventType] || 0) + 1;
+      }
+      return {
+        ok: true,
+        data: {
+          count: events.length,
+          byType,
+          note: "AI detections are signals — confidence is not confirmation",
+          detections: events.slice(0, 20).map((e) => ({
+            videoEventId: e.videoEventId,
+            eventType: e.eventType,
+            confidence: e.confidence,
+            severity: e.severity,
+            status: e.status,
+            demo: e.demo,
+            timestamp: e.timestamp?.toISOString?.() ?? null,
+            href: "/video/detections",
+          })),
+          filtersApplied: q,
+          videoHref: "/video/search",
+        },
+      };
+    }
+    case "getVideoEvidence": {
+      const { listEvidence } = await import("@/lib/video/evidence-service");
+      const evidence = await listEvidence(organizationId);
+      return {
+        ok: true,
+        data: {
+          count: evidence.length,
+          evidence: evidence.slice(0, 20),
+          href: "/video/evidence",
+          note: "Evidence access is permission-controlled; hashes are integrity checks only",
+        },
+      };
+    }
     default:
       return { ok: false, data: {}, error: "Unknown tool" };
   }
@@ -363,6 +417,16 @@ export function detectIntent(message: string): { tools: AIToolName[]; args: Reco
   }
   if (/map\s+summary|campus\s+map|show\s+.*map|exits?\s+closest/.test(m)) {
     tools.push("getMapSummary");
+  }
+  if (/video\s+event|detection|camera\s+event|summarize.*camera|critical\s+video|camera\s+failures?/.test(m)) {
+    tools.push("getVideoDetections", "summarizeCameraEvents");
+  }
+  if (/video\s+evidence|evidence\s+clip|snapshots?/.test(m)) {
+    tools.push("getVideoEvidence");
+  }
+  if (/search\s+video|near\s+.*entrance.*yesterday|show\s+critical\s+video/.test(m)) {
+    tools.push("searchVideoEvents");
+    args.severity = /critical/.test(m) ? "CRITICAL" : args.severity;
   }
   if (/emergency|active\s+emergency/.test(m)) tools.push("getEmergencies");
   if (/dashboard|summary|overview|briefing|what.*know/.test(m)) tools.push("getDashboardSummary");

@@ -485,14 +485,34 @@ export function PrivacyAdminClient({ user }: { user: SafeUser }) {
 
 export function SuperAdminModelsClient({ user }: { user: SafeUser }) {
   const [models, setModels] = useState<Record<string, unknown> | null>(null);
+  const [videoDeployments, setVideoDeployments] = useState<Array<Record<string, unknown>>>([]);
   const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/super-admin/ai/models", { credentials: "include" })
       .then((r) => r.json())
-      .then((d) => setModels(d.models))
+      .then((d) => {
+        setModels(d.models);
+        setVideoDeployments(d.videoDeployments || []);
+      })
       .finally(() => setLoading(false));
   }, []);
+
+  const transition = async (deploymentId: string, lifecycle: string) => {
+    const res = await fetch("/api/super-admin/ai/video-models", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "transition", deploymentId, lifecycle }),
+    });
+    const data = await res.json();
+    setMsg(res.ok ? `Updated to ${lifecycle}` : data.error || "Failed");
+    const refreshed = await fetch("/api/super-admin/ai/models", { credentials: "include" }).then((r) =>
+      r.json()
+    );
+    setVideoDeployments(refreshed.videoDeployments || []);
+  };
 
   const env = (models?.env as Record<string, string | null>) ?? {};
 
@@ -500,6 +520,7 @@ export function SuperAdminModelsClient({ user }: { user: SafeUser }) {
     <SuperAdminShell user={user}>
       <h1 className="text-2xl font-bold">AI Models</h1>
       <p className="mt-1 text-muted">Configured provider status (secrets never exposed).</p>
+      {msg && <p className="mt-2 text-xs text-sky-300">{msg}</p>}
       {loading ? <Loader2 className="mt-12 h-8 w-8 animate-spin text-accent" /> : models ? (
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {[
@@ -521,6 +542,41 @@ export function SuperAdminModelsClient({ user }: { user: SafeUser }) {
           </div>
         </div>
       ) : null}
+
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold">Video / CV model deployments</h2>
+        <p className="mt-1 text-xs text-muted">
+          Lifecycle: DRAFT → TESTING → APPROVED → DEPLOYED. Never skip evaluation. Rollback is audited.
+        </p>
+        <ul className="mt-4 space-y-2 text-xs">
+          {videoDeployments.map((d) => (
+            <li
+              key={String(d.deploymentId)}
+              className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 px-3 py-2"
+            >
+              <span>
+                {String(d.modelId)} v{String(d.version)} · {String(d.lifecycle)}
+                {d.purpose ? ` · ${String(d.purpose)}` : ""}
+              </span>
+              <span className="flex gap-1">
+                {["TESTING", "APPROVED", "DEPLOYED", "DISABLED"].map((lc) => (
+                  <button
+                    key={lc}
+                    type="button"
+                    className="rounded border border-white/15 px-2 py-0.5"
+                    onClick={() => transition(String(d.deploymentId), lc)}
+                  >
+                    {lc}
+                  </button>
+                ))}
+              </span>
+            </li>
+          ))}
+          {!videoDeployments.length && (
+            <li className="text-muted">No CV deployments yet — create via POST /api/super-admin/ai/video-models</li>
+          )}
+        </ul>
+      </section>
     </SuperAdminShell>
   );
 }

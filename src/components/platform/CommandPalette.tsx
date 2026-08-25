@@ -15,6 +15,12 @@ const STATIC_COMMANDS: Result[] = [
   { type: "command", id: "campus-map", title: "Digital Campus Map", href: "/map" },
   { type: "command", id: "asset-map", title: "Asset Map", href: "/assets/map" },
   { type: "command", id: "map-analytics", title: "Map Analytics", href: "/analytics/map" },
+  { type: "command", id: "video-intel", title: "Video Intelligence", href: "/video" },
+  { type: "command", id: "video-wall", title: "Video Wall", href: "/command/video-wall" },
+  { type: "command", id: "video-detections", title: "AI Detections", href: "/video/detections" },
+  { type: "command", id: "video-evidence", title: "Video Evidence", href: "/video/evidence" },
+  { type: "command", id: "video-review", title: "Detection Review", href: "/video/review" },
+  { type: "command", id: "video-analytics", title: "Video Analytics", href: "/analytics/video" },
 ];
 
 function isAdminSurface(pathname: string) {
