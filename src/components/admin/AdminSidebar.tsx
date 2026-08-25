@@ -72,7 +72,13 @@ const navSections = [
   {
     title: "AI Intelligence",
     items: [
+      { href: "/ai-copilot", label: "Copilot", icon: Brain },
       { href: "/admin/ai", label: "AI Intelligence", icon: Brain },
+      { href: "/admin/ai/knowledge", label: "Knowledge", icon: ScrollText },
+      { href: "/ai/daily-briefing", label: "Daily Briefing", icon: Lightbulb },
+      { href: "/ai/predictive-risk", label: "Predictive Risk", icon: LineChart },
+      { href: "/ai/recommendations", label: "Recommendations", icon: ClipboardList },
+      { href: "/admin/ai/privacy", label: "Privacy", icon: Shield },
       { href: "/admin/incidents", label: "Incidents", icon: Shield },
     ],
   },

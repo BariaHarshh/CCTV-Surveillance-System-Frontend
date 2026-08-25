@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, Camera, Radio, RefreshCw, Shield, Users, Activity } from "lucide-react";
+import { AlertTriangle, Brain, Camera, Radio, RefreshCw, Shield, Users, Activity } from "lucide-react";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { useMonitoringSocket } from "@/hooks/useMonitoringSocket";
@@ -92,6 +92,42 @@ export function CommandCenterClient({ user }: { user: SafeUser }) {
           </button>
         </div>
       </div>
+
+      {/* AI Command Assistant */}
+      <section className="mt-6 rounded-2xl border border-accent/20 bg-accent/5 p-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-accent">
+              <Brain className="h-4 w-4" /> AI Command Assistant
+            </h2>
+            <p className="mt-1 text-xs text-muted">Shortcuts to live intelligence — no invented metrics.</p>
+          </div>
+          <Link href="/ai-copilot" className="rounded-full bg-accent/20 px-3 py-1.5 text-[11px] font-semibold text-accent hover:bg-accent/30">
+            Open Copilot
+          </Link>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Link href="/ai/daily-briefing" className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-muted hover:text-white">Daily Briefing</Link>
+          <Link href="/ai/predictive-risk" className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-muted hover:text-white">Predictive Risk</Link>
+          <Link href="/ai/recommendations" className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-muted hover:text-white">Recommendations</Link>
+          <Link href="/ai/executive-summary" className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-muted hover:text-white">Executive Summary</Link>
+          <button
+            type="button"
+            onClick={async () => {
+              await fetch("/api/intelligence/copilot", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: "Give me a dashboard summary of open incidents, critical alerts, and offline cameras" }),
+              });
+              window.location.href = "/ai-copilot";
+            }}
+            className="rounded-lg border border-accent/30 px-3 py-1.5 text-[11px] text-accent hover:bg-accent/10"
+          >
+            Ask: dashboard summary
+          </button>
+        </div>
+      </section>
 
       {/* Status strip */}
       <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-7">

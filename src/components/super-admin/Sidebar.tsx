@@ -7,6 +7,7 @@ import {
   Activity,
   AlertTriangle,
   BarChart3,
+  Brain,
   Building2,
   ChevronLeft,
   Inbox,
@@ -23,6 +24,7 @@ import {
   Wrench,
   Database,
   AlertOctagon,
+  FlaskConical,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +48,14 @@ const navSections = [
       { href: "/super-admin/security-center", label: "Security Center", icon: Shield },
       { href: "/super-admin/audit-logs", label: "Audit Logs", icon: ScrollText },
       { href: "/super-admin/sessions", label: "Sessions", icon: Activity },
+    ],
+  },
+  {
+    title: "AI Platform",
+    items: [
+      { href: "/super-admin/ai/models", label: "AI Models", icon: Brain },
+      { href: "/super-admin/ai/observability", label: "Observability", icon: Activity },
+      { href: "/super-admin/ai/testing", label: "Testing", icon: FlaskConical },
     ],
   },
   {

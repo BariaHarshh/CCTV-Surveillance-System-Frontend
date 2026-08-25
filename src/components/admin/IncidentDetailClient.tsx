@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Brain, Loader2 } from "lucide-react";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { StaffShell } from "@/components/staff/StaffShell";
@@ -12,6 +12,9 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
   const base = portal === "admin" ? "/admin" : "/staff";
   const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
+  const [aiSummary, setAiSummary] = useState<Record<string, unknown> | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
 
   const load = () => {
     fetch(`/api/admin/incidents/${incidentId}`, { credentials: "include" })
@@ -91,6 +94,7 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
             )}
           </div>
 
+          <div className="space-y-4">
           <div className="rounded-2xl border border-white/[0.08] bg-surface/50 p-6">
             <p className="text-xs text-muted">Status: {String(incident.status)}</p>
             <p className="mt-2 text-xs text-muted">Location: {String((incident.location as Record<string, string>)?.label ?? "—")}</p>
@@ -131,6 +135,55 @@ export function IncidentDetailClient({ user, incidentId, portal = "admin" }: { u
                 Tasks
               </Link>
             </div>
+          </div>
+
+          <div className="rounded-2xl border border-accent/20 bg-accent/5 p-6">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-accent">
+                <Brain className="h-4 w-4" /> AI Summary
+              </h2>
+              <button
+                type="button"
+                disabled={aiLoading}
+                onClick={async () => {
+                  setAiLoading(true);
+                  setAiError(null);
+                  try {
+                    const res = await fetch(`/api/intelligence/incidents/${incidentId}/summary`, { credentials: "include" });
+                    const json = await res.json();
+                    if (!res.ok) setAiError(json.error ?? "Failed to load summary");
+                    else setAiSummary(json.summary);
+                  } finally {
+                    setAiLoading(false);
+                  }
+                }}
+                className="rounded-lg bg-accent/20 px-3 py-1.5 text-xs font-medium text-accent hover:bg-accent/30 disabled:opacity-50"
+              >
+                {aiLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "[AI Summary]"}
+              </button>
+            </div>
+            {aiError && <p className="mt-3 text-xs text-red-400">{aiError}</p>}
+            {aiSummary && (
+              <div className="mt-3 space-y-2 text-xs">
+                <p className="font-medium">{String(aiSummary.title)}</p>
+                <p className="text-muted">{String(aiSummary.note)}</p>
+                <ul className="list-disc space-y-1 pl-4">
+                  {((aiSummary.confirmedFacts as string[]) ?? []).map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+                {((aiSummary.timeline as Array<{ at: string; label: string }>) ?? []).length > 0 && (
+                  <div className="mt-2 space-y-1 border-t border-white/[0.06] pt-2">
+                    {((aiSummary.timeline as Array<{ at: string; label: string }>) ?? []).map((t) => (
+                      <p key={t.at + t.label} className="text-muted">
+                        {new Date(t.at).toLocaleString()} — {t.label}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           </div>
         </div>
       )}

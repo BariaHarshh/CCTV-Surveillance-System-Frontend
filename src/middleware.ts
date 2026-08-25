@@ -14,6 +14,8 @@ const protectedPaths = [
   "/settings",
   "/notifications",
   "/search",
+  "/ai-copilot",
+  "/ai",
 ];
 
 function addSecurityHeaders(response: NextResponse, requestId: string): NextResponse {
