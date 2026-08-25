@@ -194,6 +194,7 @@ export type AuditSeverity = (typeof AUDIT_SEVERITIES)[number];
 
 export interface IAuditLog extends Document {
   _id: Types.ObjectId;
+  organizationId: Types.ObjectId | null;
   actorId: Types.ObjectId | null;
   actorName: string;
   actorRole: string;
@@ -212,6 +213,7 @@ export interface IAuditLog extends Document {
 
 const AuditLogSchema = new Schema<IAuditLog>(
   {
+    organizationId: { type: Schema.Types.ObjectId, default: null, index: true },
     actorId: { type: Schema.Types.ObjectId, ref: "User", default: null, index: true },
     actorName: { type: String, default: "System" },
     actorRole: { type: String, default: "SYSTEM" },
@@ -225,10 +227,22 @@ const AuditLogSchema = new Schema<IAuditLog>(
     userAgent: { type: String, default: "" },
     metadata: { type: Schema.Types.Mixed, default: {} },
   },
-  { timestamps: true }
+  { timestamps: { createdAt: true, updatedAt: false } }
 );
 
 AuditLogSchema.index({ createdAt: -1 });
+AuditLogSchema.index({ organizationId: 1, createdAt: -1 });
+
+/** Append-only: block mutation/deletion through Mongoose. */
+function rejectAuditMutation() {
+  throw new Error("Audit logs are immutable");
+}
+AuditLogSchema.pre("findOneAndUpdate", rejectAuditMutation);
+AuditLogSchema.pre("updateOne", rejectAuditMutation);
+AuditLogSchema.pre("updateMany", rejectAuditMutation);
+AuditLogSchema.pre("deleteOne", rejectAuditMutation);
+AuditLogSchema.pre("deleteMany", rejectAuditMutation);
+AuditLogSchema.pre("findOneAndDelete", rejectAuditMutation);
 
 export const AuditLog: Model<IAuditLog> =
   mongoose.models.AuditLog ?? mongoose.model<IAuditLog>("AuditLog", AuditLogSchema);

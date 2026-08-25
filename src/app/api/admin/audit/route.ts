@@ -3,7 +3,6 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 import { apiSuccess, handleApiError } from "@/lib/api/response";
 import { connectDB } from "@/lib/db/connect";
 import { AuditLog } from "@/models/AuditLog";
-import { User } from "@/models/User";
 import mongoose from "mongoose";
 
 export async function GET() {
@@ -13,11 +12,10 @@ export async function GET() {
     await connectDB();
 
     const oid = new mongoose.Types.ObjectId(organizationId);
-    const orgUserIds = await User.find({ organizationId: oid, deletedAt: null }).select("_id").lean();
-    const actorIds = orgUserIds.map((u) => u._id);
 
+    // Prefer first-class organizationId; fall back to legacy metadata for older rows.
     const logs = await AuditLog.find({
-      $or: [{ "metadata.organizationId": organizationId }, { actorId: { $in: actorIds } }],
+      $or: [{ organizationId: oid }, { "metadata.organizationId": organizationId }],
     })
       .sort({ createdAt: -1 })
       .limit(50)

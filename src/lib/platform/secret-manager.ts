@@ -52,6 +52,18 @@ export function validateEnvironment(env = process.env): { ok: boolean; missing: 
     missing.push("CAMERA_ENCRYPTION_KEY or ENCRYPTION_KEY");
   }
 
+  if (isProd && !env.PAYMENT_WEBHOOK_SECRET && !env.WEBHOOK_SECRET) {
+    missing.push("PAYMENT_WEBHOOK_SECRET or WEBHOOK_SECRET");
+  }
+
+  if (isProd && !env.INTERNAL_EVENTS_API_KEY) {
+    missing.push("INTERNAL_EVENTS_API_KEY");
+  }
+
+  if (isProd && (!env.NEXT_PUBLIC_APP_URL || String(env.NEXT_PUBLIC_APP_URL).startsWith("http://"))) {
+    warnings.push("NEXT_PUBLIC_APP_URL should be an https:// production origin");
+  }
+
   return { ok: missing.length === 0, missing, warnings };
 }
 

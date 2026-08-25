@@ -37,9 +37,14 @@ export function checkRateLimit(
 }
 
 export function getClientIp(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    return forwarded.split(",")[0]?.trim() ?? "unknown";
+  // Only trust forwarded headers when the app sits behind a configured reverse proxy.
+  // Spoofable X-Forwarded-For must not reset rate-limit buckets in direct exposures.
+  if (process.env.TRUST_PROXY === "true") {
+    const forwarded = request.headers.get("x-forwarded-for");
+    if (forwarded) {
+      return forwarded.split(",")[0]?.trim() ?? "unknown";
+    }
+    return request.headers.get("x-real-ip") ?? "unknown";
   }
-  return request.headers.get("x-real-ip") ?? "unknown";
+  return request.headers.get("x-real-ip") ?? "direct";
 }

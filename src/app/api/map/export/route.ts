@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       const analytics = await getMapAnalytics(organizationId);
       return apiSuccess({ analytics });
     }
-    return apiSuccess({ ok: true });
+    return apiError("Specify ?analytics=1 or POST with action=export|route", 400, "VALIDATION");
   } catch (e) {
     return handleApiError(e);
   }

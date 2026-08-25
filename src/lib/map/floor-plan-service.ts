@@ -85,7 +85,7 @@ export async function uploadFloorPlan(opts: {
     building.campusId,
     building
   );
-  let floor =
+  const floor =
     (opts.floorId && floors.find((f) => f.floorId === opts.floorId)) ||
     (opts.level != null && floors.find((f) => f.level === opts.level)) ||
     floors[0];

@@ -9,13 +9,13 @@ type RouteParams = { params: Promise<{ sessionId: string }> };
 export async function GET(_request: NextRequest, { params }: RouteParams) {
   try {
     await ensureDbReady();
-    const { user } = await requireOrgMember();
+    const { user, organizationId } = await requireOrgMember();
     if (!canViewMonitoring(user)) {
       return new Response("Forbidden", { status: 403 });
     }
 
     const { sessionId } = await params;
-    const proxy = await getStreamSessionProxy(sessionId);
+    const proxy = await getStreamSessionProxy(sessionId, organizationId);
     if (!proxy) return new Response("Stream unavailable", { status: 404 });
 
     const upstream = await fetch(proxy.fetchUrl, { signal: AbortSignal.timeout(10000) });

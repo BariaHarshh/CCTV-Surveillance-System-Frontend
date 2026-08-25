@@ -158,7 +158,7 @@ async function logAccess(
   action: "CREATED" | "VIEWED" | "DOWNLOADED" | "SHARED" | "ATTACHED_TO_INCIDENT" | "ARCHIVED" | "DELETED" | "EXPORTED",
   user: IUser | null,
   purpose: string,
-  extra?: { recipient?: string; expiresAt?: Date }
+  extra?: { recipient?: string; expiresAt?: Date; tokenHash?: string }
 ) {
   await VideoEvidenceAccessLog.create({
     organizationId: new mongoose.Types.ObjectId(organizationId),
@@ -169,7 +169,39 @@ async function logAccess(
     purpose,
     recipient: extra?.recipient ?? null,
     expiresAt: extra?.expiresAt ?? null,
+    tokenHash: extra?.tokenHash ?? null,
+    consumedAt: null,
   });
+}
+
+function hashDownloadToken(token: string) {
+  return crypto.createHash("sha256").update(token).digest("hex");
+}
+
+export async function consumeDownloadToken(opts: {
+  organizationId: string;
+  videoEvidenceId: string;
+  token: string;
+  actorId?: string;
+}) {
+  await connectDB();
+  if (!opts.token || opts.token.length < 16) return null;
+  const tokenHash = hashDownloadToken(opts.token);
+  const grant = await VideoEvidenceAccessLog.findOne(
+    orgFilter(opts.organizationId, {
+      videoEvidenceId: opts.videoEvidenceId,
+      action: { $in: ["DOWNLOADED", "SHARED"] },
+      tokenHash,
+      consumedAt: null,
+      expiresAt: { $gt: new Date() },
+    })
+  ).sort({ createdAt: -1 });
+
+  if (!grant) return null;
+
+  grant.consumedAt = new Date();
+  await grant.save();
+  return grant;
 }
 
 export async function listEvidence(organizationId: string) {
@@ -224,7 +256,11 @@ export async function createDownloadToken(
   if (!meta || !meta.available) return null;
   const expiresAt = new Date(Date.now() + 5 * 60_000);
   const token = crypto.randomBytes(24).toString("hex");
-  await logAccess(organizationId, videoEvidenceId, "DOWNLOADED", user, "download", { expiresAt });
+  const tokenHash = hashDownloadToken(token);
+  await logAccess(organizationId, videoEvidenceId, "DOWNLOADED", user, "download", {
+    expiresAt,
+    tokenHash,
+  });
   await logAuditEvent({
     actor: user,
     action: "EVIDENCE_DOWNLOADED",
@@ -232,12 +268,13 @@ export async function createDownloadToken(
     targetType: "VideoEvidence",
     targetId: videoEvidenceId,
     severity: "warning",
+    metadata: { organizationId },
   });
   return {
     token,
     expiresAt: expiresAt.toISOString(),
     url: `/api/video/evidence/${videoEvidenceId}/download?token=${token}`,
-    note: "Time-limited — not a permanent public URL",
+    note: "Time-limited single-use — not a permanent public URL",
   };
 }
 
@@ -378,9 +415,11 @@ export async function shareEvidence(opts: {
   if (!meta) return null;
   const expiresAt = new Date(Date.now() + (opts.expiresInMinutes ?? 60) * 60_000);
   const token = crypto.randomBytes(24).toString("hex");
+  const tokenHash = hashDownloadToken(token);
   await logAccess(opts.organizationId, opts.videoEvidenceId, "SHARED", opts.user, opts.purpose, {
     recipient: opts.recipient,
     expiresAt,
+    tokenHash,
   });
   await logAuditEvent({
     actor: opts.user,
@@ -389,6 +428,7 @@ export async function shareEvidence(opts: {
     targetType: "VideoEvidence",
     targetId: opts.videoEvidenceId,
     severity: "warning",
+    metadata: { organizationId: opts.organizationId },
   });
   return {
     token,
@@ -396,6 +436,6 @@ export async function shareEvidence(opts: {
     recipient: opts.recipient,
     purpose: opts.purpose,
     url: `/api/video/evidence/${opts.videoEvidenceId}/download?token=${token}`,
-    note: "Time-limited controlled access — not a permanent public URL",
+    note: "Time-limited single-use controlled access — not a permanent public URL",
   };
 }

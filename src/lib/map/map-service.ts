@@ -221,8 +221,8 @@ export async function getViewportObjects(
     const markers = filterLatLng(
       cams
         .map((c) => {
-          let lat = c.mapLocation?.lat ?? null;
-          let lng = c.mapLocation?.lng ?? null;
+          const lat = c.mapLocation?.lat ?? null;
+          const lng = c.mapLocation?.lng ?? null;
           // Fallback: inherit building coordinates when camera mapLocation unset
           return { c, lat, lng };
         })

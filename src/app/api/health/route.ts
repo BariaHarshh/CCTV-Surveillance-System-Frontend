@@ -14,8 +14,7 @@ export async function GET() {
       {
         status: "error",
         database: "disconnected",
-        message:
-          "MongoDB is not reachable. Start MongoDB and verify MONGODB_URI in .env.local.",
+        message: "Dependency unavailable",
         timestamp: new Date().toISOString(),
       },
       { status: 503 }

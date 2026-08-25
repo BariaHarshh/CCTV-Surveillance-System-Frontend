@@ -70,10 +70,15 @@ export async function createStreamSession(organizationId: string, cameraDbId: st
   };
 }
 
-export async function getStreamSessionProxy(sessionId: string) {
+export async function getStreamSessionProxy(sessionId: string, organizationId: string) {
   const session = sessions.get(sessionId);
   if (!session || session.expiresAt < Date.now()) {
     sessions.delete(sessionId);
+    return null;
+  }
+
+  // Prevent cross-organization stream IDOR when a sessionId is leaked/shared.
+  if (session.organizationId !== organizationId) {
     return null;
   }
 

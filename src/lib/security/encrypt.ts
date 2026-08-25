@@ -5,8 +5,18 @@ const ALGORITHM = "aes-256-gcm";
 function getEncryptionKey(): Buffer {
   const secret =
     process.env.CAMERA_ENCRYPTION_KEY ??
-    process.env.SESSION_SECRET ??
-    "dev-only-camera-key-change-in-production-32b";
+    process.env.ENCRYPTION_KEY ??
+    process.env.SESSION_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("CAMERA_ENCRYPTION_KEY (or ENCRYPTION_KEY) is required in production");
+    }
+    // Local-only fallback — never used when NODE_ENV=production
+    return crypto.createHash("sha256").update("dev-only-camera-key-change-in-production-32b").digest();
+  }
+  if (process.env.NODE_ENV === "production" && (secret.includes("change-me") || secret.includes("dev-only"))) {
+    throw new Error("CAMERA_ENCRYPTION_KEY must not use a development placeholder in production");
+  }
   return crypto.createHash("sha256").update(secret).digest();
 }
 

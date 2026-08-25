@@ -64,6 +64,7 @@ const IncidentSchema = new Schema<IIncident>(
 );
 
 IncidentSchema.index({ organizationId: 1, createdAt: -1 });
+IncidentSchema.index({ organizationId: 1, status: 1, createdAt: -1 });
 
 export const Incident: Model<IIncident> =
   mongoose.models.Incident ?? mongoose.model<IIncident>("Incident", IncidentSchema);

@@ -309,9 +309,17 @@ export class InternalPaymentProvider implements PaymentProvider {
   }
   async verifyWebhook(rawBody: string, signature: string) {
     const secret = process.env.PAYMENT_WEBHOOK_SECRET ?? process.env.WEBHOOK_SECRET ?? "";
-    if (secret) {
-      const expected = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
-      if (expected !== signature) throw new Error("Invalid payment webhook signature");
+    if (!secret) {
+      throw new Error("Invalid payment webhook signature");
+    }
+    if (!signature) {
+      throw new Error("Invalid payment webhook signature");
+    }
+    const expected = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
+    const a = Buffer.from(expected);
+    const b = Buffer.from(signature);
+    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+      throw new Error("Invalid payment webhook signature");
     }
     return JSON.parse(rawBody) as { type: string; data: Record<string, unknown> };
   }

@@ -38,15 +38,17 @@ export async function GET(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const { user, organizationId } = await requireOrgMember();
+    if (!canViewFieldOps(user)) return apiError("Forbidden", 403, "FORBIDDEN");
     const body = await request.json();
-    if (body.id) {
-      await markNotificationRead(organizationId, user._id.toString(), String(body.id));
-      await logAuditEvent({
-        actor: user,
-        action: "NOTIFICATION_READ",
-        description: `Read notification ${body.id}`,
-      });
-    }
+    if (!body.id) return apiError("Notification id is required", 400, "VALIDATION");
+    const updated = await markNotificationRead(organizationId, user._id.toString(), String(body.id));
+    if (!updated) return apiError("Notification not found", 404, "NOT_FOUND");
+    await logAuditEvent({
+      actor: user,
+      action: "NOTIFICATION_READ",
+      description: `Read notification ${body.id}`,
+      organizationId,
+    });
     return apiSuccess({ ok: true });
   } catch (e) {
     return handleApiError(e);

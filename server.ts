@@ -33,7 +33,14 @@ app.prepare().then(() => {
 
   const io = new SocketIOServer(httpServer, {
     path: "/api/socket",
-    cors: { origin: dev, credentials: true },
+    cors: {
+      origin: dev
+        ? true
+        : process.env.NEXT_PUBLIC_APP_URL
+          ? [process.env.NEXT_PUBLIC_APP_URL]
+          : false,
+      credentials: true,
+    },
   });
 
   setSocketIO(io);

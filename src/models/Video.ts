@@ -77,6 +77,7 @@ const VideoEventSchema = new Schema<IVideoEvent>(
 );
 VideoEventSchema.index({ organizationId: 1, timestamp: -1 });
 VideoEventSchema.index({ organizationId: 1, fingerprint: 1, timestamp: -1 });
+VideoEventSchema.index({ organizationId: 1, status: 1, timestamp: -1 });
 
 export const VideoEvent: Model<IVideoEvent> =
   mongoose.models.VideoEvent ?? mongoose.model<IVideoEvent>("VideoEvent", VideoEventSchema);
@@ -343,6 +344,8 @@ const VideoEvidenceMetaSchema = new Schema<IVideoEvidenceMeta>(
   { timestamps: true }
 );
 
+VideoEvidenceMetaSchema.index({ organizationId: 1, createdAt: -1 });
+
 export const VideoEvidenceMeta: Model<IVideoEvidenceMeta> =
   mongoose.models.VideoEvidenceMeta ??
   mongoose.model<IVideoEvidenceMeta>("VideoEvidenceMeta", VideoEvidenceMetaSchema);
@@ -356,6 +359,9 @@ export interface IVideoEvidenceAccessLog extends Document {
   purpose: string;
   recipient: string | null;
   expiresAt: Date | null;
+  /** SHA-256 of one-time download/share token — never store raw token */
+  tokenHash: string | null;
+  consumedAt: Date | null;
   createdAt: Date;
 }
 
@@ -369,6 +375,8 @@ const VideoEvidenceAccessLogSchema = new Schema<IVideoEvidenceAccessLog>(
     purpose: { type: String, default: "" },
     recipient: { type: String, default: null },
     expiresAt: { type: Date, default: null },
+    tokenHash: { type: String, default: null, index: true },
+    consumedAt: { type: Date, default: null },
   },
   { timestamps: { createdAt: true, updatedAt: false } }
 );
