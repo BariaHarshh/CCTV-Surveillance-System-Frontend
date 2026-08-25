@@ -149,11 +149,15 @@ const navSections = [
   {
     title: "Intelligence",
     items: [
+      { href: "/executive", label: "Executive Command", icon: BarChart3 },
       { href: "/admin/analytics", label: "Safety Intelligence", icon: LineChart },
-      { href: "/admin/executive", label: "Executive", icon: BarChart3 },
+      { href: "/admin/executive", label: "Executive Overview", icon: BarChart3 },
+      { href: "/governance", label: "Governance", icon: Shield },
+      { href: "/strategy", label: "Strategy", icon: ClipboardList },
       { href: "/admin/insights", label: "Insights", icon: Lightbulb },
       { href: "/admin/actions", label: "Corrective Actions", icon: ClipboardList },
       { href: "/admin/reports", label: "Reports", icon: BarChart3 },
+      { href: "/reports/executive", label: "Executive Reports", icon: BarChart3 },
     ],
   },
   {

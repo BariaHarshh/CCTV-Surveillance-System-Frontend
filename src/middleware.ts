@@ -41,6 +41,11 @@ const protectedPaths = [
   "/directory",
   "/announcements",
   "/communication",
+  "/executive",
+  "/governance",
+  "/strategy",
+  "/reports",
+  "/incidents",
 ];
 
 function addSecurityHeaders(response: NextResponse, requestId: string): NextResponse {

@@ -60,6 +60,9 @@ export function toolAllowed(ctx: ToolExecutionContext, tool: AIToolName): boolea
     getRespondingTeams: () => userCan(ctx, "response_team:view") || ctx.role === "ADMIN",
     getOverdueInspections: () => userCan(ctx, "response_task:view") || ctx.role === "ADMIN",
     summarizeFieldOperations: () => userCan(ctx, "analytics:view") || userCan(ctx, "analytics.view") || ctx.role === "ADMIN",
+    getExecutiveBrief: () => userCan(ctx, "executive:view") || userCan(ctx, "executive.view") || ctx.role === "ADMIN",
+    getKpisBelowTarget: () => userCan(ctx, "executive:view") || userCan(ctx, "analytics.view") || ctx.role === "ADMIN",
+    getTopOperationalRisks: () => userCan(ctx, "analytics:view") || userCan(ctx, "analytics.view") || ctx.role === "ADMIN",
   };
   return map[tool]();
 }
@@ -462,6 +465,39 @@ export async function executeTool(
         },
       };
     }
+    case "getExecutiveBrief": {
+      const { buildExecutiveAiBrief } = await import("@/lib/bi/executive-service");
+      const brief = await buildExecutiveAiBrief(
+        organizationId,
+        String(args.question || "What requires executive attention?")
+      );
+      return { ok: true, data: brief };
+    }
+    case "getKpisBelowTarget": {
+      const { computeKpiPack } = await import("@/lib/bi/kpi-engine");
+      const pack = await computeKpiPack(organizationId, "30D");
+      return {
+        ok: true,
+        data: {
+          belowTarget: pack.belowTarget,
+          count: pack.belowTarget.length,
+          href: "/executive",
+          note: "NO_DATA KPIs are excluded from judgment",
+        },
+      };
+    }
+    case "getTopOperationalRisks": {
+      const { getExecutiveCommandCenter } = await import("@/lib/bi/executive-service");
+      const pack = await getExecutiveCommandCenter(organizationId, "30D");
+      return {
+        ok: true,
+        data: {
+          risks: pack.topRisks,
+          href: "/map?mode=RISK",
+          label: "AI-GENERATED INSIGHT from map/incident analytics",
+        },
+      };
+    }
     default:
       return { ok: false, data: {}, error: "Unknown tool" };
   }
@@ -507,6 +543,13 @@ export function detectIntent(message: string): { tools: AIToolName[]; args: Reco
   }
   if (/field\s+operations|today'?s?\s+field|summarize.*field|overdue\s+task/.test(m)) {
     tools.push("summarizeFieldOperations", "getFieldTasks");
+  }
+  if (/executive|what changed|biggest\s+operational\s+risk|below\s+target|quarter|requires?\s+executive/.test(m)) {
+    tools.push("getExecutiveBrief", "getKpisBelowTarget", "getTopOperationalRisks");
+    args.question = message;
+  }
+  if (/which\s+building|top\s+risk|areas?\s+need\s+attention/.test(m)) {
+    tools.push("getTopOperationalRisks", "getMapRisk");
   }
   if (/need(s)?\s+a\s+responder|incidents?\s+still\s+need/.test(m)) {
     tools.push("getIncidents", "getRespondingTeams");

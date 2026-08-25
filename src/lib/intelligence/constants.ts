@@ -48,6 +48,9 @@ export const AI_TOOL_NAMES = [
   "getRespondingTeams",
   "getOverdueInspections",
   "summarizeFieldOperations",
+  "getExecutiveBrief",
+  "getKpisBelowTarget",
+  "getTopOperationalRisks",
 ] as const;
 export type AIToolName = (typeof AI_TOOL_NAMES)[number];
 
