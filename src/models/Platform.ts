@@ -732,6 +732,60 @@ export const OnboardingProgress: Model<IOnboardingProgress> =
   mongoose.models.OnboardingProgress ??
   mongoose.model<IOnboardingProgress>("OnboardingProgress", OnboardingProgressSchema);
 
+/* ─── Global platform settings (singleton) ─── */
+export interface IPlatformSettings extends Document {
+  key: string;
+  platformName: string;
+  supportEmail: string;
+  supportUrl: string;
+  defaultTimezone: string;
+  defaultTheme: "day" | "night" | "system";
+  allowOrganizationSelfService: boolean;
+  requireMfaForAdmins: boolean;
+  requireMfaForStaff: boolean;
+  sessionIdleMinutes: number;
+  sessionAbsoluteHours: number;
+  maxConcurrentSessions: number;
+  defaultAuditRetentionDays: number;
+  defaultEvidenceRetentionDays: number;
+  allowAiFeatures: boolean;
+  allowVideoAi: boolean;
+  allowAdvancedAnalytics: boolean;
+  statusPageMessage: string;
+  updatedBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const PlatformSettingsSchema = new Schema<IPlatformSettings>(
+  {
+    key: { type: String, required: true, unique: true, default: "default" },
+    platformName: { type: String, default: "AI Campus Guardian" },
+    supportEmail: { type: String, default: "" },
+    supportUrl: { type: String, default: "" },
+    defaultTimezone: { type: String, default: "UTC" },
+    defaultTheme: { type: String, enum: ["day", "night", "system"], default: "night" },
+    allowOrganizationSelfService: { type: Boolean, default: false },
+    requireMfaForAdmins: { type: Boolean, default: false },
+    requireMfaForStaff: { type: Boolean, default: false },
+    sessionIdleMinutes: { type: Number, default: 60, min: 5, max: 1440 },
+    sessionAbsoluteHours: { type: Number, default: 12, min: 1, max: 168 },
+    maxConcurrentSessions: { type: Number, default: 5, min: 1, max: 50 },
+    defaultAuditRetentionDays: { type: Number, default: 365, min: 30, max: 3650 },
+    defaultEvidenceRetentionDays: { type: Number, default: 90, min: 7, max: 3650 },
+    allowAiFeatures: { type: Boolean, default: true },
+    allowVideoAi: { type: Boolean, default: true },
+    allowAdvancedAnalytics: { type: Boolean, default: true },
+    statusPageMessage: { type: String, default: "" },
+    updatedBy: { type: String, default: "" },
+  },
+  { timestamps: true }
+);
+
+export const PlatformSettings: Model<IPlatformSettings> =
+  mongoose.models.PlatformSettings ??
+  mongoose.model<IPlatformSettings>("PlatformSettings", PlatformSettingsSchema);
+
 export function hashToken(raw: string) {
   return crypto.createHash("sha256").update(raw).digest("hex");
 }

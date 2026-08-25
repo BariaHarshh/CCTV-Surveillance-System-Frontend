@@ -32,6 +32,7 @@ import {
   FileSearch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const navSections = [
   {
@@ -162,6 +163,18 @@ export function Sidebar({ open, collapsed, onClose, onToggleCollapse }: SidebarP
           </div>
         ))}
       </nav>
+
+      <div
+        className={cn(
+          "border-t border-border p-3",
+          collapsed ? "flex justify-center" : "flex items-center justify-between gap-2"
+        )}
+      >
+        {!collapsed && (
+          <p className="px-1 text-[10px] font-medium tracking-wider text-muted uppercase">Appearance</p>
+        )}
+        <ThemeToggle size="sm" />
+      </div>
     </div>
   );
 
