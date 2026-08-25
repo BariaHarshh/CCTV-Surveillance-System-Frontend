@@ -2,10 +2,12 @@
   "name": "AI Campus Guardian",
   "short_name": "ACG",
   "description": "Campus safety operations platform",
-  "start_url": "/",
+  "start_url": "/mobile",
   "display": "standalone",
-  "background_color": "#0b1220",
-  "theme_color": "#0b1220",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
+  "orientation": "any",
+  "categories": ["security", "productivity"],
   "icons": [
     {
       "src": "/icon-192.png",

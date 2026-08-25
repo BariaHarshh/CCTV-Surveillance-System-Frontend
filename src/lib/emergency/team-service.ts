@@ -67,6 +67,7 @@ export async function updateResponseTeam(
     type?: ResponseTeamType;
     status?: ResponseTeamStatus;
     description?: string;
+    currentAssignment?: string;
     members?: Array<{ userId: string; name: string; role?: string }>;
   }
 ) {
@@ -77,6 +78,7 @@ export async function updateResponseTeam(
   if (patch.type !== undefined) team.type = patch.type;
   if (patch.status !== undefined) team.status = patch.status;
   if (patch.description !== undefined) team.description = patch.description;
+  if (patch.currentAssignment !== undefined) team.currentAssignment = patch.currentAssignment;
   if (patch.members !== undefined) {
     team.members = patch.members.map((m) => ({
       userId: new mongoose.Types.ObjectId(m.userId),

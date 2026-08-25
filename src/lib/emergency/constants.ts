@@ -48,14 +48,23 @@ export type ResponseTeamType = (typeof RESPONSE_TEAM_TYPES)[number];
 export const RESPONSE_TEAM_STATUSES = ["AVAILABLE", "BUSY", "OFFLINE", "ON_LEAVE"] as const;
 export type ResponseTeamStatus = (typeof RESPONSE_TEAM_STATUSES)[number];
 
-export const RESPONSE_TASK_STATUSES = ["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELLED"] as const;
+export const RESPONSE_TASK_STATUSES = [
+  "PENDING",
+  "IN_PROGRESS",
+  "PAUSED",
+  "COMPLETED",
+  "CANCELLED",
+  "REJECTED",
+] as const;
 export type ResponseTaskStatus = (typeof RESPONSE_TASK_STATUSES)[number];
 
 export const RESPONSE_TASK_TRANSITIONS: Record<ResponseTaskStatus, ResponseTaskStatus[]> = {
-  PENDING: ["IN_PROGRESS", "CANCELLED"],
-  IN_PROGRESS: ["COMPLETED", "CANCELLED"],
+  PENDING: ["IN_PROGRESS", "CANCELLED", "REJECTED"],
+  IN_PROGRESS: ["PAUSED", "COMPLETED", "CANCELLED", "REJECTED"],
+  PAUSED: ["IN_PROGRESS", "COMPLETED", "CANCELLED", "REJECTED"],
   COMPLETED: [],
   CANCELLED: [],
+  REJECTED: [],
 };
 
 export const PLAYBOOK_CATEGORIES = [

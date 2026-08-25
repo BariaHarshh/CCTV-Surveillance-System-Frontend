@@ -56,6 +56,10 @@ export function toolAllowed(ctx: ToolExecutionContext, tool: AIToolName): boolea
     summarizeCameraEvents: () => userCan(ctx, "camera.view") || ctx.role === "ADMIN",
     getVideoEvidence: () => userCan(ctx, "camera.view") || ctx.role === "ADMIN",
     searchVideoEvents: () => userCan(ctx, "camera.view") || ctx.role === "ADMIN",
+    getFieldTasks: () => userCan(ctx, "response_task:view") || ctx.role === "ADMIN",
+    getRespondingTeams: () => userCan(ctx, "response_team:view") || ctx.role === "ADMIN",
+    getOverdueInspections: () => userCan(ctx, "response_task:view") || ctx.role === "ADMIN",
+    summarizeFieldOperations: () => userCan(ctx, "analytics:view") || userCan(ctx, "analytics.view") || ctx.role === "ADMIN",
   };
   return map[tool]();
 }
@@ -391,6 +395,73 @@ export async function executeTool(
         },
       };
     }
+    case "getFieldTasks": {
+      const { ResponseTask } = await import("@/models/ResponseTask");
+      const overdue = await ResponseTask.find(
+        orgFilter(organizationId, {
+          status: { $in: ["PENDING", "IN_PROGRESS", "PAUSED"] },
+          dueAt: { $lt: new Date() },
+        })
+      ).limit(30);
+      const open = await ResponseTask.countDocuments(
+        orgFilter(organizationId, { status: { $in: ["PENDING", "IN_PROGRESS", "PAUSED"] } })
+      );
+      return {
+        ok: true,
+        data: {
+          open,
+          overdueCount: overdue.length,
+          overdue: overdue.map((t) => ({
+            taskId: t.taskId,
+            title: t.title,
+            status: t.status,
+            dueAt: t.dueAt?.toISOString() ?? null,
+            href: `/tasks/${t._id}`,
+          })),
+        },
+      };
+    }
+    case "getRespondingTeams": {
+      const { ResponseTeam } = await import("@/models/ResponseTeam");
+      const { FieldStaffPresence } = await import("@/models/Mobile");
+      const teams = await ResponseTeam.find(
+        orgFilter(organizationId, { status: { $in: ["AVAILABLE", "BUSY"] } })
+      ).limit(50);
+      const responding = await FieldStaffPresence.find(
+        orgFilter(organizationId, { status: { $in: ["RESPONDING", "ON_SCENE"] } })
+      ).limit(50);
+      return {
+        ok: true,
+        data: {
+          teams: teams.map((t) => ({
+            teamId: t.teamId,
+            name: t.name,
+            status: t.status,
+            assignment: t.currentAssignment || null,
+          })),
+          staffResponding: responding.length,
+          href: "/teams",
+        },
+      };
+    }
+    case "getOverdueInspections": {
+      const { listInspections } = await import("@/lib/mobile/ops-service");
+      const inspections = await listInspections(organizationId);
+      const overdue = inspections.filter((i) => i.status === "OVERDUE");
+      return { ok: true, data: { overdue, count: overdue.length, href: "/inspections" } };
+    }
+    case "summarizeFieldOperations": {
+      const { getOperationsAnalytics } = await import("@/lib/mobile/field-service");
+      const analytics = await getOperationsAnalytics(organizationId);
+      return {
+        ok: true,
+        data: {
+          summary: analytics,
+          label: "AI-generated operational summary — not employee performance evaluation",
+          href: "/analytics/operations",
+        },
+      };
+    }
     default:
       return { ok: false, data: {}, error: "Unknown tool" };
   }
@@ -427,6 +498,18 @@ export function detectIntent(message: string): { tools: AIToolName[]; args: Reco
   if (/search\s+video|near\s+.*entrance.*yesterday|show\s+critical\s+video/.test(m)) {
     tools.push("searchVideoEvents");
     args.severity = /critical/.test(m) ? "CRITICAL" : args.severity;
+  }
+  if (/responding\s+team|teams?\s+currently\s+respond|which\s+teams/.test(m)) {
+    tools.push("getRespondingTeams");
+  }
+  if (/overdue\s+(safety\s+)?inspection|inspection/.test(m)) {
+    tools.push("getOverdueInspections");
+  }
+  if (/field\s+operations|today'?s?\s+field|summarize.*field|overdue\s+task/.test(m)) {
+    tools.push("summarizeFieldOperations", "getFieldTasks");
+  }
+  if (/need(s)?\s+a\s+responder|incidents?\s+still\s+need/.test(m)) {
+    tools.push("getIncidents", "getRespondingTeams");
   }
   if (/emergency|active\s+emergency/.test(m)) tools.push("getEmergencies");
   if (/dashboard|summary|overview|briefing|what.*know/.test(m)) tools.push("getDashboardSummary");

@@ -75,6 +75,22 @@ export async function createTask(
     priority: data.priority ?? "MEDIUM",
     dueAt: data.dueAt ? new Date(data.dueAt) : null,
     source: data.source ?? "MANUAL",
+    checklist: (data as { checklist?: Array<{ key: string; label: string }> }).checklist?.map((c) => ({
+      key: c.key,
+      label: c.label,
+      done: false,
+      doneAt: null,
+      doneBy: null,
+    })) ?? [],
+    timeline: [
+      {
+        action: "ASSIGNED",
+        at: new Date(),
+        userId: actor ? new mongoose.Types.ObjectId(actor.id) : null,
+        userName: actor?.name ?? "System",
+        note: "",
+      },
+    ],
   });
 
   if (data.emergencyId && actor) {

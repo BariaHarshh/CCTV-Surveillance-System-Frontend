@@ -24,6 +24,12 @@ export const metadata: Metadata = {
     "intelligent monitoring",
     "risk assessment",
   ],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    title: "ACG Field",
+    statusBarStyle: "black-translucent",
+  },
   openGraph: {
     title: "AI Campus Guardian",
     description: "From Passive CCTV to Proactive AI-Powered Campus Safety",

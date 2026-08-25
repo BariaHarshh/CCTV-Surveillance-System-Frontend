@@ -31,6 +31,16 @@ const protectedPaths = [
   "/analytics",
   "/video",
   "/command",
+  "/mobile",
+  "/tasks",
+  "/teams",
+  "/field",
+  "/supervisor",
+  "/patrol",
+  "/inspections",
+  "/directory",
+  "/announcements",
+  "/communication",
 ];
 
 function addSecurityHeaders(response: NextResponse, requestId: string): NextResponse {
@@ -41,7 +51,7 @@ function addSecurityHeaders(response: NextResponse, requestId: string): NextResp
   response.headers.set("X-XSS-Protection", "1; mode=block");
   response.headers.set(
     "Permissions-Policy",
-    "camera=(), microphone=(), geolocation=()"
+    "camera=(self), microphone=(), geolocation=(self)"
   );
   if (process.env.NODE_ENV === "production") {
     response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");

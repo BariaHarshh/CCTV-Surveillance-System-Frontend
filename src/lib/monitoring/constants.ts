@@ -27,7 +27,16 @@ export type AlertStatus = (typeof ALERT_STATUSES)[number];
 export const EVENT_SOURCES = ["DETECTION", "SYSTEM", "TEST", "MANUAL"] as const;
 export type EventSource = (typeof EVENT_SOURCES)[number];
 
-export const NOTIFICATION_TYPES = ["ALERT", "EVENT", "SYSTEM", "SECURITY"] as const;
+export const NOTIFICATION_TYPES = [
+  "ALERT",
+  "EVENT",
+  "SYSTEM",
+  "SECURITY",
+  "TASK",
+  "INCIDENT",
+  "EMERGENCY",
+  "ANNOUNCEMENT",
+] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
 export const MONITORING_PERMISSIONS = {

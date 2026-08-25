@@ -95,6 +95,11 @@ async function handleJob(
     // Handlers reserved — no-op success unless specialized modules invoke failures
     return;
   }
+  if (type === "PUSH_DELIVER") {
+    const { processPushDelivery } = await import("@/lib/mobile/push-service");
+    await processPushDelivery(String(payload.deliveryId || ""));
+    return;
+  }
   if (type === "VIDEO_AI_PROCESS") {
     const { processVideoDetection } = await import("@/lib/video/pipeline");
     if (!meta.organizationId) throw new Error("organizationId required");
