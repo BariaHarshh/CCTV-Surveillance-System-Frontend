@@ -41,6 +41,7 @@ export function CameraStreamView({
   const [stream, setStream] = useState<StreamInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [retryKey, setRetryKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef(true);
 
@@ -58,7 +59,7 @@ export function CameraStreamView({
       .then((data) => {
         if (!activeRef.current) return;
         if (data.error) throw new Error(data.error);
-        setStream(data);
+        setStream(data.stream ?? data);
       })
       .catch((e) => {
         if (activeRef.current) setError(e instanceof Error ? e.message : "Stream unavailable");
@@ -88,7 +89,17 @@ export function CameraStreamView({
       ) : stream?.available && stream.url ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={stream.url} alt="Live camera feed" className="aspect-video w-full object-cover" />
+          <img
+            key={retryKey}
+            src={stream.url}
+            alt="Live camera feed"
+            className="aspect-video w-full object-cover"
+            onError={() => {
+              setTimeout(() => {
+                if (activeRef.current) setRetryKey((k) => k + 1);
+              }, 1000);
+            }}
+          />
           <DetectionOverlay detections={detections} zones={zones} />
           {showFullscreen && (
             <button

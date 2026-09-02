@@ -18,6 +18,12 @@ export async function connectDB(): Promise<typeof mongoose> {
     return cached.conn;
   }
 
+  if (!authConfig.mongodbUri) {
+    throw new Error(
+      "MONGODB_URI is not configured. Please create .env.local with a valid MongoDB Atlas connection string."
+    );
+  }
+
   // Drop stale cache after disconnect / failed connect so we can retry.
   if (mongoose.connection.readyState === 0) {
     cached.conn = null;
@@ -25,12 +31,22 @@ export async function connectDB(): Promise<typeof mongoose> {
   }
 
   if (!cached.promise) {
+    const isAtlas =
+      authConfig.mongodbUri.includes("mongodb+srv") ||
+      authConfig.mongodbUri.includes(".mongodb.net");
+    const targetType = isAtlas ? "MongoDB Atlas" : "MongoDB";
+    console.log(`[DB] Connecting to ${targetType}...`);
+
     cached.promise = mongoose
       .connect(authConfig.mongodbUri, {
         bufferCommands: false,
         serverSelectionTimeoutMS: 5000,
         connectTimeoutMS: 5000,
         socketTimeoutMS: 10000,
+      })
+      .then((conn) => {
+        console.log("[DB] MongoDB connection established");
+        return conn;
       })
       .catch((err) => {
         cached.promise = null;

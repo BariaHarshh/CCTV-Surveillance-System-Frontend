@@ -110,6 +110,16 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
           <p className="mt-1 text-muted">Real-time visibility across your organization&apos;s camera network.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href={`${base}/monitoring/live`}
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            Live AI Feed
+          </Link>
           <RealtimeIndicator status={realtimeStatus} />
           <button type="button" onClick={load} className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium text-muted hover:text-foreground">
             <RefreshCw className="h-3.5 w-3.5" /> Refresh

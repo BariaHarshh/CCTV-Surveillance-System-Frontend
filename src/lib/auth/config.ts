@@ -1,5 +1,7 @@
 export const authConfig = {
-  mongodbUri: process.env.MONGODB_URI ?? "mongodb://localhost:27017/ai-campus-guardian",
+  get mongodbUri() {
+    return process.env.MONGODB_URI ?? "";
+  },
   sessionSecret: process.env.SESSION_SECRET ?? "dev-session-secret-change-in-production-min-32",
   jwtSecret: process.env.JWT_SECRET ?? "dev-jwt-secret-change-in-production-min-32",
   jwtRefreshSecret:

@@ -18,7 +18,18 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     const proxy = await getStreamSessionProxy(sessionId, organizationId);
     if (!proxy) return new Response("Stream unavailable", { status: 404 });
 
-    const upstream = await fetch(proxy.fetchUrl, { signal: AbortSignal.timeout(10000) });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    let upstream: Response;
+    try {
+      upstream = await fetch(proxy.fetchUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
+    } catch (err) {
+      clearTimeout(timeoutId);
+      throw err;
+    }
+
     if (!upstream.ok) return new Response("Stream connection failed", { status: 502 });
 
     const contentType = upstream.headers.get("content-type") ?? proxy.contentType;

@@ -8,6 +8,7 @@ export type RealtimeStatus = "connected" | "disconnected" | "reconnecting";
 
 export function useMonitoringSocket(handlers?: {
   onCameraStatus?: (payload: Record<string, unknown>) => void;
+  onDetectionCreated?: (payload: Record<string, unknown>) => void;
   onEventCreated?: (payload: Record<string, unknown>) => void;
   onEventUpdated?: (payload: Record<string, unknown>) => void;
   onAlertCreated?: (payload: Record<string, unknown>) => void;
@@ -42,6 +43,7 @@ export function useMonitoringSocket(handlers?: {
     socket.io.on("reconnect", () => setStatus("connected"));
 
     socket.on(SOCKET_EVENTS.CAMERA_STATUS, (p) => handlersRef.current?.onCameraStatus?.(p));
+    socket.on(SOCKET_EVENTS.DETECTION_CREATED, (p) => handlersRef.current?.onDetectionCreated?.(p));
     socket.on(SOCKET_EVENTS.EVENT_CREATED, (p) => handlersRef.current?.onEventCreated?.(p));
     socket.on(SOCKET_EVENTS.EVENT_UPDATED, (p) => handlersRef.current?.onEventUpdated?.(p));
     socket.on(SOCKET_EVENTS.ALERT_CREATED, (p) => handlersRef.current?.onAlertCreated?.(p));
