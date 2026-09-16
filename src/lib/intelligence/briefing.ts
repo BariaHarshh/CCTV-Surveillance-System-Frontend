@@ -19,7 +19,7 @@ export async function buildPredictiveRisk(organizationId: string) {
   ]);
 
   const trend = inc7 - incPrev;
-  let currentRisk = Math.min(100, Math.round(inc7 * 8 + alert7 * 5 + offline * 7));
+  const currentRisk = Math.min(100, Math.round(inc7 * 8 + alert7 * 5 + offline * 7));
   const factors: string[] = [];
   if (inc7 > 0) factors.push(`${inc7} incidents in the last 7 days`);
   if (trend > 0) factors.push(`Incident volume up ${trend} vs prior week`);

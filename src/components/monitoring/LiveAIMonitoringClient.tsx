@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Camera, Users, AlertTriangle, ShieldCheck, RefreshCw, Activity, Layers, Maximize2 } from "lucide-react";
+import { Camera, AlertTriangle, RefreshCw } from "lucide-react";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
 import { MonitoringPortal } from "./MonitoringPortal";
 import { CameraStreamView } from "./CameraStreamView";
-import { CameraStatusDot, SeverityBadge, RealtimeIndicator, formatDateTime, formatTime, formatEventType } from "./shared";
+import { CameraStatusDot, RealtimeIndicator, formatTime, formatEventType } from "./shared";
 import { useMonitoringSocket } from "@/hooks/useMonitoringSocket";
 import { cn } from "@/lib/utils";
 
@@ -64,7 +64,7 @@ export function LiveAIMonitoringClient({
   const base = portal === "admin" ? "/admin" : "/staff";
   const [cameras, setCameras] = useState<CameraItem[]>([]);
   const [crowdDataMap, setCrowdDataMap] = useState<Record<string, CameraCrowdData>>({});
-  const [eventsMap, setEventsMap] = useState<Record<string, EventRow[]>>({});
+  const [, setEventsMap] = useState<Record<string, EventRow[]>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
