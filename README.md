@@ -124,10 +124,17 @@ python app/run_crowd_detection.py
 
 ---
 
-## Technical Documentation Index
+## Documentation Index
 
-- [docs/MONGODB_ATLAS_SETUP.md](docs/MONGODB_ATLAS_SETUP.md) — Team MongoDB Atlas configuration & security guide.
-- [ADMIN_GUIDE.md](ADMIN_GUIDE.md) — Organization Admin operations guide.
-- [SUPER_ADMIN_GUIDE.md](SUPER_ADMIN_GUIDE.md) — Platform Super Admin operations guide.
-- [STAFF_GUIDE.md](STAFF_GUIDE.md) — Field / Operations staff guide.
-- [SECURITY.md](SECURITY.md) — Security controls & secret management policy.
+| Document | Audience / Purpose |
+| :--- | :--- |
+| [docs/PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) | Technical architecture & implementation summary |
+| [docs/MONGODB_ATLAS_SETUP.md](docs/MONGODB_ATLAS_SETUP.md) | MongoDB Atlas connection & security setup guide |
+| [docs/ADMIN_GUIDE.md](docs/ADMIN_GUIDE.md) | Organization Administrators operations guide |
+| [docs/SUPER_ADMIN_GUIDE.md](docs/SUPER_ADMIN_GUIDE.md) | Platform Super Admins operations guide |
+| [docs/STAFF_GUIDE.md](docs/STAFF_GUIDE.md) | Field / Operations Staff guide |
+| [SECURITY.md](SECURITY.md) & [docs/SECURITY_AUDIT.md](docs/SECURITY_AUDIT.md) | Security controls & audit findings |
+| [DEPLOYMENT.md](DEPLOYMENT.md) & [docs/PRODUCTION_CHECKLIST.md](docs/PRODUCTION_CHECKLIST.md) | Deployment guide & launch checklist |
+| [docs/RUNBOOK.md](docs/RUNBOOK.md) | On-call operations runbook |
+| [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md) | Release notes |
+| [docs/FINAL_TEST_REPORT.md](docs/FINAL_TEST_REPORT.md) | Test suite evidence |
