@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Camera, AlertTriangle, RefreshCw } from "lucide-react";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
@@ -53,6 +53,105 @@ interface CameraCrowdData {
   detections: { label: string; confidence?: number | null; boundingBox?: { x: number; y: number; w: number; h: number } }[];
 }
 
+const DEFAULT_CROWD_DATA: CameraCrowdData = {
+  currentCount: 0,
+  stableCount: 0,
+  capacity: 10,
+  crowdState: "NORMAL",
+  lastUpdate: null,
+  detections: [],
+};
+
+const MonitoringCameraCard = React.memo(function MonitoringCameraCard({
+  camera,
+  crowdData,
+}: {
+  camera: CameraItem;
+  crowdData: CameraCrowdData;
+}) {
+  const capacityPct = Math.min(100, Math.round((crowdData.currentCount / (crowdData.capacity || 1)) * 100));
+
+  return (
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface/50 p-4 transition-all hover:border-accent/30">
+      {/* Camera Card Top Header */}
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+          </span>
+          <span className="text-xs font-bold text-foreground">{camera.name}</span>
+          <span className="rounded-full bg-glass px-2 py-0.5 font-mono text-[10px] text-muted">{camera.cameraId}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <CameraStatusDot status={camera.status} />
+          <span className={cn(
+            "rounded-md px-2 py-0.5 font-mono text-[10px] font-bold uppercase",
+            crowdData.crowdState === "CROWD DETECTED" ? "bg-red-500/20 text-red-400" :
+            crowdData.crowdState === "CHECKING CROWD" ? "bg-amber-500/20 text-amber-400" : "bg-emerald-500/20 text-emerald-400"
+          )}>
+            {crowdData.crowdState}
+          </span>
+        </div>
+      </div>
+
+      {/* Independent Direct Video Stream Container */}
+      <div className="relative overflow-hidden rounded-xl border border-border bg-black">
+        <CameraStreamView
+          cameraDbId={camera.id}
+          status={camera.status}
+          className="w-full"
+          detections={crowdData.detections}
+        />
+      </div>
+
+      {/* Location & Time Footer */}
+      <div className="mt-2.5 flex items-center justify-between text-[11px] text-muted">
+        <span className="truncate">
+          {[camera.location.building, camera.location.room, camera.location.areaLabel].filter(Boolean).join(" · ") || "Main Campus Area"}
+        </span>
+        <span>{crowdData.lastUpdate ? formatTime(crowdData.lastUpdate) : "Live"}</span>
+      </div>
+
+      {/* Crowd Analytics HUD */}
+      <div className="mt-3 rounded-xl border border-border bg-glass p-3.5">
+        <div className="grid grid-cols-2 gap-3 text-center">
+          <div>
+            <span className="block text-[10px] font-medium uppercase text-muted">YOLOv8 Count</span>
+            <span className="mt-0.5 block font-mono text-xl font-extrabold text-foreground">
+              {crowdData.currentCount}
+            </span>
+          </div>
+          <div>
+            <span className="block text-[10px] font-medium uppercase text-muted">ByteTrack Stable</span>
+            <span className="mt-0.5 block font-mono text-xl font-extrabold text-accent">
+              {crowdData.stableCount}
+            </span>
+          </div>
+        </div>
+
+        {/* Capacity Bar */}
+        <div className="mt-3">
+          <div className="flex items-center justify-between text-[11px] font-medium text-muted">
+            <span>Occupancy Capacity</span>
+            <span className="font-mono text-foreground">{crowdData.currentCount} / {crowdData.capacity} ({capacityPct}%)</span>
+          </div>
+          <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-800">
+            <div
+              className={cn(
+                "h-full rounded-full transition-all duration-500",
+                capacityPct >= 100 ? "bg-red-500" :
+                capacityPct >= 70 ? "bg-amber-500" : "bg-emerald-500"
+              )}
+              style={{ width: `${capacityPct}%` }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
 export function LiveAIMonitoringClient({
   user,
   portal,
@@ -67,6 +166,9 @@ export function LiveAIMonitoringClient({
   const [, setEventsMap] = useState<Record<string, EventRow[]>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const camerasRef = useRef<CameraItem[]>([]);
+  camerasRef.current = cameras;
 
   // Fetch details for all cameras in parallel
   const loadAllCameraDetails = useCallback(async (cameraList: CameraItem[]) => {
@@ -171,63 +273,52 @@ export function LiveAIMonitoringClient({
       const payloadCamId = payload.cameraId as string;
       const meta = (payload.metadata as DetectionMetadata) || {};
 
-      setCameras((prevCameras) => {
-        const targetCam = prevCameras.find(
+      setCrowdDataMap((prevMap) => {
+        const matchingCam = camerasRef.current.find(
           (c) => c.id === payloadCamId || c.cameraId === payloadCamId || meta.cameraId === c.cameraId
         );
-        if (!targetCam) return prevCameras;
+        if (!matchingCam) return prevMap;
 
-        const camKey = targetCam.id;
-        setCrowdDataMap((prevMap) => {
-          const existing = prevMap[camKey] || {
-            currentCount: 0,
-            stableCount: 0,
-            capacity: 10,
-            crowdState: "NORMAL",
-            lastUpdate: null,
-            detections: [],
-          };
+        const camKey = matchingCam.id;
+        const existing = prevMap[camKey] || DEFAULT_CROWD_DATA;
 
-          const count = Number(meta.currentCount ?? existing.currentCount);
-          const cap = Number(meta.capacity ?? meta.threshold ?? existing.capacity);
-          let state: "NORMAL" | "CHECKING CROWD" | "CROWD DETECTED" = "NORMAL";
+        const count = Number(meta.currentCount ?? existing.currentCount);
+        const cap = Number(meta.capacity ?? meta.threshold ?? existing.capacity);
+        let state: "NORMAL" | "CHECKING CROWD" | "CROWD DETECTED" = "NORMAL";
 
-          if (meta.crowdState) {
-            const s = String(meta.crowdState).toUpperCase();
-            if (s.includes("CROWD DETECTED") || s.includes("HIGH") || s.includes("CRITICAL")) {
-              state = "CROWD DETECTED";
-            } else if (s.includes("CHECKING") || s.includes("ELEVATED") || s.includes("MEDIUM")) {
-              state = "CHECKING CROWD";
-            }
-          } else if (count >= cap) {
+        if (meta.crowdState) {
+          const s = String(meta.crowdState).toUpperCase();
+          if (s.includes("CROWD DETECTED") || s.includes("HIGH") || s.includes("CRITICAL")) {
             state = "CROWD DETECTED";
-          } else if (count >= Math.floor(cap * 0.7)) {
+          } else if (s.includes("CHECKING") || s.includes("ELEVATED") || s.includes("MEDIUM")) {
             state = "CHECKING CROWD";
           }
+        } else if (count >= cap) {
+          state = "CROWD DETECTED";
+        } else if (count >= Math.floor(cap * 0.7)) {
+          state = "CHECKING CROWD";
+        }
 
-          const detections = meta.boundingBox
-            ? [{ label: "Person", confidence: 0.9, boundingBox: meta.boundingBox }]
-            : existing.detections;
+        const detections = meta.boundingBox
+          ? [{ label: "Person", confidence: 0.9, boundingBox: meta.boundingBox }]
+          : existing.detections;
 
-          return {
-            ...prevMap,
-            [camKey]: {
-              currentCount: count,
-              stableCount: Number(meta.stableCount ?? count),
-              capacity: cap,
-              crowdState: state,
-              lastUpdate: new Date().toISOString(),
-              detections,
-            },
-          };
-        });
-
-        return prevCameras;
+        return {
+          ...prevMap,
+          [camKey]: {
+            currentCount: count,
+            stableCount: Number(meta.stableCount ?? count),
+            capacity: cap,
+            crowdState: state,
+            lastUpdate: new Date().toISOString(),
+            detections,
+          },
+        };
       });
     },
     onEventCreated: (payload) => {
       const payloadCamId = payload.cameraId as string;
-      const targetCam = cameras.find((c) => c.id === payloadCamId || c.cameraId === payloadCamId);
+      const targetCam = camerasRef.current.find((c) => c.id === payloadCamId || c.cameraId === payloadCamId);
       if (targetCam) {
         fetch(`/api/monitoring/cameras/${targetCam.id}`, { credentials: "include" })
           .then((r) => r.json())
@@ -293,97 +384,13 @@ export function LiveAIMonitoringClient({
       ) : (
         /* Multi-Camera 2-Column Responsive Grid */
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {cameras.map((camera) => {
-            const crowdData = crowdDataMap[camera.id] || {
-              currentCount: 0,
-              stableCount: 0,
-              capacity: 10,
-              crowdState: "NORMAL",
-              lastUpdate: null,
-              detections: [],
-            };
-            const capacityPct = Math.min(100, Math.round((crowdData.currentCount / (crowdData.capacity || 1)) * 100));
-
-            return (
-              <div key={camera.id} className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface/50 p-4 transition-all hover:border-accent/30">
-                {/* Camera Card Top Header */}
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                    </span>
-                    <span className="text-xs font-bold text-foreground">{camera.name}</span>
-                    <span className="rounded-full bg-glass px-2 py-0.5 font-mono text-[10px] text-muted">{camera.cameraId}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CameraStatusDot status={camera.status} />
-                    <span className={cn(
-                      "rounded-md px-2 py-0.5 font-mono text-[10px] font-bold uppercase",
-                      crowdData.crowdState === "CROWD DETECTED" ? "bg-red-500/20 text-red-400" :
-                      crowdData.crowdState === "CHECKING CROWD" ? "bg-amber-500/20 text-amber-400" : "bg-emerald-500/20 text-emerald-400"
-                    )}>
-                      {crowdData.crowdState}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Independent Video Stream Container */}
-                <div className="relative overflow-hidden rounded-xl border border-border bg-black">
-                  <CameraStreamView
-                    cameraDbId={camera.id}
-                    status={camera.status}
-                    className="w-full"
-                    detections={crowdData.detections}
-                  />
-                </div>
-
-                {/* Location & Time Footer */}
-                <div className="mt-2.5 flex items-center justify-between text-[11px] text-muted">
-                  <span className="truncate">
-                    {[camera.location.building, camera.location.room, camera.location.areaLabel].filter(Boolean).join(" · ") || "Main Campus Area"}
-                  </span>
-                  <span>{crowdData.lastUpdate ? formatTime(crowdData.lastUpdate) : "Live"}</span>
-                </div>
-
-                {/* Crowd Analytics HUD */}
-                <div className="mt-3 rounded-xl border border-border bg-glass p-3.5">
-                  <div className="grid grid-cols-2 gap-3 text-center">
-                    <div>
-                      <span className="block text-[10px] font-medium uppercase text-muted">YOLOv8 Count</span>
-                      <span className="mt-0.5 block font-mono text-xl font-extrabold text-foreground">
-                        {crowdData.currentCount}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="block text-[10px] font-medium uppercase text-muted">ByteTrack Stable</span>
-                      <span className="mt-0.5 block font-mono text-xl font-extrabold text-accent">
-                        {crowdData.stableCount}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Capacity Bar */}
-                  <div className="mt-3">
-                    <div className="flex items-center justify-between text-[11px] font-medium text-muted">
-                      <span>Occupancy Capacity</span>
-                      <span className="font-mono text-foreground">{crowdData.currentCount} / {crowdData.capacity} ({capacityPct}%)</span>
-                    </div>
-                    <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-800">
-                      <div
-                        className={cn(
-                          "h-full rounded-full transition-all duration-500",
-                          capacityPct >= 100 ? "bg-red-500" :
-                          capacityPct >= 70 ? "bg-amber-500" : "bg-emerald-500"
-                        )}
-                        style={{ width: `${capacityPct}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {cameras.map((camera) => (
+            <MonitoringCameraCard
+              key={camera.id}
+              camera={camera}
+              crowdData={crowdDataMap[camera.id] || DEFAULT_CROWD_DATA}
+            />
+          ))}
         </div>
       )}
     </MonitoringPortal>

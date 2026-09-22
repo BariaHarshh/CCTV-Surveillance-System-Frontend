@@ -1,7 +1,5 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-import { Maximize2, VideoOff } from "lucide-react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Maximize2, VideoOff, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DetectionOverlay } from "./DetectionOverlay";
 
@@ -23,7 +21,10 @@ interface OverlayZone {
   polygon: { x: number; y: number }[];
 }
 
-export function CameraStreamView({
+const RETRY_DELAYS_MS = [2000, 4000, 8000, 16000, 30000];
+const MAX_RETRIES = RETRY_DELAYS_MS.length;
+
+export const CameraStreamView = React.memo(function CameraStreamView({
   cameraDbId,
   status,
   className,
@@ -42,11 +43,14 @@ export function CameraStreamView({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [retryKey, setRetryKey] = useState(0);
+  const [retryExhausted, setRetryExhausted] = useState(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef(true);
+  const retryCountRef = useRef(0);
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    activeRef.current = true;
+  const fetchStreamUrl = useCallback(async () => {
     if (status !== "ONLINE") {
       setStream(null);
       return;
@@ -54,24 +58,68 @@ export function CameraStreamView({
 
     setLoading(true);
     setError("");
-    fetch(`/api/monitoring/cameras/${cameraDbId}/stream`, { credentials: "include" })
-      .then((r) => r.json())
-      .then((data) => {
-        if (!activeRef.current) return;
-        if (data.error) throw new Error(data.error);
-        setStream(data.stream ?? data);
-      })
-      .catch((e) => {
-        if (activeRef.current) setError(e instanceof Error ? e.message : "Stream unavailable");
-      })
-      .finally(() => {
-        if (activeRef.current) setLoading(false);
-      });
+    setRetryExhausted(false);
+
+    try {
+      const res = await fetch(`/api/monitoring/cameras/${cameraDbId}/stream`, { credentials: "include" });
+      const data = await res.json();
+      if (!activeRef.current) return;
+      if (data.error) throw new Error(data.error);
+      setStream(data.stream ?? data);
+      retryCountRef.current = 0;
+    } catch (e) {
+      if (activeRef.current) {
+        setError(e instanceof Error ? e.message : "Stream unavailable");
+      }
+    } finally {
+      if (activeRef.current) setLoading(false);
+    }
+  }, [cameraDbId, status]);
+
+  useEffect(() => {
+    activeRef.current = true;
+    fetchStreamUrl();
 
     return () => {
       activeRef.current = false;
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
+      }
     };
-  }, [cameraDbId, status]);
+  }, [fetchStreamUrl]);
+
+  const handleImageError = () => {
+    if (!activeRef.current) return;
+
+    if (retryCountRef.current < MAX_RETRIES) {
+      const delay = RETRY_DELAYS_MS[retryCountRef.current];
+      retryCountRef.current += 1;
+
+      if (retryTimeoutRef.current) clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = setTimeout(() => {
+        if (activeRef.current) {
+          setRetryKey((k) => k + 1);
+        }
+      }, delay);
+    } else {
+      setRetryExhausted(true);
+      setError("Stream connection lost. Maximum reconnect attempts reached.");
+    }
+  };
+
+  const handleImageLoad = () => {
+    retryCountRef.current = 0;
+    setRetryExhausted(false);
+    setError("");
+  };
+
+  const handleManualRetry = () => {
+    retryCountRef.current = 0;
+    setRetryExhausted(false);
+    setRetryKey((k) => k + 1);
+    fetchStreamUrl();
+  };
 
   const offline = status !== "ONLINE";
 
@@ -86,6 +134,19 @@ export function CameraStreamView({
         <div className="flex aspect-video items-center justify-center">
           <p className="text-sm text-muted">Connecting stream...</p>
         </div>
+      ) : retryExhausted ? (
+        <div className="flex aspect-video flex-col items-center justify-center gap-2 px-4 text-center">
+          <VideoOff className="h-8 w-8 text-amber-500" />
+          <p className="text-xs font-semibold text-amber-400">Stream Connection Offline</p>
+          <p className="text-[11px] text-muted">{error || "Failed to establish direct video connection."}</p>
+          <button
+            type="button"
+            onClick={handleManualRetry}
+            className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1 text-xs font-medium text-foreground hover:bg-glass"
+          >
+            <RefreshCw className="h-3 w-3" /> Retry Stream
+          </button>
+        </div>
       ) : stream?.available && stream.url ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -94,11 +155,8 @@ export function CameraStreamView({
             src={stream.url}
             alt="Live camera feed"
             className="aspect-video w-full object-cover"
-            onError={() => {
-              setTimeout(() => {
-                if (activeRef.current) setRetryKey((k) => k + 1);
-              }, 1000);
-            }}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
           />
           <DetectionOverlay detections={detections} zones={zones} />
           {showFullscreen && (
@@ -121,4 +179,4 @@ export function CameraStreamView({
       )}
     </div>
   );
-}
+});
