@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { RefreshCw, Search } from "lucide-react";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
@@ -8,6 +8,7 @@ import { MonitoringPortal } from "./MonitoringPortal";
 import { SeverityBadge, formatDateTime, formatEventType } from "./shared";
 import { useMonitoringSocket } from "@/hooks/useMonitoringSocket";
 import { RealtimeIndicator } from "./shared";
+import { cn } from "@/lib/utils";
 
 interface EventRow {
   id: string;
@@ -24,13 +25,21 @@ export function EventsClient({ user, portal }: { user: SafeUser; portal: "admin"
   const base = portal === "admin" ? "/admin" : "/staff";
   const [events, setEvents] = useState<EventRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [q, setQ] = useState("");
   const [severity, setSeverity] = useState("ALL");
   const [eventType, setEventType] = useState("");
   const [page, setPage] = useState(1);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const eventsRef = useRef<EventRow[]>([]);
+  eventsRef.current = events;
+
+  const load = useCallback(async (showSpinner = false) => {
+    if (showSpinner && eventsRef.current.length === 0) {
+      setLoading(true);
+    } else {
+      setRefreshing(true);
+    }
     try {
       const params = new URLSearchParams({ page: String(page), limit: "30" });
       if (q) params.set("q", q);
@@ -41,14 +50,15 @@ export function EventsClient({ user, portal }: { user: SafeUser; portal: "admin"
       if (res.ok) setEvents(data.events ?? []);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, [page, q, severity, eventType]);
 
   useEffect(() => {
-    load();
+    load(true);
   }, [load]);
 
-  const { status: realtimeStatus } = useMonitoringSocket({ onEventCreated: () => load() });
+  const { status: realtimeStatus } = useMonitoringSocket({ onEventCreated: () => load(false) });
 
   return (
     <MonitoringPortal portal={portal} user={user}>
@@ -59,8 +69,13 @@ export function EventsClient({ user, portal }: { user: SafeUser; portal: "admin"
         </div>
         <div className="flex items-center gap-3">
           <RealtimeIndicator status={realtimeStatus} />
-          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
-            <RefreshCw className="h-4 w-4" />
+          <button
+            type="button"
+            onClick={() => load(false)}
+            disabled={refreshing}
+            className="rounded-full border border-border p-2 text-muted hover:text-foreground disabled:opacity-70"
+          >
+            <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin text-accent")} />
           </button>
         </div>
       </div>
@@ -88,7 +103,7 @@ export function EventsClient({ user, portal }: { user: SafeUser; portal: "admin"
       </div>
 
       <div className="mt-6 space-y-2">
-        {loading ? (
+        {loading && events.length === 0 ? (
           Array.from({ length: 8 }).map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-glass" />)
         ) : events.length === 0 ? (
           <p className="rounded-xl border border-border p-8 text-center text-muted">No events found.</p>

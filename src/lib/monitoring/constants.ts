@@ -78,3 +78,55 @@ export function riskLevelFromScore(score: number): SeverityLevel {
   if (score >= 25) return "MEDIUM";
   return "LOW";
 }
+
+export function normalizeEventType(type: string | undefined | null): EventType {
+  if (!type) return "OTHER";
+  const upper = String(type).toUpperCase().trim();
+  if ((EVENT_TYPES as readonly string[]).includes(upper)) {
+    return upper as EventType;
+  }
+  if (
+    upper.includes("VIOLEN") ||
+    upper.includes("FIGHT") ||
+    upper.includes("FALL") ||
+    upper.includes("SUSPICIOUS") ||
+    upper.includes("ANOMALY") ||
+    upper.includes("BEHAVIOR")
+  ) {
+    return "UNUSUAL_ACTIVITY";
+  }
+  if (upper.includes("ABANDON") || upper.includes("UNATTEND") || upper.includes("OBJECT")) {
+    return "ABANDONED_OBJECT";
+  }
+  if (
+    upper.includes("INTRUD") ||
+    upper.includes("BREACH") ||
+    upper.includes("UNAUTHOR") ||
+    upper.includes("ZONE") ||
+    upper.includes("PERIMETER")
+  ) {
+    return "UNAUTHORIZED_ENTRY";
+  }
+  if (upper.includes("CROWD") || upper.includes("OCCUPAN")) {
+    return "OCCUPANCY_HIGH";
+  }
+  if (upper.includes("PERSON") || upper.includes("PEOPLE") || upper.includes("TRACK")) {
+    return "PERSON_DETECTED";
+  }
+  if (upper.includes("TAMPER")) {
+    return "CAMERA_TAMPERED";
+  }
+  if (upper.includes("OFFLINE")) {
+    return "CAMERA_OFFLINE";
+  }
+  if (upper.includes("FIRE")) {
+    return "FIRE_DETECTED";
+  }
+  if (upper.includes("SMOKE")) {
+    return "SMOKE_DETECTED";
+  }
+  if (upper.includes("PPE")) {
+    return "PPE_VIOLATION";
+  }
+  return "OTHER";
+}

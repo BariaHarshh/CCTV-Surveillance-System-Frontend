@@ -12,7 +12,7 @@ import { severityEngine } from "@/lib/monitoring/severity-engine";
 import { createEventRecord } from "@/lib/ai/event-pipeline";
 import { detectionQueue, eventQueue, queueMetrics } from "@/lib/ai/queue";
 import { emitToOrganization } from "@/lib/monitoring/socket-emitter";
-import { SOCKET_EVENTS } from "@/lib/monitoring/constants";
+import { normalizeEventType, SOCKET_EVENTS } from "@/lib/monitoring/constants";
 
 export interface ProcessDetectionInput {
   organizationId: string;
@@ -41,6 +41,7 @@ export async function processDetection(input: ProcessDetectionInput) {
   queueMetrics.detectionJobs++;
   const orgSettings = await getOrCreateOrgAISettings(input.organizationId);
   const cameraConfig = await getOrCreateCameraAIConfig(input.organizationId, input.cameraId);
+  const cameraDbId = cameraConfig.cameraId ? cameraConfig.cameraId.toString() : input.cameraId;
   const moduleConfig = cameraConfig.modules[input.moduleType];
 
   if (!moduleConfig?.enabled && input.source !== "TEST") {
@@ -80,13 +81,21 @@ export async function processDetection(input: ProcessDetectionInput) {
     return { skipped: true, reason: "Below confidence threshold" };
   }
 
+  // Emit real-time detection telemetry to Socket.IO monitoring wall
+  emitToOrganization(input.organizationId, SOCKET_EVENTS.DETECTION_CREATED, {
+    moduleType: input.moduleType,
+    cameraId: input.cameraId,
+    confidence: output.confidence ?? input.confidence ?? null,
+    metadata: input.metadata ?? {},
+  });
+
   const zones = input.moduleType === "RESTRICTED_ZONE"
-    ? await getActiveZonesForCamera(input.organizationId, input.cameraId)
+    ? await getActiveZonesForCamera(input.organizationId, cameraDbId)
     : [];
 
   const ruleResult = await evaluateRules({
     organizationId: input.organizationId,
-    cameraId: input.cameraId,
+    cameraId: cameraDbId,
     moduleType: input.moduleType,
     detection: output,
     zones,
@@ -103,7 +112,7 @@ export async function processDetection(input: ProcessDetectionInput) {
     const dup = await isDuplicateEvent(
       {
         organizationId: input.organizationId,
-        cameraId: input.cameraId,
+        cameraId: cameraDbId,
         eventType: ruleResult.eventType,
         zoneId: ruleResult.metadata.zoneId as string | undefined,
       },
@@ -114,13 +123,15 @@ export async function processDetection(input: ProcessDetectionInput) {
 
   const relatedIds = await findRelatedEvents(
     input.organizationId,
-    input.cameraId,
+    cameraDbId,
     ruleResult.eventType,
     frame.timestamp
   );
 
+  const canonicalEventType = normalizeEventType(ruleResult.eventType);
+
   const severity = severityEngine.calculate({
-    eventType: ruleResult.eventType,
+    eventType: canonicalEventType,
     confidence: output.confidence,
     detectedAt: frame.timestamp,
     afterHours: ruleResult.afterHours,
@@ -128,7 +139,7 @@ export async function processDetection(input: ProcessDetectionInput) {
   });
 
   const risk = riskEngine.calculate({
-    eventType: ruleResult.eventType,
+    eventType: canonicalEventType,
     confidence: output.confidence,
     severity,
     afterHours: ruleResult.afterHours,
@@ -140,8 +151,8 @@ export async function processDetection(input: ProcessDetectionInput) {
 
   const result = await createEventRecord({
     organizationId: input.organizationId,
-    cameraId: input.cameraId,
-    eventType: ruleResult.eventType,
+    cameraId: cameraDbId,
+    eventType: canonicalEventType,
     confidence: output.confidence,
     source: input.source ?? (output.simulated ? "TEST" : "DETECTION"),
     detectedAt: frame.timestamp,
@@ -161,12 +172,6 @@ export async function processDetection(input: ProcessDetectionInput) {
 
   queueMetrics.eventJobs++;
   queueMetrics.lastProcessedAt = new Date();
-
-  emitToOrganization(input.organizationId, SOCKET_EVENTS.DETECTION_CREATED, {
-    moduleType: input.moduleType,
-    eventId: result.event.eventId,
-    cameraId: input.cameraId,
-  });
 
   return result;
 }

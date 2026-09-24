@@ -68,9 +68,9 @@ function addSecurityHeaders(response: NextResponse, requestId: string): NextResp
       ? "script-src 'self' 'unsafe-inline'"
       : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com",
+    "img-src 'self' data: blob: http://localhost:8000 http://127.0.0.1:8000 https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://server.arcgisonline.com",
     "font-src 'self' data:",
-    "connect-src 'self' ws: wss:",
+    "connect-src 'self' ws: wss: http://localhost:8000 http://127.0.0.1:8000",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",

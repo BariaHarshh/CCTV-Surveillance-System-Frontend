@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { AlertTriangle, Camera, Maximize2, RefreshCw } from "lucide-react";
@@ -35,14 +35,22 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
   const [overview, setOverview] = useState<Overview | null>(null);
   const [cameras, setCameras] = useState<MonitoringCamera[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [testMode, setTestMode] = useState(false);
   const [criticalBanner, setCriticalBanner] = useState<Record<string, unknown> | null>(null);
   const { enabled: soundEnabled, toggle: toggleSound } = useSoundNotificationsEnabled();
   const { play: playCriticalSound } = useCriticalAlertSound(soundEnabled);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const camerasRef = useRef<MonitoringCamera[]>([]);
+  camerasRef.current = cameras;
+
+  const load = useCallback(async (showSpinner = false) => {
+    if (showSpinner && camerasRef.current.length === 0) {
+      setLoading(true);
+    } else {
+      setRefreshing(true);
+    }
     try {
       const [ovRes, camRes] = await Promise.all([
         fetch("/api/monitoring/overview", { credentials: "include" }),
@@ -61,11 +69,12 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
       if (camRes.ok) setCameras(cam.cameras ?? []);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, []);
 
   useEffect(() => {
-    load();
+    load(true);
     if (process.env.NODE_ENV === "development") {
       fetch("/api/monitoring/test", { method: "OPTIONS" }).catch(() => {});
     }
@@ -83,13 +92,13 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
       );
     },
     onAlertCreated: (p) => {
-      load();
+      load(false);
       if (p.severity === "CRITICAL" || p.severity === "HIGH") {
         setCriticalBanner(p);
         if (p.severity === "CRITICAL") playCriticalSound();
       }
     },
-    onEventCreated: () => load(),
+    onEventCreated: () => load(false),
   });
 
   async function runTest(action: string) {
@@ -99,7 +108,7 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action, cameraId: cameras[0]?.id }),
     });
-    if (res.ok) load();
+    if (res.ok) load(false);
   }
 
   return (
@@ -121,8 +130,13 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
             Live AI Feed
           </Link>
           <RealtimeIndicator status={realtimeStatus} />
-          <button type="button" onClick={load} className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium text-muted hover:text-foreground">
-            <RefreshCw className="h-3.5 w-3.5" /> Refresh
+          <button
+            type="button"
+            onClick={() => load(false)}
+            disabled={refreshing}
+            className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium text-muted hover:text-foreground disabled:opacity-70"
+          >
+            <RefreshCw className={cn("h-3.5 w-3.5", refreshing && "animate-spin text-accent")} /> Refresh
           </button>
           <button
             type="button"
@@ -135,7 +149,7 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
-        {loading ? (
+        {loading && !overview ? (
           Array.from({ length: 6 }).map((_, i) => <StatCardSkeleton key={i} />)
         ) : overview ? (
           <>
@@ -170,7 +184,7 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
       <div className="mt-8">
         <h2 className="text-lg font-semibold">Camera Grid</h2>
         <p className="mt-1 text-sm text-muted">Streams load on demand — only visible cameras consume bandwidth.</p>
-        {loading ? (
+        {loading && cameras.length === 0 ? (
           <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="h-64 animate-pulse rounded-2xl bg-glass" />
@@ -197,7 +211,7 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
                     <CameraStatusDot status={cam.status} />
                   </div>
                   <p className="mt-2 text-xs text-muted">
-                    {[cam.location.building, cam.location.room, cam.location.areaLabel].filter(Boolean).join(" · ") || "No location"}
+                    {[cam.location?.building, cam.location?.room, cam.location?.areaLabel].filter(Boolean).join(" · ") || "No location"}
                   </p>
                   {cam.lastSeen && <p className="mt-1 text-[10px] text-muted">Last seen: {formatTime(cam.lastSeen)}</p>}
                 </div>

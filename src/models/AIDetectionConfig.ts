@@ -37,7 +37,7 @@ const defaultModules = (): Record<string, IModuleConfig> => {
   const m: Record<string, IModuleConfig> = {};
   for (const t of AI_MODULE_TYPES) {
     m[t] = {
-      enabled: t === "PERSON_DETECTION" || t === "CAMERA_TAMPER",
+      enabled: true,
       confidenceThreshold: null,
       cooldownSeconds: null,
       scheduleId: null,

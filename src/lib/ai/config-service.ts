@@ -41,13 +41,26 @@ export async function updateOrgAISettings(organizationId: string, patch: Record<
 
 export async function getOrCreateCameraAIConfig(organizationId: string, cameraId: string) {
   await connectDB();
+
+  let targetCameraDocId: mongoose.Types.ObjectId;
+
+  if (mongoose.Types.ObjectId.isValid(cameraId) && /^[0-9a-fA-F]{24}$/.test(cameraId)) {
+    targetCameraDocId = new mongoose.Types.ObjectId(cameraId);
+  } else {
+    const camera = await Camera.findOne(orgFilter(organizationId, { cameraId }));
+    if (!camera) {
+      throw new Error(`Camera '${cameraId}' not found in organization.`);
+    }
+    targetCameraDocId = camera._id;
+  }
+
   let config = await AIDetectionConfig.findOne(
-    orgFilter(organizationId, { cameraId: new mongoose.Types.ObjectId(cameraId) })
+    orgFilter(organizationId, { cameraId: targetCameraDocId })
   );
   if (!config) {
     config = await AIDetectionConfig.create({
       organizationId: new mongoose.Types.ObjectId(organizationId),
-      cameraId: new mongoose.Types.ObjectId(cameraId),
+      cameraId: targetCameraDocId,
       modules: defaultModules(),
     });
   }

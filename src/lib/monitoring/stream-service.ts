@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db/connect";
 import { getCameraById } from "@/lib/campus/camera-service";
 import { decryptSecret } from "@/lib/security/encrypt";
@@ -19,7 +20,9 @@ const SESSION_TTL_MS = 5 * 60 * 1000;
 
 export async function createStreamSession(organizationId: string, cameraDbId: string) {
   await connectDB();
-  const camera = await Camera.findOne(orgFilter(organizationId, { _id: cameraDbId }))
+  const isObjectId = mongoose.Types.ObjectId.isValid(cameraDbId);
+  const query = isObjectId ? { _id: cameraDbId } : { cameraId: cameraDbId };
+  const camera = await Camera.findOne(orgFilter(organizationId, query))
     .select("+connection.usernameEncrypted +connection.passwordEncrypted");
   if (!camera) return null;
 

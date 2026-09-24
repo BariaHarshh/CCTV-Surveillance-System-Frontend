@@ -7,6 +7,7 @@ import { Room } from "@/models/Room";
 import { getNextSequence, formatEventId } from "@/models/Counter";
 import { orgFilter } from "@/lib/campus/service";
 import type { EventSource, EventType, SeverityLevel } from "@/lib/monitoring/constants";
+import { normalizeEventType } from "@/lib/monitoring/constants";
 import { alertEngine } from "@/lib/monitoring/alert-engine";
 import { createAlertFromEvent } from "@/lib/monitoring/alert-service";
 import { createNotificationForAlert } from "@/lib/monitoring/notification-service";
@@ -74,6 +75,7 @@ export async function createEventRecord(input: CreateEventRecordInput) {
   const detectedAt = input.detectedAt ?? new Date();
 
   const seq = await getNextSequence("event");
+  const canonicalEventType = normalizeEventType(input.eventType);
   const event = await Event.create({
     eventId: await formatEventId(seq),
     organizationId: new mongoose.Types.ObjectId(input.organizationId),
@@ -81,7 +83,7 @@ export async function createEventRecord(input: CreateEventRecordInput) {
     buildingId: loc.buildingId,
     roomId: loc.roomId,
     cameraId: new mongoose.Types.ObjectId(input.cameraId),
-    eventType: input.eventType,
+    eventType: canonicalEventType,
     severity: input.severity,
     confidence: input.confidence ?? null,
     source: input.source ?? "DETECTION",

@@ -1,24 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Maximize2, VideoOff, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DetectionOverlay } from "./DetectionOverlay";
+import { DetectionOverlay, type OverlayDetection, type OverlayZone } from "./DetectionOverlay";
 
 interface StreamInfo {
   available: boolean;
   type: string;
   url?: string | null;
   message?: string;
-}
-
-interface OverlayDetection {
-  label: string;
-  confidence?: number | null;
-  boundingBox?: { x: number; y: number; w: number; h: number };
-}
-
-interface OverlayZone {
-  name: string;
-  polygon: { x: number; y: number }[];
 }
 
 const RETRY_DELAYS_MS = [2000, 4000, 8000, 16000, 30000];
@@ -46,61 +35,67 @@ export const CameraStreamView = React.memo(function CameraStreamView({
   const [retryExhausted, setRetryExhausted] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const activeRef = useRef(true);
+  const streamRef = useRef<StreamInfo | null>(null);
+  streamRef.current = stream;
   const retryCountRef = useRef(0);
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const fetchStreamUrl = useCallback(async () => {
-    if (status !== "ONLINE") {
-      setStream(null);
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-    setRetryExhausted(false);
-
-    try {
-      const res = await fetch(`/api/monitoring/cameras/${cameraDbId}/stream`, { credentials: "include" });
-      const data = await res.json();
-      if (!activeRef.current) return;
-      if (data.error) throw new Error(data.error);
-      setStream(data.stream ?? data);
-      retryCountRef.current = 0;
-    } catch (e) {
-      if (activeRef.current) {
-        setError(e instanceof Error ? e.message : "Stream unavailable");
-      }
-    } finally {
-      if (activeRef.current) setLoading(false);
-    }
-  }, [cameraDbId, status]);
-
   useEffect(() => {
-    activeRef.current = true;
-    fetchStreamUrl();
+    let isCurrent = true;
+
+    async function initializeStream() {
+      if (status !== "ONLINE") {
+        if (isCurrent) {
+          setStream(null);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (!streamRef.current?.url) {
+        setLoading(true);
+      }
+      setError("");
+      setRetryExhausted(false);
+
+      try {
+        const res = await fetch(`/api/monitoring/cameras/${cameraDbId}/stream`, { credentials: "include" });
+        const data = await res.json();
+        if (!isCurrent) return;
+        if (data.error) throw new Error(data.error);
+        const streamData = data.stream ?? data;
+        setStream(streamData);
+        retryCountRef.current = 0;
+      } catch (e) {
+        if (isCurrent) {
+          setError(e instanceof Error ? e.message : "Stream unavailable");
+        }
+      } finally {
+        if (isCurrent) {
+          setLoading(false);
+        }
+      }
+    }
+
+    initializeStream();
 
     return () => {
-      activeRef.current = false;
+      isCurrent = false;
       if (retryTimeoutRef.current) {
         clearTimeout(retryTimeoutRef.current);
         retryTimeoutRef.current = null;
       }
     };
-  }, [fetchStreamUrl]);
+  }, [cameraDbId, status]);
 
   const handleImageError = () => {
-    if (!activeRef.current) return;
-
     if (retryCountRef.current < MAX_RETRIES) {
       const delay = RETRY_DELAYS_MS[retryCountRef.current];
       retryCountRef.current += 1;
 
       if (retryTimeoutRef.current) clearTimeout(retryTimeoutRef.current);
       retryTimeoutRef.current = setTimeout(() => {
-        if (activeRef.current) {
-          setRetryKey((k) => k + 1);
-        }
+        setRetryKey((k) => k + 1);
       }, delay);
     } else {
       setRetryExhausted(true);
@@ -118,7 +113,13 @@ export const CameraStreamView = React.memo(function CameraStreamView({
     retryCountRef.current = 0;
     setRetryExhausted(false);
     setRetryKey((k) => k + 1);
-    fetchStreamUrl();
+    fetch(`/api/monitoring/cameras/${cameraDbId}/stream`, { credentials: "include" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.error) throw new Error(data.error);
+        setStream(data.stream ?? data);
+      })
+      .catch((e) => setError(e instanceof Error ? e.message : "Stream unavailable"));
   };
 
   const offline = status !== "ONLINE";
@@ -130,7 +131,7 @@ export const CameraStreamView = React.memo(function CameraStreamView({
           <VideoOff className="h-10 w-10 text-slate-500" />
           <p className="text-sm font-semibold tracking-wider text-slate-400">CAMERA OFFLINE</p>
         </div>
-      ) : loading ? (
+      ) : loading && !stream?.url ? (
         <div className="flex aspect-video items-center justify-center">
           <p className="text-sm text-muted">Connecting stream...</p>
         </div>

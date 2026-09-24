@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AlertTriangle, RefreshCw, Search } from "lucide-react";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
@@ -9,6 +9,7 @@ import { MonitoringPortal } from "./MonitoringPortal";
 import { SeverityBadge, formatDateTime } from "./shared";
 import { useMonitoringSocket } from "@/hooks/useMonitoringSocket";
 import { RealtimeIndicator } from "./shared";
+import { cn } from "@/lib/utils";
 
 interface AlertRow {
   id: string;
@@ -34,12 +35,20 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
   const [alerts, setAlerts] = useState<AlertRow[]>([]);
   const [stats, setStats] = useState<AlertStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [q, setQ] = useState("");
   const [severity, setSeverity] = useState("ALL");
   const [page, setPage] = useState(1);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const alertsRef = useRef<AlertRow[]>([]);
+  alertsRef.current = alerts;
+
+  const load = useCallback(async (showSpinner = false) => {
+    if (showSpinner && alertsRef.current.length === 0) {
+      setLoading(true);
+    } else {
+      setRefreshing(true);
+    }
     try {
       const params = new URLSearchParams({ page: String(page), limit: "20" });
       if (q) params.set("q", q);
@@ -62,16 +71,17 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
       }
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, [page, q, severity]);
 
   useEffect(() => {
-    load();
+    load(true);
   }, [load]);
 
   const { status: realtimeStatus } = useMonitoringSocket({
-    onAlertCreated: () => load(),
-    onAlertUpdated: () => load(),
+    onAlertCreated: () => load(false),
+    onAlertUpdated: () => load(false),
   });
 
   return (
@@ -83,8 +93,13 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
         </div>
         <div className="flex items-center gap-3">
           <RealtimeIndicator status={realtimeStatus} />
-          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
-            <RefreshCw className="h-4 w-4" />
+          <button
+            type="button"
+            onClick={() => load(false)}
+            disabled={refreshing}
+            className="rounded-full border border-border p-2 text-muted hover:text-foreground disabled:opacity-70"
+          >
+            <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin text-accent")} />
           </button>
         </div>
       </div>
@@ -138,7 +153,7 @@ export function AlertsClient({ user, portal }: { user: SafeUser; portal: "admin"
             </tr>
           </thead>
           <tbody>
-            {loading ? (
+            {loading && alerts.length === 0 ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <tr key={i}><td colSpan={7} className="px-4 py-4"><div className="h-8 animate-pulse rounded bg-glass" /></td></tr>
               ))

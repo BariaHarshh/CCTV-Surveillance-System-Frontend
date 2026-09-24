@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Bell, RefreshCw } from "lucide-react";
 import type { SafeUser } from "@/lib/auth/sanitize-user";
 import { AdminShell } from "@/components/admin/AdminShell";
@@ -8,6 +8,7 @@ import { SeverityBadge, formatDateTime } from "./shared";
 import { useMonitoringSocket } from "@/hooks/useMonitoringSocket";
 import { RealtimeIndicator } from "./shared";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface NotificationRow {
   id: string;
@@ -25,10 +26,18 @@ export function NotificationsClient({ user }: { user: SafeUser }) {
   const [items, setItems] = useState<NotificationRow[]>([]);
   const [unread, setUnread] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<"all" | "unread">("all");
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const itemsRef = useRef<NotificationRow[]>([]);
+  itemsRef.current = items;
+
+  const load = useCallback(async (showSpinner = false) => {
+    if (showSpinner && itemsRef.current.length === 0) {
+      setLoading(true);
+    } else {
+      setRefreshing(true);
+    }
     try {
       const params = filter === "unread" ? "?unread=true" : "";
       const res = await fetch(`/api/notifications${params}`, { credentials: "include" });
@@ -39,23 +48,24 @@ export function NotificationsClient({ user }: { user: SafeUser }) {
       }
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, [filter]);
 
   useEffect(() => {
-    load();
+    load(true);
   }, [load]);
 
-  const { status: realtimeStatus } = useMonitoringSocket({ onNotification: () => load() });
+  const { status: realtimeStatus } = useMonitoringSocket({ onNotification: () => load(false) });
 
   async function markRead(id: string) {
     await fetch(`/api/notifications/${id}/read`, { method: "PATCH", credentials: "include" });
-    load();
+    load(false);
   }
 
   async function markAllRead() {
     await fetch("/api/notifications/read-all", { method: "PATCH", credentials: "include" });
-    load();
+    load(false);
   }
 
   const stats = {
@@ -75,8 +85,13 @@ export function NotificationsClient({ user }: { user: SafeUser }) {
         </div>
         <div className="flex items-center gap-3">
           <RealtimeIndicator status={realtimeStatus} />
-          <button type="button" onClick={load} className="rounded-full border border-border p-2 text-muted hover:text-foreground">
-            <RefreshCw className="h-4 w-4" />
+          <button
+            type="button"
+            onClick={() => load(false)}
+            disabled={refreshing}
+            className="rounded-full border border-border p-2 text-muted hover:text-foreground disabled:opacity-70"
+          >
+            <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin text-accent")} />
           </button>
           {unread > 0 && (
             <button type="button" onClick={markAllRead} className="rounded-full bg-accent/10 px-4 py-2 text-xs font-medium text-accent">
@@ -115,7 +130,7 @@ export function NotificationsClient({ user }: { user: SafeUser }) {
       </div>
 
       <div className="mt-6 space-y-2">
-        {loading ? (
+        {loading && items.length === 0 ? (
           Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-glass" />)
         ) : items.length === 0 ? (
           <p className="rounded-xl border border-border p-8 text-center text-muted">No notifications.</p>

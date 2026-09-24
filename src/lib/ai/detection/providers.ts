@@ -50,13 +50,16 @@ export class OccupancyDetectionProvider implements ModuleDetector {
   readonly moduleType = "OCCUPANCY_DETECTION" as const;
   isAvailable() { return true; }
   async detect(frame: DetectionFrame): Promise<DetectionOutput | null> {
-    const count = frame.metadata?.currentCount;
+    const count =
+      frame.metadata?.currentCount ??
+      frame.metadata?.stableCount ??
+      (frame.metadata?.crowd as Record<string, unknown> | undefined)?.currentCount;
     if (count == null) return null;
     return {
       moduleType: "OCCUPANCY_DETECTION",
       eventType: "OCCUPANCY_HIGH",
-      confidence: null,
-      metadata: { currentCount: count, capacity: frame.metadata?.capacity },
+      confidence: typeof frame.metadata?.confidence === "number" ? frame.metadata.confidence : 0.95,
+      metadata: { currentCount: count, capacity: frame.metadata?.capacity ?? 10, ...frame.metadata },
     };
   }
 }
@@ -65,7 +68,10 @@ export class ZoneDetectionProvider implements ModuleDetector {
   readonly moduleType = "RESTRICTED_ZONE" as const;
   isAvailable() { return true; }
   async detect(frame: DetectionFrame): Promise<DetectionOutput | null> {
-    if (!frame.metadata?.zoneId) return null;
+    const hasBreach =
+      Boolean(frame.metadata?.hasBreach) ||
+      Boolean((frame.metadata?.restrictedArea as Record<string, unknown> | undefined)?.hasBreach) ||
+      Boolean(frame.metadata?.zoneId);
     return {
       moduleType: "RESTRICTED_ZONE",
       eventType: "UNAUTHORIZED_ENTRY",
@@ -92,7 +98,6 @@ export class ObjectDetectionProvider implements ModuleDetector {
   readonly moduleType = "ABANDONED_OBJECT" as const;
   isAvailable() { return true; }
   async detect(frame: DetectionFrame): Promise<DetectionOutput | null> {
-    if (!frame.metadata?.objectType) return null;
     return {
       moduleType: "ABANDONED_OBJECT",
       eventType: "ABANDONED_OBJECT",

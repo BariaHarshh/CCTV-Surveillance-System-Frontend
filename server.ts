@@ -50,7 +50,11 @@ app.prepare().then(() => {
       const user = await authenticateSocketSession(socket.handshake.headers.cookie);
       if (!user) return nextFn(new Error("Unauthorized"));
       socket.data.user = user;
-      if (user.role !== "SUPER_ADMIN" && user.organizationId) {
+      if (user.role === "SUPER_ADMIN") {
+        const { Organization } = await import("./src/models/Organization");
+        const orgs = await Organization.find({ deletedAt: null }).select("_id");
+        socket.data.organizationIds = orgs.map((o) => o._id.toString());
+      } else if (user.organizationId) {
         socket.data.organizationId = user.organizationId.toString();
       }
       nextFn();
@@ -61,7 +65,13 @@ app.prepare().then(() => {
 
   io.on("connection", (socket) => {
     const orgId = socket.data.organizationId as string | undefined;
+    const orgIds = socket.data.organizationIds as string[] | undefined;
     if (orgId) socket.join(orgChannel(orgId));
+    if (orgIds) {
+      for (const oid of orgIds) {
+        socket.join(orgChannel(oid));
+      }
+    }
     socket.emit("connected", { organizationId: orgId ?? null });
   });
 
