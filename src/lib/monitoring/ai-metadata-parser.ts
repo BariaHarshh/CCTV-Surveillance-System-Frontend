@@ -162,7 +162,22 @@ export function parseAIDataFromPayload(
   meta: Record<string, any>,
   existing?: CameraAIData
 ): CameraAIData {
-  const currentRiskScore = Number(meta.riskScore ?? existing?.riskScore ?? 5);
+  let currentRiskScore = Number(meta.riskScore ?? existing?.riskScore ?? 5);
+
+  // Auto-elevate risk score if critical breach or anomaly flags are present
+  const hasBreachFlag = Boolean(meta.restrictedArea?.hasBreach ?? meta.hasBreach ?? false);
+  const hasFightFlag = Boolean(meta.behavior?.hasFight ?? meta.hasFight ?? false);
+  const hasFallFlag = Boolean(meta.behavior?.hasFall ?? meta.hasFall ?? false);
+  const hasAbandonedFlag = (meta.abandonedObject?.objectStatus === "ABANDONED" || meta.objectStatus === "ABANDONED" || (meta.abandonedCount != null && Number(meta.abandonedCount) > 0));
+
+  if (hasFightFlag) {
+    currentRiskScore = Math.max(currentRiskScore, 85);
+  } else if (hasBreachFlag) {
+    currentRiskScore = Math.max(currentRiskScore, 75);
+  } else if (hasFallFlag || hasAbandonedFlag) {
+    currentRiskScore = Math.max(currentRiskScore, 60);
+  }
+
   const currentRiskLevel = String(
     meta.riskLevel ??
       (currentRiskScore >= 75

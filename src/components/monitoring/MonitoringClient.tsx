@@ -529,7 +529,12 @@ const CameraCard = React.memo(function CameraCard({
       {/* Video area — lazy on-demand */}
       <div className="p-3">
         {expanded ? (
-          <CameraStreamView cameraDbId={cam.id} status={cam.status} />
+          <CameraStreamView
+            cameraDbId={cam.id}
+            status={cam.status}
+            detections={aiData.detections}
+            zones={aiData.zones}
+          />
         ) : (
           <button
             type="button"
@@ -671,24 +676,28 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
         const loadedCams: CommandCameraItem[] = camData.cameras;
         setCameras(loadedCams);
 
-        // Seed AI data with defaults, then fetch per-camera latest event metadata
+        // Seed AI data with defaults without overwriting active live Socket.IO data
         const detailsMap: Record<string, CameraAIData> = {};
         await Promise.all(
           loadedCams.map(async (cam) => {
-            const existing = aiDataMapRef.current[cam.id];
+            const existing = aiDataMapRef.current[cam.id] || aiDataMapRef.current[cam.cameraId];
             detailsMap[cam.id] = existing || getDefaultAIData(cam.cameraId);
+            detailsMap[cam.cameraId] = detailsMap[cam.id];
             try {
               const r = await fetch(`/api/monitoring/cameras/${cam.id}`, { credentials: "include" });
               const d = await r.json();
               if (r.ok && Array.isArray(d.recentEvents) && d.recentEvents.length > 0) {
                 const meta = (d.recentEvents[0].metadata as Record<string, unknown>) || {};
-                if (!existing || existing.detections.length === 0) {
-                  detailsMap[cam.id] = parseAIDataFromPayload(
+                // Only seed from DB if no live Socket.IO detections have arrived
+                if (!existing || (!existing.lastUpdate && existing.detections.length === 0)) {
+                  const parsed = parseAIDataFromPayload(
                     cam.cameraId,
                     meta.moduleType as string,
                     meta,
                     detailsMap[cam.id]
                   );
+                  detailsMap[cam.id] = parsed;
+                  detailsMap[cam.cameraId] = parsed;
                 }
               }
             } catch {
@@ -696,7 +705,16 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
             }
           })
         );
-        setAiDataMap((prev) => ({ ...prev, ...detailsMap }));
+        setAiDataMap((prev) => {
+          const merged = { ...detailsMap };
+          // Preserve all existing live states that arrived via Socket.IO
+          for (const [key, val] of Object.entries(prev)) {
+            if (val.lastUpdate || val.detections.length > 0) {
+              merged[key] = val;
+            }
+          }
+          return merged;
+        });
       }
 
       if (alertRes.ok && Array.isArray(alertData.alerts)) setActiveAlerts(alertData.alerts);
@@ -743,16 +761,19 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
         const match = camerasRef.current.find(
           (c) => c.id === payloadCamId || c.cameraId === payloadCamId || meta.cameraId === c.cameraId || meta.cameraId === c.id
         );
-        if (!match) return prevMap;
-        const existing = prevMap[match.id] || getDefaultAIData(match.cameraId);
+        const camKey = match ? match.id : payloadCamId;
+        const camCode = match ? match.cameraId : payloadCamId;
+        const existing = prevMap[camKey] || prevMap[camCode] || getDefaultAIData(camCode);
+        const nextData = parseAIDataFromPayload(
+          camCode,
+          (payload.moduleType as string) || (meta.moduleType as string),
+          meta,
+          existing
+        );
         return {
           ...prevMap,
-          [match.id]: parseAIDataFromPayload(
-            match.cameraId || payloadCamId,
-            (payload.moduleType as string) || (meta.moduleType as string),
-            meta,
-            existing
-          ),
+          [camKey]: nextData,
+          [camCode]: nextData,
         };
       });
     },

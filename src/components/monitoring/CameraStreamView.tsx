@@ -13,6 +13,38 @@ interface StreamInfo {
 const RETRY_DELAYS_MS = [2000, 4000, 8000, 16000, 30000];
 const MAX_RETRIES = RETRY_DELAYS_MS.length;
 
+/**
+ * Isolated, strictly memoized stream image component.
+ * Ensures the live video <img> DOM node and open MJPEG connection
+ * are NEVER recreated when AI bounding boxes or telemetry metadata change.
+ */
+const StableStreamImage = React.memo(
+  function StableStreamImage({
+    url,
+    retryKey,
+    onLoad,
+    onError,
+  }: {
+    url: string;
+    retryKey: number;
+    onLoad: () => void;
+    onError: () => void;
+  }) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        key={retryKey}
+        src={url}
+        alt="Live camera feed"
+        className="aspect-video w-full object-cover"
+        onLoad={onLoad}
+        onError={onError}
+      />
+    );
+  },
+  (prev, next) => prev.url === next.url && prev.retryKey === next.retryKey
+);
+
 export const CameraStreamView = React.memo(function CameraStreamView({
   cameraDbId,
   status,
@@ -88,7 +120,7 @@ export const CameraStreamView = React.memo(function CameraStreamView({
     };
   }, [cameraDbId, status]);
 
-  const handleImageError = () => {
+  const handleImageError = useCallback(() => {
     if (retryCountRef.current < MAX_RETRIES) {
       const delay = RETRY_DELAYS_MS[retryCountRef.current];
       retryCountRef.current += 1;
@@ -101,15 +133,15 @@ export const CameraStreamView = React.memo(function CameraStreamView({
       setRetryExhausted(true);
       setError("Stream connection lost. Maximum reconnect attempts reached.");
     }
-  };
+  }, []);
 
-  const handleImageLoad = () => {
+  const handleImageLoad = useCallback(() => {
     retryCountRef.current = 0;
     setRetryExhausted(false);
     setError("");
-  };
+  }, []);
 
-  const handleManualRetry = () => {
+  const handleManualRetry = useCallback(() => {
     retryCountRef.current = 0;
     setRetryExhausted(false);
     setRetryKey((k) => k + 1);
@@ -120,7 +152,7 @@ export const CameraStreamView = React.memo(function CameraStreamView({
         setStream(data.stream ?? data);
       })
       .catch((e) => setError(e instanceof Error ? e.message : "Stream unavailable"));
-  };
+  }, [cameraDbId]);
 
   const offline = status !== "ONLINE";
 
@@ -150,12 +182,9 @@ export const CameraStreamView = React.memo(function CameraStreamView({
         </div>
       ) : stream?.available && stream.url ? (
         <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            key={retryKey}
-            src={stream.url}
-            alt="Live camera feed"
-            className="aspect-video w-full object-cover"
+          <StableStreamImage
+            url={stream.url}
+            retryKey={retryKey}
             onLoad={handleImageLoad}
             onError={handleImageError}
           />

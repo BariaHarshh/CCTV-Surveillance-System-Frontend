@@ -158,4 +158,44 @@ describe("Monitoring Metadata & AI HUD Parser", () => {
     expect(parsed.detections[0].status).toBe("WARNING");
     expect(parsed.detections[0].extraLabel).toBe("8.4s");
   });
+
+  it("ensures critical security breach automatically elevates risk score and level", () => {
+    const breachPayload = {
+      restrictedArea: {
+        hasBreach: true,
+        zoneStatus: "ALERT",
+        activeIntruders: [101],
+      },
+      // Note: riskScore not explicitly provided or low
+      riskScore: 5,
+    };
+
+    const parsed = parseAIDataFromPayload("CAM-000003", "RESTRICTED_ZONE", breachPayload);
+    expect(parsed.riskScore).toBe(75);
+    expect(parsed.riskLevel).toBe("CRITICAL");
+    expect(parsed.restrictedArea?.hasBreach).toBe(true);
+    expect(parsed.restrictedArea?.zoneStatus).toBe("ALERT");
+    expect(parsed.lastUpdate).not.toBeNull();
+  });
+
+  it("ensures CAM-000001 update does not mutate CAM-000002 state", () => {
+    const cam1Payload = {
+      rawCount: 15,
+      stableCount: 15,
+      crowdState: "CROWD DETECTED",
+      riskScore: 75,
+    };
+    const cam2Existing = parseAIDataFromPayload("CAM-000002", "PERSON_DETECTION", {
+      behavior: { personCount: 1, behaviorState: "NORMAL", hasFall: false, hasFight: false },
+      riskScore: 5,
+      riskLevel: "LOW",
+    });
+
+    const cam1Parsed = parseAIDataFromPayload("CAM-000001", "OCCUPANCY_DETECTION", cam1Payload);
+
+    expect(cam1Parsed.riskScore).toBe(75);
+    expect(cam1Parsed.riskLevel).toBe("CRITICAL");
+    expect(cam2Existing.riskScore).toBe(5);
+    expect(cam2Existing.riskLevel).toBe("LOW");
+  });
 });

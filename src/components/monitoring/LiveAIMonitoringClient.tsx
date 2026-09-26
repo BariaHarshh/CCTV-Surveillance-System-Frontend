@@ -1024,9 +1024,10 @@ export function LiveAIMonitoringClient({
         await Promise.all(
           loadedCameras.map(async (cam) => {
             try {
-              const currentAi = aiDataMapRef.current[cam.id];
+              const currentAi = aiDataMapRef.current[cam.id] || aiDataMapRef.current[cam.cameraId];
               const defaultData = currentAi || getDefaultAIData(cam.cameraId);
               detailsMap[cam.id] = defaultData;
+              detailsMap[cam.cameraId] = defaultData;
 
               const res = await fetch(`/api/monitoring/cameras/${cam.id}`, {
                 credentials: "include",
@@ -1035,14 +1036,16 @@ export function LiveAIMonitoringClient({
               if (res.ok && data.recentEvents && data.recentEvents.length > 0) {
                 const latestEvent = data.recentEvents[0];
                 const meta = (latestEvent.metadata as Record<string, unknown>) || {};
-                // Only use DB metadata if we don't already have live detections from Socket.IO
-                if (!currentAi || currentAi.detections.length === 0) {
-                  detailsMap[cam.id] = parseAIDataFromPayload(
+                // Only use DB metadata if no live Socket.IO detections have arrived
+                if (!currentAi || (!currentAi.lastUpdate && currentAi.detections.length === 0)) {
+                  const parsed = parseAIDataFromPayload(
                     cam.cameraId,
                     meta.moduleType as string,
                     meta,
                     defaultData
                   );
+                  detailsMap[cam.id] = parsed;
+                  detailsMap[cam.cameraId] = parsed;
                 }
               }
             } catch {
@@ -1050,7 +1053,15 @@ export function LiveAIMonitoringClient({
             }
           })
         );
-        setAiDataMap((prev) => ({ ...prev, ...detailsMap }));
+        setAiDataMap((prev) => {
+          const merged = { ...detailsMap };
+          for (const [key, val] of Object.entries(prev)) {
+            if (val.lastUpdate || val.detections.length > 0) {
+              merged[key] = val;
+            }
+          }
+          return merged;
+        });
       } else {
         setError(camerasData.error || "Failed to load camera feeds");
       }
@@ -1102,13 +1113,12 @@ export function LiveAIMonitoringClient({
             meta.cameraId === c.cameraId ||
             meta.cameraId === c.id
         );
-        if (!matchingCam) return prevMap;
-
-        const camKey = matchingCam.id;
-        const existing = prevMap[camKey] || getDefaultAIData(matchingCam.cameraId);
+        const camKey = matchingCam ? matchingCam.id : payloadCamId;
+        const camCode = matchingCam ? matchingCam.cameraId : payloadCamId;
+        const existing = prevMap[camKey] || prevMap[camCode] || getDefaultAIData(camCode);
 
         const nextData = parseAIDataFromPayload(
-          matchingCam.cameraId || payloadCamId,
+          camCode,
           (payload.moduleType as string) || (meta.moduleType as string),
           meta,
           existing
@@ -1117,6 +1127,7 @@ export function LiveAIMonitoringClient({
         return {
           ...prevMap,
           [camKey]: nextData,
+          [camCode]: nextData,
         };
       });
     },

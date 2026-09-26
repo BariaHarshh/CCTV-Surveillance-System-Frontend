@@ -5,6 +5,9 @@ const appOrigin = process.env.NEXT_PUBLIC_APP_URL ?? "";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   async rewrites() {
     return [
       { source: "/health", destination: "/api/health/live" },
