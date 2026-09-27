@@ -123,8 +123,48 @@ const StatusBanner = React.memo(function StatusBanner({
             Security Command Center
           </h1>
           <p className="mt-1 text-xs text-muted">
-            Real-time campus surveillance · AI threat detection · Live camera feeds
+            Real-time AI-powered campus surveillance and risk monitoring.
           </p>
+          <div className="flex flex-wrap items-center gap-2 mt-2">
+            {/* SYSTEM ONLINE */}
+            <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              SYSTEM ONLINE
+            </span>
+            {/* AI ENGINE ONLINE */}
+            <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              AI ENGINE ONLINE
+            </span>
+            {/* CAMERAS ONLINE */}
+            <span className={cn(
+              "flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-bold",
+              onlineCount === totalCount
+                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                : "border-amber-500/30 bg-amber-500/10 text-amber-400"
+            )}>
+              <span className={cn("h-1.5 w-1.5 rounded-full", onlineCount === totalCount ? "bg-emerald-500" : "bg-amber-500")} />
+              {onlineCount}/{totalCount} CAMERAS ONLINE
+            </span>
+            {/* REAL-TIME STATUS */}
+            <span className={cn(
+              "flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-bold",
+              realtimeStatus === "connected"
+                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                : realtimeStatus === "reconnecting"
+                ? "border-amber-500/30 bg-amber-500/10 text-amber-400"
+                : "border-red-500/30 bg-red-500/10 text-red-400"
+            )}>
+              <span className={cn(
+                "h-1.5 w-1.5 rounded-full",
+                realtimeStatus === "connected" ? "bg-emerald-500" :
+                realtimeStatus === "reconnecting" ? "bg-amber-500" : "bg-red-500"
+              )} />
+              {realtimeStatus === "connected" ? "REAL‑TIME CONNECTED" :
+               realtimeStatus === "reconnecting" ? "REAL‑TIME RECONNECTING" :
+               "REAL‑TIME DISCONNECTED"}
+            </span>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -166,7 +206,7 @@ const StatusBanner = React.memo(function StatusBanner({
       </div>
 
       {/* KPI metric strip */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
         {/* Cameras Online */}
         <div className="flex flex-col justify-between rounded-xl border border-border bg-surface/60 p-3.5 shadow-sm">
           <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted">
@@ -275,30 +315,48 @@ function RiskDistributionBar({ aiDataMap }: { aiDataMap: Record<string, CameraAI
 
   return (
     <div className="rounded-xl border border-border bg-surface/50 p-4">
+      {/* Header */}
       <div className="mb-3 flex items-center justify-between">
         <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-muted">
           <Shield className="h-3.5 w-3.5 text-accent" /> Risk Distribution
         </span>
         <span className="font-mono text-[10px] text-muted">{total} camera{total !== 1 ? "s" : ""}</span>
       </div>
-      <div className="flex gap-2">
-        {(["CRITICAL", "HIGH", "MEDIUM", "LOW"] as const).map((lvl) => (
-          <div key={lvl} className="flex flex-1 flex-col items-center gap-1.5">
-            <div className="relative h-14 w-full overflow-hidden rounded-lg bg-slate-800">
-              <div
-                className={cn(
-                  "absolute bottom-0 w-full rounded-lg transition-all duration-700",
-                  lvl === "CRITICAL" ? "bg-red-500" : lvl === "HIGH" ? "bg-orange-500" : lvl === "MEDIUM" ? "bg-amber-500" : "bg-emerald-500"
-                )}
-                style={{ height: `${Math.max(8, (counts[lvl] / total) * 100)}%` }}
-              />
+
+      {/* Horizontal bar rows */}
+      <div className="flex flex-col gap-2">
+        {(["CRITICAL", "HIGH", "MEDIUM", "LOW"] as const).map((lvl) => {
+          const pct = Math.round((counts[lvl] / total) * 100);
+          const barColor =
+            lvl === "CRITICAL" ? "bg-red-500" :
+            lvl === "HIGH"     ? "bg-orange-500" :
+            lvl === "MEDIUM"   ? "bg-amber-500" :
+                                 "bg-emerald-500";
+          const textColor =
+            lvl === "CRITICAL" ? "text-red-400" :
+            lvl === "HIGH"     ? "text-orange-400" :
+            lvl === "MEDIUM"   ? "text-amber-400" :
+                                 "text-emerald-400";
+          return (
+            <div key={lvl} className="flex items-center gap-2">
+              {/* Level label */}
+              <span className="w-16 shrink-0 font-mono text-[9px] font-bold uppercase tracking-wider text-muted">
+                {lvl}
+              </span>
+              {/* Bar track */}
+              <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-slate-800">
+                <div
+                  className={cn("absolute inset-y-0 left-0 rounded-full transition-all duration-700", barColor)}
+                  style={{ width: `${Math.max(4, pct)}%` }}
+                />
+              </div>
+              {/* Count */}
+              <span className={cn("w-5 shrink-0 text-right font-mono text-xs font-extrabold", textColor)}>
+                {counts[lvl]}
+              </span>
             </div>
-            <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-muted">{lvl}</span>
-            <span className={cn("font-mono text-sm font-extrabold", lvl === "CRITICAL" ? "text-red-400" : lvl === "HIGH" ? "text-orange-400" : lvl === "MEDIUM" ? "text-amber-400" : "text-emerald-400")}>
-              {counts[lvl]}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -323,10 +381,10 @@ const ActiveAlertsPanel = React.memo(function ActiveAlertsPanel({
       <div className="mb-4 flex items-center justify-between border-b border-border/60 pb-3">
         <div className="flex items-center gap-2">
           <ShieldAlert className={cn("h-4 w-4", active.length > 0 ? "animate-pulse text-red-400" : "text-emerald-400")} />
-          <h2 className="text-sm font-bold tracking-tight">Active Security Alerts</h2>
+          <h2 className="text-sm font-bold uppercase tracking-tight">ACTIVE ALERTS</h2>
         </div>
         <span className={cn("rounded-full border px-2 py-0.5 font-mono text-[10px] font-bold uppercase", active.length > 0 ? "border-red-500/30 bg-red-500/20 text-red-400" : "border-emerald-500/30 bg-emerald-500/20 text-emerald-400")}>
-          {active.length} Active
+          {active.length} ACTIVE
         </span>
       </div>
 
@@ -337,14 +395,14 @@ const ActiveAlertsPanel = React.memo(function ActiveAlertsPanel({
           <p className="mt-1 max-w-xs text-xs text-muted">No active security events across all camera pipelines.</p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {active.slice(0, 8).map((alert) => (
             <button
               key={alert.id}
               type="button"
               onClick={() => alert.cameraId && onCameraFocus(alert.cameraId)}
               className={cn(
-                "flex w-full items-start justify-between gap-3 rounded-xl border p-3 text-left transition-all hover:bg-glass",
+                "flex w-full items-stretch gap-0 rounded-xl border text-left transition-all hover:brightness-110",
                 alert.severity === "CRITICAL"
                   ? "border-red-500/40 bg-red-500/10 shadow-[0_0_8px_rgba(239,68,68,0.1)]"
                   : alert.severity === "HIGH"
@@ -352,15 +410,42 @@ const ActiveAlertsPanel = React.memo(function ActiveAlertsPanel({
                   : "border-border bg-glass/40"
               )}
             >
-              <div className="flex min-w-0 flex-col gap-0.5">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-foreground truncate">{alert.cameraName || alert.cameraId || "Campus"}</span>
-                  <SeverityBadge severity={alert.severity} />
-                  <span className="rounded bg-surface px-1.5 py-0.5 font-mono text-[9px] font-semibold text-muted">{alert.status}</span>
+              {/* Severity indicator bar */}
+              <span
+                className={cn(
+                  "w-1 shrink-0 rounded-l-xl",
+                  alert.severity === "CRITICAL"
+                    ? "bg-red-500"
+                    : alert.severity === "HIGH"
+                    ? "bg-orange-500"
+                    : alert.severity === "MEDIUM"
+                    ? "bg-amber-500"
+                    : "bg-emerald-500"
+                )}
+              />
+              {/* Main content */}
+              <div className="flex min-w-0 flex-1 items-start justify-between gap-3 p-3">
+                <div className="flex min-w-0 flex-col gap-1">
+                  {/* Row 1: severity badge + title */}
+                  <div className="flex items-center gap-2">
+                    <SeverityBadge severity={alert.severity} />
+                    <p className="truncate text-xs font-semibold text-foreground">{alert.title}</p>
+                  </div>
+                  {/* Row 2: camera + status */}
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[10px] font-bold text-accent/80 truncate">
+                      {alert.cameraName || alert.cameraId || "CAMPUS"}
+                    </span>
+                    <span className="rounded bg-surface px-1.5 py-0.5 font-mono text-[9px] font-semibold text-muted">
+                      {alert.status}
+                    </span>
+                  </div>
                 </div>
-                <p className="text-xs text-foreground/80 truncate">{alert.title}</p>
+                {/* Timestamp */}
+                <span className="shrink-0 font-mono text-[11px] text-muted pt-0.5">
+                  {formatTime(alert.createdAt)}
+                </span>
               </div>
-              <span className="shrink-0 font-mono text-[11px] text-muted">{formatTime(alert.createdAt)}</span>
             </button>
           ))}
           {active.length > 8 && (
@@ -386,12 +471,15 @@ const EventTimelinePanel = React.memo(function EventTimelinePanel({
 }) {
   return (
     <div className="flex flex-col rounded-2xl border border-border bg-surface/50 p-4 shadow-sm">
+      {/* Header */}
       <div className="mb-4 flex items-center justify-between border-b border-border/60 pb-3">
         <div className="flex items-center gap-2">
           <Activity className="h-4 w-4 text-accent" />
-          <h2 className="text-sm font-bold tracking-tight">Recent AI Events</h2>
+          <h2 className="text-sm font-bold uppercase tracking-tight">RECENT AI EVENTS</h2>
         </div>
-        <span className="rounded-full bg-glass px-2 py-0.5 font-mono text-[10px] font-medium text-muted">Real-Time</span>
+        <span className="rounded-full border border-accent/20 bg-accent/10 px-2 py-0.5 font-mono text-[10px] font-semibold text-accent">
+          REAL-TIME
+        </span>
       </div>
 
       {events.length === 0 ? (
@@ -401,29 +489,52 @@ const EventTimelinePanel = React.memo(function EventTimelinePanel({
           <p className="mt-0.5 text-[11px] text-muted/60">Events appear here as AI detections occur</p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {events.slice(0, 12).map((e) => (
             <Link
               key={e.id}
               href={`${base}/events/${e.id}`}
-              className="flex items-center justify-between rounded-xl border border-border/80 bg-glass/60 px-3.5 py-2.5 transition-all hover:border-accent/40 hover:bg-glass"
+              className="flex items-stretch gap-0 rounded-xl border border-border/80 bg-glass/60 transition-all hover:brightness-105"
             >
-              <div className="flex items-center gap-3">
-                <span
-                  className={cn(
-                    "h-2 w-2 shrink-0 rounded-full",
-                    e.severity === "CRITICAL" ? "bg-red-400 shadow-[0_0_6px_rgba(239,68,68,0.7)]" : e.severity === "HIGH" ? "bg-orange-400" : e.severity === "MEDIUM" ? "bg-amber-400" : "bg-emerald-400"
-                  )}
-                />
-                <div>
+              {/* Left severity bar */}
+              <span
+                className={cn(
+                  "w-1 shrink-0 rounded-l-xl",
+                  e.severity === "CRITICAL" ? "bg-red-500" :
+                  e.severity === "HIGH"     ? "bg-orange-500" :
+                  e.severity === "MEDIUM"   ? "bg-amber-500" :
+                                             "bg-emerald-500"
+                )}
+              />
+              {/* Row content */}
+              <div className="flex min-w-0 flex-1 items-start justify-between gap-3 px-3 py-2">
+                <div className="flex min-w-0 flex-col gap-0.5">
+                  {/* Event type + severity badge */}
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-semibold text-foreground">{formatEventType(e.eventType)}</span>
-                    <span className="rounded bg-surface px-1.5 py-0.5 font-mono text-[9px] text-muted">{e.cameraName || e.cameraId || "Camera"}</span>
+                    <span
+                      className={cn(
+                        "h-1.5 w-1.5 shrink-0 rounded-full",
+                        e.severity === "CRITICAL" ? "bg-red-400" :
+                        e.severity === "HIGH"     ? "bg-orange-400" :
+                        e.severity === "MEDIUM"   ? "bg-amber-400" :
+                                                   "bg-emerald-400"
+                      )}
+                    />
+                    <span className="truncate font-mono text-xs font-semibold text-foreground">
+                      {formatEventType(e.eventType)}
+                    </span>
+                    <SeverityBadge severity={e.severity} />
                   </div>
-                  <span className="font-mono text-[10px] text-muted">{formatTime(e.detectedAt)}</span>
+                  {/* Camera chip */}
+                  <span className="font-mono text-[10px] text-accent/70 truncate">
+                    {e.cameraName || e.cameraId || "Camera"}
+                  </span>
                 </div>
+                {/* Timestamp — right-aligned top */}
+                <span className="shrink-0 pt-0.5 font-mono text-[11px] text-muted">
+                  {formatTime(e.detectedAt)}
+                </span>
               </div>
-              <SeverityBadge severity={e.severity} />
             </Link>
           ))}
         </div>
@@ -476,54 +587,71 @@ const CameraCard = React.memo(function CameraCard({
       )}
     >
       {/* Card Header */}
-      <div className="border-b border-border/60 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2.5 w-2.5 shrink-0">
-                {cam.status === "ONLINE" && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />}
-                <span className={cn("relative inline-flex h-2.5 w-2.5 rounded-full", cam.status === "ONLINE" ? "bg-emerald-500" : "bg-slate-500")} />
-              </span>
-              <p className="font-mono text-[10px] font-semibold text-muted">{cam.cameraId}</p>
-            </div>
-            <h3 className="mt-0.5 font-semibold text-foreground truncate">{cam.name}</h3>
-            <p className="mt-0.5 text-[11px] text-muted truncate">
-              {[cam.location?.building, cam.location?.room, cam.location?.areaLabel].filter(Boolean).join(" · ") || "Campus Area"}
-            </p>
-          </div>
+      <div className="border-b border-border/60 p-3.5">
 
-          <div className="flex shrink-0 flex-col items-end gap-1.5">
-            <CameraStatusDot status={cam.status} />
-            <span className={cn("rounded-md px-2 py-0.5 font-mono text-[9px] font-bold uppercase border", RISK_BADGE[riskLevel] ?? RISK_BADGE.LOW)}>
-              RISK {riskScore}
+        {/* Top row: camera ID + online/offline pill */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="relative flex h-2 w-2 shrink-0">
+              {cam.status === "ONLINE" && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />}
+              <span className={cn("relative inline-flex h-2 w-2 rounded-full", cam.status === "ONLINE" ? "bg-emerald-500" : "bg-slate-500")} />
             </span>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-muted truncate">{cam.cameraId}</p>
           </div>
+          <span className={cn(
+            "shrink-0 rounded-full border px-2 py-0.5 font-mono text-[9px] font-bold uppercase",
+            cam.status === "ONLINE"
+              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+              : "border-slate-500/30 bg-slate-500/10 text-slate-400"
+          )}>
+            {cam.status}
+          </span>
         </div>
 
-        {/* AI module + status row */}
-        <div className="mt-2.5 flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-accent/10 px-2 py-0.5 font-mono text-[10px] font-medium text-accent">
-            {aiData.moduleType || "AI Module"}
+        {/* Camera name */}
+        <h3 className="mt-1.5 text-sm font-bold text-foreground leading-tight truncate">{cam.name}</h3>
+
+        {/* Location */}
+        <p className="mt-0.5 text-[10px] text-muted truncate">
+          {[cam.location?.building, cam.location?.room, cam.location?.areaLabel].filter(Boolean).join(" · ") || "Campus Area"}
+        </p>
+
+        {/* Divider */}
+        <div className="my-2.5 border-t border-border/40" />
+
+        {/* AI module row */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="rounded-full bg-accent/10 border border-accent/20 px-2 py-0.5 font-mono text-[10px] font-semibold text-accent truncate max-w-[55%]">
+            {aiData.moduleType || "AI MODULE"}
           </span>
-          <span className={cn("rounded-md px-2 py-0.5 font-mono text-[9px] font-bold uppercase", aiStatusClass)}>
+          <span className={cn("shrink-0 rounded-md px-2 py-0.5 font-mono text-[9px] font-bold uppercase", aiStatusClass)}>
             {aiStatusText}
           </span>
-          {isCritical && (
-            <span className="flex items-center gap-1 rounded-md bg-red-500/15 px-1.5 py-0.5 font-mono text-[9px] text-red-400">
-              <AlertOctagon className="h-3 w-3 animate-pulse" /> ALERT
-            </span>
-          )}
         </div>
 
-        {/* AI feature label */}
-        <p className="mt-1.5 text-[10px] text-muted/70 truncate">{aiFeature}</p>
+        {/* Risk row */}
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <p className="text-[10px] text-muted/70 truncate">{aiFeature}</p>
+          <span className={cn("shrink-0 rounded-md border px-2 py-0.5 font-mono text-[9px] font-bold uppercase", RISK_BADGE[riskLevel] ?? RISK_BADGE.LOW)}>
+            {riskLevel} · {riskScore}
+          </span>
+        </div>
 
-        {/* Last event time */}
-        {aiData.lastUpdate && (
-          <p className="mt-0.5 font-mono text-[10px] text-muted/50">
-            Last update: {formatTime(aiData.lastUpdate)}
-          </p>
-        )}
+        {/* Bottom row: alert indicator + last update */}
+        <div className="mt-2 flex items-center justify-between gap-2">
+          {isCritical ? (
+            <span className="flex items-center gap-1 rounded-md bg-red-500/15 border border-red-500/20 px-1.5 py-0.5 font-mono text-[9px] font-bold text-red-400">
+              <AlertOctagon className="h-3 w-3" /> ALERT ACTIVE
+            </span>
+          ) : (
+            <span />
+          )}
+          {aiData.lastUpdate && (
+            <p className="font-mono text-[10px] text-muted/50 truncate">
+              {formatTime(aiData.lastUpdate)}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Video area — lazy on-demand */}
@@ -907,12 +1035,26 @@ export function MonitoringClient({ user, portal }: { user: SafeUser; portal: "ad
 
           {/* ── Camera Grid ───────────────────────────────────────────────── */}
           <div>
-            <div className="mb-3 flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-bold tracking-tight">Live Camera Grid</h2>
-                <p className="mt-0.5 text-xs text-muted">Streams load on demand — click a card to activate live feed.</p>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <h2 className="text-sm font-bold uppercase tracking-tight">LIVE CAMERA NETWORK</h2>
+                <p className="mt-0.5 text-[10px] text-muted">Streams load on demand — click a card to activate live feed.</p>
               </div>
-              <span className="font-mono text-[10px] text-muted">{cameras.length} camera{cameras.length !== 1 ? "s" : ""}</span>
+              <div className="flex shrink-0 items-center gap-2">
+                <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  {onlineCount} ONLINE
+                </span>
+                {cameras.length - onlineCount > 0 && (
+                  <span className="flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-amber-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                    {cameras.length - onlineCount} OFFLINE
+                  </span>
+                )}
+                <span className="rounded-full border border-border bg-surface/60 px-2.5 py-0.5 font-mono text-[10px] text-muted">
+                  {cameras.length} total
+                </span>
+              </div>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {cameras.map((cam) => (
