@@ -587,15 +587,12 @@ const CameraCard = React.memo(function CameraCard({
       )}
     >
       {/* Card Header */}
-      <div className="border-b border-border/60 p-3.5">
+      <div className="border-b border-border/60 p-3.5 flex flex-col gap-0">
 
-        {/* Top row: camera ID + online/offline pill */}
+        {/* ── IDENTITY ─────────────────────────────────── */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 min-w-0">
-            <span className="relative flex h-2 w-2 shrink-0">
-              {cam.status === "ONLINE" && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />}
-              <span className={cn("relative inline-flex h-2 w-2 rounded-full", cam.status === "ONLINE" ? "bg-emerald-500" : "bg-slate-500")} />
-            </span>
+            <Camera className="h-3 w-3 shrink-0 text-muted/50" />
             <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-muted truncate">{cam.cameraId}</p>
           </div>
           <span className={cn(
@@ -604,22 +601,27 @@ const CameraCard = React.memo(function CameraCard({
               ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
               : "border-slate-500/30 bg-slate-500/10 text-slate-400"
           )}>
+            <span className={cn(
+              "mr-1 inline-block h-1.5 w-1.5 rounded-full align-middle",
+              cam.status === "ONLINE" ? "bg-emerald-500" : "bg-slate-500"
+            )} />
             {cam.status}
           </span>
         </div>
 
         {/* Camera name */}
-        <h3 className="mt-1.5 text-sm font-bold text-foreground leading-tight truncate">{cam.name}</h3>
+        <h3 className="mt-1.5 text-sm font-extrabold text-foreground leading-tight truncate">{cam.name}</h3>
 
         {/* Location */}
-        <p className="mt-0.5 text-[10px] text-muted truncate">
+        <p className="mt-0.5 font-mono text-[10px] text-muted/60 truncate">
           {[cam.location?.building, cam.location?.room, cam.location?.areaLabel].filter(Boolean).join(" · ") || "Campus Area"}
         </p>
 
         {/* Divider */}
         <div className="my-2.5 border-t border-border/40" />
 
-        {/* AI module row */}
+        {/* ── AI STATUS ────────────────────────────────── */}
+        <p className="mb-1 font-mono text-[8px] font-bold uppercase tracking-widest text-muted/40">AI STATUS</p>
         <div className="flex items-center justify-between gap-2">
           <span className="rounded-full bg-accent/10 border border-accent/20 px-2 py-0.5 font-mono text-[10px] font-semibold text-accent truncate max-w-[55%]">
             {aiData.moduleType || "AI MODULE"}
@@ -628,28 +630,36 @@ const CameraCard = React.memo(function CameraCard({
             {aiStatusText}
           </span>
         </div>
+        <p className="mt-1 text-[10px] text-muted/60 truncate">{aiFeature}</p>
 
-        {/* Risk row */}
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <p className="text-[10px] text-muted/70 truncate">{aiFeature}</p>
+        {/* Divider */}
+        <div className="my-2 border-t border-border/40" />
+
+        {/* ── RISK ─────────────────────────────────────── */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1">
+            <Shield className="h-3 w-3 text-muted/50 shrink-0" />
+            <p className="font-mono text-[8px] font-bold uppercase tracking-widest text-muted/40">RISK</p>
+          </div>
           <span className={cn("shrink-0 rounded-md border px-2 py-0.5 font-mono text-[9px] font-bold uppercase", RISK_BADGE[riskLevel] ?? RISK_BADGE.LOW)}>
             {riskLevel} · {riskScore}
           </span>
         </div>
 
-        {/* Bottom row: alert indicator + last update */}
+        {/* ── ALERT / TIMESTAMP ────────────────────────── */}
         <div className="mt-2 flex items-center justify-between gap-2">
           {isCritical ? (
             <span className="flex items-center gap-1 rounded-md bg-red-500/15 border border-red-500/20 px-1.5 py-0.5 font-mono text-[9px] font-bold text-red-400">
-              <AlertOctagon className="h-3 w-3" /> ALERT ACTIVE
+              <AlertOctagon className="h-3 w-3 shrink-0" /> ALERT ACTIVE
             </span>
           ) : (
             <span />
           )}
           {aiData.lastUpdate && (
-            <p className="font-mono text-[10px] text-muted/50 truncate">
+            <span className="flex items-center gap-1 font-mono text-[9px] text-muted/50">
+              <Clock className="h-2.5 w-2.5 shrink-0" />
               {formatTime(aiData.lastUpdate)}
-            </p>
+            </span>
           )}
         </div>
       </div>
