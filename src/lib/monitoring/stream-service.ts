@@ -58,6 +58,22 @@ export async function createStreamSession(organizationId: string, cameraDbId: st
       }
     }
 
+    // Direct stream resolution:
+    // Normalize localhost to 127.0.0.1 for local ML streams.
+    // RFC 6797 §8.3 prohibits HSTS on IP addresses, ensuring browsers never
+    // attempt an automatic HTTPS upgrade on local plain-HTTP stream ports.
+    try {
+      if (streamUrl.startsWith("http")) {
+        const parsed = new URL(streamUrl);
+        if (parsed.hostname === "localhost") {
+          parsed.hostname = "127.0.0.1";
+          streamUrl = parsed.toString();
+        }
+      }
+    } catch {
+      // keep streamUrl
+    }
+
     const session: StreamSession = {
       id: sessionId,
       cameraId: cameraDbId,
@@ -125,6 +141,16 @@ export async function getStreamSessionProxy(sessionId: string, organizationId: s
       fetchUrl = url;
     }
   }
+
+  try {
+    if (fetchUrl.startsWith("http")) {
+      const parsed = new URL(fetchUrl);
+      if (parsed.hostname === "localhost") {
+        parsed.hostname = "127.0.0.1";
+        fetchUrl = parsed.toString();
+      }
+    }
+  } catch {}
 
   return { fetchUrl, contentType: "multipart/x-mixed-replace" };
 }

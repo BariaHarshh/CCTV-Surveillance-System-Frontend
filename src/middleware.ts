@@ -48,7 +48,7 @@ const protectedPaths = [
   "/incidents",
 ];
 
-function addSecurityHeaders(response: NextResponse, requestId: string): NextResponse {
+function addSecurityHeaders(response: NextResponse, requestId: string, request?: NextRequest): NextResponse {
   response.headers.set("X-Request-Id", requestId);
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("X-Frame-Options", "DENY");
@@ -58,7 +58,16 @@ function addSecurityHeaders(response: NextResponse, requestId: string): NextResp
     "Permissions-Policy",
     "camera=(self), microphone=(), geolocation=(self)"
   );
-  if (process.env.NODE_ENV === "production") {
+  const isHttps = request
+    ? request.nextUrl.protocol === "https:" || request.headers.get("x-forwarded-proto") === "https"
+    : false;
+  const isLocalhost = request
+    ? request.nextUrl.hostname === "localhost" ||
+      request.nextUrl.hostname === "127.0.0.1" ||
+      request.nextUrl.hostname === "::1"
+    : true;
+
+  if (process.env.NODE_ENV === "production" && isHttps && !isLocalhost) {
     response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
   }
   // connect-src includes websockets for Socket.IO; avoid unsafe-eval in production CSP when possible
@@ -96,7 +105,7 @@ export function middleware(request: NextRequest) {
       loginUrl.searchParams.set("reason", "session_required");
     }
     const response = NextResponse.redirect(loginUrl);
-    return addSecurityHeaders(response, requestId);
+    return addSecurityHeaders(response, requestId, request);
   }
 
   const response = NextResponse.next();
@@ -110,7 +119,7 @@ export function middleware(request: NextRequest) {
     response.headers.set("Pragma", "no-cache");
   }
 
-  return addSecurityHeaders(response, requestId);
+  return addSecurityHeaders(response, requestId, request);
 }
 
 export const config = {

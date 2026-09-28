@@ -26,10 +26,6 @@ const nextConfig: NextConfig = {
       },
     ];
     if (isProd) {
-      securityHeaders.push({
-        key: "Strict-Transport-Security",
-        value: "max-age=63072000; includeSubDomains; preload",
-      });
       // Conservative CSP — maps/video/AI may need additional host allowlists via env later
       const connectSrc = ["'self'", appOrigin].filter(Boolean).join(" ");
       securityHeaders.push({

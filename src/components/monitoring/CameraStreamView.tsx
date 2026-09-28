@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { Maximize2, VideoOff, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DetectionOverlay, type OverlayDetection, type OverlayZone } from "./DetectionOverlay";
@@ -156,6 +156,24 @@ export const CameraStreamView = React.memo(function CameraStreamView({
 
   const offline = status !== "ONLINE";
 
+  // Normalize stream URL on client side:
+  // Convert localhost -> 127.0.0.1 to prevent browser HSTS upgrades and IPv6 loopback mismatch.
+  const streamUrl = useMemo(() => {
+    if (!stream?.url) return "";
+    try {
+      if (typeof window !== "undefined" && stream.url.startsWith("http")) {
+        const u = new URL(stream.url);
+        if (u.hostname === "localhost") {
+          u.hostname = "127.0.0.1";
+          return u.toString();
+        }
+      }
+    } catch {
+      // keep original
+    }
+    return stream.url;
+  }, [stream?.url]);
+
   return (
     <div ref={containerRef} className={cn("relative overflow-hidden rounded-xl border border-border bg-black/60", className)}>
       {offline ? (
@@ -180,10 +198,10 @@ export const CameraStreamView = React.memo(function CameraStreamView({
             <RefreshCw className="h-3 w-3" /> Retry Stream
           </button>
         </div>
-      ) : stream?.available && stream.url ? (
+      ) : stream?.available && streamUrl ? (
         <>
           <StableStreamImage
-            url={stream.url}
+            url={streamUrl}
             retryKey={retryKey}
             onLoad={handleImageLoad}
             onError={handleImageError}
